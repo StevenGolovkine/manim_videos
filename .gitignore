@@ -1,0 +1,11 @@
+# .gitignore file
+
+# Python files
+__pycache__/*
+*.cpython*
+
+# Temporary videos
+media/*
+
+# MacOS files
+.DS_Store
