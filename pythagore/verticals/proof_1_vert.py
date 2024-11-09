@@ -3,7 +3,8 @@ Visual proof of the Pythagorean theorem.
 Proofs without Words I. Roger B. Nelsen. p. 3.
 """
 from manim import MovingCameraScene, Mobject
-from manim import BraceBetweenPoints, Point, Square, Line, Polygon
+from manim import BraceBetweenPoints, Point, Line, Polygon
+from manim import RoundedRectangle, Rectangle, Square
 from manim import Create, Rotate, Transform, Uncreate, Write
 from manim import FadeOut, FadeTransform, TransformFromCopy
 from manim import VGroup
@@ -65,8 +66,8 @@ class Pythagorean(MovingCameraScene):
         # Camera set
         points = [
             Point(location=[0, 0, 0]),
-            Point(location=[2, 2, 0]),
-            Point(location=[5.5, 2, 0]),
+            Point(location=[0.5, -1, 0]),
+            Point(location=[1.5, -2, 0]),
             Point(location=[5.5, 1, 0])
         ]
 
@@ -131,6 +132,7 @@ class Pythagorean(MovingCameraScene):
             Write(txt_a_r),
             Write(txt_b_r)
         )
+        self.wait(0.5)
 
         # Expand squares
         line_a = Line([-2, 1.5, 0], [2, 1.5, 0])
@@ -140,7 +142,7 @@ class Pythagorean(MovingCameraScene):
             .move_to(square_a.get_center_of_mass())
 
         self.play(
-            self.camera.frame.animate.move_to(points[1]).set(width=18),
+            self.camera.frame.animate.move_to(points[1]).set(width=10),
             FadeOut(txt_a_r),
             FadeTransform(line_a, square_a, stretch=True),
             Write(txt_a2)
@@ -178,7 +180,8 @@ class Pythagorean(MovingCameraScene):
             [-2, 5.6, 0], [5, 5.6, 0], direction=[0, 1, 0], color=BLACK
         )
         txt_ab_r = Tex(r"$a + b$", font_size=48, color=BLACK)\
-            .next_to(brace_r, LEFT)
+            .next_to(brace_r, LEFT)\
+            .rotate(PI / 2)
         txt_ab_t = Tex(r"$a + b$", font_size=48, color=BLACK)\
             .next_to(brace_t, UP)
 
@@ -190,11 +193,8 @@ class Pythagorean(MovingCameraScene):
         )
 
         # Create text
-        txt_area = Tex(r"Aire", font_size=72, color=BLACK)
-        txt_area_f = Tex(r"$(a + b)^2$", font_size=72, color=BLACK)
-        txt_area = VGroup(txt_area, txt_area_f)\
-            .arrange(DOWN)\
-            .move_to([8, 2, 0])
+        txt_area = Tex(r"Aire: $(a + b)^2$", font_size=72, color=BLACK)\
+            .move_to([0.5, -3, 0])
 
         self.play(
             Create(txt_area)
@@ -202,7 +202,7 @@ class Pythagorean(MovingCameraScene):
 
         # Delete objects
         self.play(
-            self.camera.frame.animate.move_to(points[2]).set(width=18),
+            self.camera.frame.animate.move_to(points[2]).set(width=10),
             Uncreate(txt_area),
             Uncreate(brace_r),
             Uncreate(txt_ab_r)
@@ -212,11 +212,11 @@ class Pythagorean(MovingCameraScene):
         square_ab = Square(
             side_length=7, stroke_width=2, color=BLACK, fill_color=WHITE
         )
-        square_ab.move_to([10, 2, 0])
+        square_ab.move_to([1.5, -6, 0])
         brace_tt = BraceBetweenPoints(
-            [6.5, 5.6, 0], [13.5, 5.6, 0], direction=[0, 1, 0], color=BLACK
+            [-2, -9.6, 0], [5, -9.6, 0], direction=[0, -1, 0], color=BLACK
         )
-        txt_ab_tt = txt_ab_t.copy().next_to(brace_tt, UP)
+        txt_ab_tt = txt_ab_t.copy().next_to(brace_tt, DOWN)
 
         self.play(
             Create(square_ab),
@@ -256,15 +256,20 @@ class Pythagorean(MovingCameraScene):
         )
 
         # Finish the animation
-        self.play(
-            self.camera.frame.animate.move_to(points[3]).set(width=24)
-        )
-
+        rect = RoundedRectangle(
+            height=2.0, width=6.0, fill_color=WHITE, fill_opacity=1
+        ).move_to([1.5, -2, 0])
         txt = Tex(
             r"$a^2$", r"$~+~$", r"$b^2$", r"$~=~$", r"$c^2$",
             font_size=96, color=BLACK
-        ).move_to([5.5, -3, 0])
+        ).move_to([1.5, -2, 0])
 
+        rect.z_index = 0
+        txt.z_index = 1
+        self.play(
+            Create(rect),
+            run_time=0.1
+        )
         self.play(
             TransformFromCopy(txt_a2[0], txt[0]),
             Write(txt[1]),
