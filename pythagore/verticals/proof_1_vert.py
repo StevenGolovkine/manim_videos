@@ -145,7 +145,8 @@ class Pythagorean(MovingCameraScene):
             self.camera.frame.animate.move_to(points[1]).set(width=10),
             FadeOut(txt_a_r),
             FadeTransform(line_a, square_a, stretch=True),
-            Write(txt_a2)
+            Write(txt_a2),
+            run_time=1.5
         )
 
         line_b = Line([2, -1.5, 0], [2, 1.5, 0])
@@ -156,7 +157,8 @@ class Pythagorean(MovingCameraScene):
         self.play(
             FadeOut(txt_b),
             FadeTransform(line_b, square_b, stretch=True),
-            Write(txt_b2)
+            Write(txt_b2),
+            run_time=1.5
         )
 
         # Complete the square
@@ -169,7 +171,8 @@ class Pythagorean(MovingCameraScene):
         )
         self.play(
             triangle_v.animate.next_to(square_b, 0.1 * UP),
-            triangle_y.animate.next_to(square_b, 0.1 * UP)
+            triangle_y.animate.next_to(square_b, 0.1 * UP),
+            run_time=1.5
         )
 
         # Create braces
@@ -189,7 +192,8 @@ class Pythagorean(MovingCameraScene):
             Create(brace_r),
             Create(brace_t),
             Write(txt_ab_r),
-            Write(txt_ab_t)
+            Write(txt_ab_t),
+            run_time=1.5
         )
 
         # Create text
@@ -199,6 +203,7 @@ class Pythagorean(MovingCameraScene):
         self.play(
             Create(txt_area)
         )
+        self.wait(1)
 
         # Delete objects
         self.play(
@@ -257,7 +262,9 @@ class Pythagorean(MovingCameraScene):
 
         # Finish the animation
         rect = RoundedRectangle(
-            height=2.0, width=6.0, fill_color=WHITE, fill_opacity=1
+            height=2.0, width=6.0,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
         ).move_to([1.5, -2, 0])
         txt = Tex(
             r"$a^2$", r"$~+~$", r"$b^2$", r"$~=~$", r"$c^2$",
@@ -278,4 +285,4 @@ class Pythagorean(MovingCameraScene):
             TransformFromCopy(txt_c2[0], txt[4])
         )
 
-        self.wait(1)
+        self.wait(4)
