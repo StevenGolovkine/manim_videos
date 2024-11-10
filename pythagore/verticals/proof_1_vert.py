@@ -4,7 +4,7 @@ Proofs without Words I. Roger B. Nelsen. p. 3.
 """
 from manim import MovingCameraScene, Mobject
 from manim import BraceBetweenPoints, Point, Line, Polygon
-from manim import RoundedRectangle, Rectangle, Square
+from manim import RoundedRectangle, Square
 from manim import Create, Rotate, Transform, Uncreate, Write
 from manim import FadeOut, FadeTransform, TransformFromCopy
 from manim import VGroup
