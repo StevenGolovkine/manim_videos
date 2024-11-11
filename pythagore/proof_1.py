@@ -104,7 +104,7 @@ class Pythagorean(MovingCameraScene):
 
         # Expand squares
         line_a = Line([-2, 1.5, 0], [2, 1.5, 0])
-        square_a  = Square(side_length=4, stroke_width=2, stroke_color=BLACK)
+        square_a  = Square(side_length=4, stroke_width=4, stroke_color=BLACK)
         square_a.next_to(triangle_r, 0.1 * UP)
         txt_a2  = Tex(r"$a^2$", font_size=72, color=BLACK)\
             .move_to(square_a.get_center_of_mass())
@@ -117,7 +117,7 @@ class Pythagorean(MovingCameraScene):
         )
 
         line_b = Line([2, -1.5, 0], [2, 1.5, 0])
-        square_b = Square(side_length=3, stroke_width=2, color=BLACK)
+        square_b = Square(side_length=3, stroke_width=4, color=BLACK)
         square_b.next_to(triangle_r, 0.1 * RIGHT)
         txt_b2  = Tex(r"$b^2$", font_size=72, color=BLACK)\
             .move_to(square_b.get_center_of_mass())
@@ -180,7 +180,7 @@ class Pythagorean(MovingCameraScene):
 
         # Create second square
         square_ab = Square(
-            side_length=7, stroke_width=2, color=BLACK, fill_color=WHITE
+            side_length=7, stroke_width=4, color=BLACK, fill_color=WHITE
         )
         square_ab.move_to([10, 2, 0])
         brace_tt = BraceBetweenPoints(

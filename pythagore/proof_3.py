@@ -12,7 +12,7 @@ from manim import FadeOut, FadeTransform
 from manim import VGroup
 from manim import Tex
 
-from manim import LEFT, RIGHT, UP, DOWN, PI, DEGREES
+from manim import LEFT, RIGHT, UP, DOWN, PI, DEGREES, UR
 
 
 # COLORS
@@ -99,37 +99,77 @@ class Pythagorean(MovingCameraScene):
             Rotate(triangle_b, 143 * DEGREES, about_point=[0, 0, 0]),
         )
 
-        # Expand the squares
-        line_c = Line([-2.5, 0, 0], [2.5, 0, 0])
-        square_c  = Square(side_length=5, stroke_width=4, stroke_color=BLACK)
-        square_c.next_to(triangle_b, 0.1 * DOWN)
-        txt_c2  = Tex(r"$c^2$", font_size=72, color=BLACK)\
-            .move_to(square_c.get_center_of_mass())
-        
-        self.play(
-            #self.camera.frame.animate.move_to(points[0]).set(width=18),
-            #FadeOut(txt_a_r),
-            FadeTransform(line_c, square_c, stretch=True),
-            Write(txt_c2)
-        )
-        
-        c = Circle(radius=0.1).move_to(
-            [-4.3 + 1.9 - (3 * np.sqrt(2) / 2), (3 * np.sqrt(2) / 2) - 0.05, 0]
-        )
-        line_a = Line(triangle_b.get_anchors()[3], triangle_b.get_anchors()[1])
-        square_a  = Square(side_length=3, stroke_width=4, stroke_color=BLACK)\
-            .next_to([-4.3 + 1.9 - (3 * np.sqrt(2) / 2), (3 * np.sqrt(2) / 2) - 0.05, 0])\
-            .rotate(np.arcsin(0.8))
-        txt_a2  = Tex(r"$a^2$", font_size=72, color=BLACK)\
-            .move_to(square_a.get_center_of_mass())
+        vertices = triangle_b.get_vertices()
+        coords_vertices = []
+        for i in range(len(vertices)):
+            if i < len(vertices)-1:
+                p1, p2 = [vertices[i],vertices[i+1]]
+            else:
+                p1, p2 = [vertices[-1],vertices[0]]
+            guide_line = Line(p1, p2)
+            coords_vertices.append(guide_line)
 
+        # Expand the squares
+        sq_a2 = Square(side_length=3, stroke_color=BLACK)\
+            .rotate(PI / 2 - np.arcsin(0.6))\
+            .move_to(coords_vertices[1], DOWN + RIGHT)
+        txt_a2  = Tex(r"$a^2$", font_size=72, color=BLACK)\
+            .move_to(sq_a2.get_center_of_mass())
         self.play(
-            Create(c),
-            #self.camera.frame.animate.move_to(points[0]).set(width=18),
-            #FadeOut(txt_a_r),
-            Transform(line_a, square_a),
+            FadeTransform(coords_vertices[1], sq_a2, stretch=True),
             Write(txt_a2)
         )
+
+        sq_b2 = Square(side_length=4, stroke_color=BLACK)\
+            .rotate(np.arcsin(0.8))\
+            .move_to(coords_vertices[0], DOWN + LEFT)
+        txt_b2  = Tex(r"$b^2$", font_size=72, color=BLACK)\
+            .move_to(sq_b2.get_center_of_mass())
+        self.play(
+            FadeTransform(coords_vertices[0], sq_b2, stretch=True),
+            Write(txt_b2)
+        )
+
+        sq_c2 = Square(side_length=5, stroke_color=BLACK)\
+            .move_to(coords_vertices[2], UP)
+        txt_c2  = Tex(r"$c^2$", font_size=72, color=BLACK)\
+            .move_to(sq_c2.get_center_of_mass())
+        self.play(
+            FadeTransform(coords_vertices[2], sq_c2, stretch=True),
+            Write(txt_c2)
+        )
+
+
+        # line_c = Line([-2.5, 0, 0], [2.5, 0, 0])
+        # square_c  = Square(side_length=5, stroke_width=4, stroke_color=BLACK)
+        # square_c.next_to(triangle_b, 0.1 * DOWN)
+        # txt_c2  = Tex(r"$c^2$", font_size=72, color=BLACK)\
+        #     .move_to(square_c.get_center_of_mass())
+        
+        # self.play(
+        #     #self.camera.frame.animate.move_to(points[0]).set(width=18),
+        #     #FadeOut(txt_a_r),
+        #     FadeTransform(line_c, square_c, stretch=True),
+        #     Write(txt_c2)
+        # )
+        
+        # c = Circle(radius=0.1).move_to(
+        #     [-4.3 + 1.9 - (3 * np.sqrt(2) / 2), (3 * np.sqrt(2) / 2) - 0.05, 0]
+        # )
+        # line_a = Line(triangle_b.get_anchors()[3], triangle_b.get_anchors()[1])
+        # square_a  = Square(side_length=3, stroke_width=4, stroke_color=BLACK)\
+        #     .next_to([-4.3 + 1.9 - (3 * np.sqrt(2) / 2), (3 * np.sqrt(2) / 2) - 0.05, 0])\
+        #     .rotate(np.arcsin(0.8))
+        # txt_a2  = Tex(r"$a^2$", font_size=72, color=BLACK)\
+        #     .move_to(square_a.get_center_of_mass())
+
+        # self.play(
+        #     Create(c),
+        #     #self.camera.frame.animate.move_to(points[0]).set(width=18),
+        #     #FadeOut(txt_a_r),
+        #     FadeTransform(line_a, square_a, stretch=True),
+        #     Write(txt_a2)
+        # )
 
         # # Create the square
         # self.play(
