@@ -3,9 +3,9 @@ Visual proof of the Pythagorean theorem.
 Proofs without Words I. Roger B. Nelsen. p. 4.
 """
 from manim import MovingCameraScene, Mobject
-from manim import BraceBetweenPoints, Point, Square, Polygon, RoundedRectangle
+from manim import Point, Square, Polygon, RoundedRectangle
 from manim import Create, Rotate, Transform, Uncreate, Write
-from manim import ReplacementTransform, TransformFromCopy
+from manim import TransformFromCopy
 from manim import VGroup
 from manim import Tex
 
@@ -66,7 +66,7 @@ class Pythagorean(MovingCameraScene):
         points = [
             Point(location=[0, 0, 0]),
             Point(location=[0, 2.5, 0]),
-            Point(location=[-1, 2.5, 0]),
+            Point(location=[0, -2, 0]),
             Point(location=[-1, -2.5, 0]),
             Point(location=[6, 1, 0])
         ]
@@ -116,7 +116,7 @@ class Pythagorean(MovingCameraScene):
             Write(txt_b),
             Write(txt_c)
         )
-        self.wait(0.5)
+        self.wait(1)
 
         # Remove txt and rotate the triangle
         self.play(
@@ -171,95 +171,61 @@ class Pythagorean(MovingCameraScene):
             run_time=0.5
         )
 
-        # Area
         self.play(
-            self.camera.frame.animate.move_to(points[2]).set(width=12)
+            self.camera.frame.animate.move_to(points[2]).set(width=9)
         )
-
-        txt_aire = Tex(r"Aire", font_size=96, color=BLACK)\
-            .move_to([-6, 2.5, 0])
-        brace_l = BraceBetweenPoints(
-            [-4, -0.5, 0], [-4, 5.5, 0],
-            direction=[-1, 0, 0], color=BLACK
-        )
-        brace_r = BraceBetweenPoints(
-            [4, -0.5, 0], [4, 5.5, 0],
-            direction=[1, 0, 0], color=BLACK
-        )
-        self.play(
-            Write(txt_aire),
-            Create(brace_l),
-            Create(brace_r)
-        )
-
-        # Areas equality
-        txt_eq = Tex(r"$=$", font_size=96, color=BLACK)\
-            .move_to([-1, -2, 0])
-        txt_aire = Tex(r"Aire", font_size=96, color=BLACK)\
-            .move_to([-6, -6.5, 0])
-        brace_l = BraceBetweenPoints(
-            [-4, -9.5, 0], [-4, -3.5, 0],
-            direction=[-1, 0, 0], color=BLACK
-        )
-        brace_r = BraceBetweenPoints(
-            [4, -9.5, 0], [4, -3.5, 0],
-            direction=[1, 0, 0], color=BLACK
-        )
-
-        self.play(
-            self.camera.frame.animate.move_to(points[3])
-        )
-        self.play(
-            Write(txt_eq),
-            Write(txt_aire),
-            Create(brace_l),
-            Create(brace_r)
-        )
-
 
         triangle_r2 = triangle_r.copy()
         triangle_l2 = triangle_l.copy()
         self.play(
-            triangle_r2.animate.move_to([-3.8, -6.5, 0]),
-            triangle_l2.animate.move_to([-3.8 + 12 / 5, -6.5, 0]),
+            triangle_r2.animate.move_to([1, -6, 0]),
+            triangle_l2.animate.move_to([1 + 12 / 5, -6, 0]),
             run_time=0.5
         )
-        triangle_g = VGroup(triangle_l2, triangle_r2)
+        triangle_g1 = VGroup(triangle_l2, triangle_r2)
         self.play(
-            Rotate(triangle_g, 37 * DEGREES),
+            Rotate(triangle_g1, 37 * DEGREES),
+            run_time=0.5
+        )
+        self.play(
+            triangle_g1.animate.move_to([2, -6, 0]),
             run_time=0.5
         )
         txt_a = Tex(r"$a$", font_size=48, color=BLACK)\
-            .next_to(triangle_g, DOWN)
+            .next_to(triangle_g1, DOWN)
         txt_b = Tex(r"$b$", font_size=48, color=BLACK)\
-            .next_to(triangle_g, RIGHT)
+            .next_to(triangle_g1, RIGHT)
         self.play(
             Write(txt_a),
             Write(txt_b),
-            run_time=0.1
+            run_time=0.5
         )
 
 
         triangle_u2 = triangle_u.copy()
         triangle_b2 = triangle_b.copy()
         self.play(
-            triangle_u2.animate.move_to([2, -6.5, 0]),
-            triangle_b2.animate.move_to([2, -6.5 + 12 / 5, 0]),
+            triangle_u2.animate.move_to([-1.5, -6.5, 0]),
+            triangle_b2.animate.move_to([-1.5, -6.5 + 12 / 5, 0]),
             run_time=0.5
         )
-        triangle_g = VGroup(triangle_u2, triangle_b2)
+        triangle_g2 = VGroup(triangle_u2, triangle_b2)
         self.play(
-            Rotate(triangle_g, 37 * DEGREES),
+            Rotate(triangle_g2, 37 * DEGREES),
+            run_time=0.5
+        )
+        self.play(
+            triangle_g2.animate.move_to([-1.5, -6.5, 0]),
             run_time=0.5
         )
         txt_a2 = Tex(r"$a$", font_size=48, color=BLACK)\
-            .next_to(triangle_g, LEFT)
+            .next_to(triangle_g2, LEFT)
         txt_b2 = Tex(r"$b$", font_size=48, color=BLACK)\
-            .next_to(triangle_g, UP)
+            .next_to(triangle_g2, DOWN)
         self.play(
             Write(txt_a2),
             Write(txt_b2),
-            run_time=0.1
+            run_time=0.5
         )
 
 
@@ -267,88 +233,80 @@ class Pythagorean(MovingCameraScene):
             .rotate(PI / 4, about_point=[0, 0, 0])\
             .move_to([0, 2.5, 0])
         self.play(
-            square_ab.animate.move_to([2, -8.5, 0]),
+            square_ab.animate.move_to([0, -4.5, 0]),
             run_time=0.5
         )
         self.play(
             Rotate(square_ab, -PI / 4),
-            run_time=0.25
+            run_time=0.5
         )
         txt_ab = Tex(r"$b - a$", font_size=48, color=BLACK)\
-            .next_to(square_ab, RIGHT)
+            .next_to(square_ab, LEFT)
         txt_ab2 = Tex(r"$b - a$", font_size=48, color=BLACK)\
             .next_to(square_ab, UP)
         self.play(
             Write(txt_ab),
             Write(txt_ab2),
-            run_time=0.1
+            run_time=0.5
         )
 
-        # Write equation
-        txt = Tex(
-            r"$c^2$", r"$~=~$",
-            r"$a$", r"$b$",
-            r"$~+~$",
-            r"$a$", r"$b$",
-            r"$~+~$",
-            r"$(b - a)^2$",
-            font_size=96, color=BLACK
-        ).move_to([-1, -2, 0])
 
+        # Areas
+        square_c2 = Square(
+            side_length=5, stroke_width=4, stroke_color=BLACK,
+            fill_color=WHITE, fill_opacity=0.8
+        ).move_to([0, 2.5, 0])
+        txt_c2 = Tex(r"$c^2$", font_size=96, color=BLACK)\
+            .move_to(square_c2.get_center_of_mass())
         self.play(
-            Uncreate(txt_eq),
-            TransformFromCopy(txt_c2[0], txt[0]),
-            TransformFromCopy(txt_eq[0], txt[1]),
-            TransformFromCopy(txt_a[0], txt[2]),
-            TransformFromCopy(txt_b[0], txt[3]),
-            Write(txt[4]),
-            TransformFromCopy(txt_a2[0], txt[5]),
-            TransformFromCopy(txt_b2[0], txt[6]),
-            Write(txt[7]),
-            TransformFromCopy(txt_ab2[0], txt[8]),
+            Create(square_c2),
+            Write(txt_c2)
         )
-        self.wait(0.5)
 
-        txt2 = Tex(
-            r"$c^2$", r"$~=~$", r"$2ab$", r"$~+~$", r"$(b - a)^2$",
-            font_size=96, color=BLACK
-        ).move_to([-1, -2, 0])
+        square_a2 = Square(
+            side_length=3, stroke_width=4, stroke_color=BLACK,
+            fill_color=WHITE, fill_opacity=0.8
+        ).move_to([-2, -6.5, 0])
+        txt_a2 = Tex(r"$a^2$", font_size=96, color=BLACK)\
+            .move_to(square_a2.get_center_of_mass())
         self.play(
-            ReplacementTransform(txt, txt2)
+            Create(square_a2),
+            Write(txt_a2)
         )
-        self.wait(0.5)
 
-        txt3 = Tex(
-            r"$c^2$", r"$~=~$", r"$2ab$", r"$~+~$", r"$b^2 - 2ab + a^2$",
-            font_size=96, color=BLACK
-        ).move_to([-1, -2, 0])
+        square_b2 = Square(
+            side_length=4, stroke_width=4, stroke_color=BLACK,
+            fill_color=WHITE, fill_opacity=0.8
+        ).move_to([1.5, -6, 0])
+        txt_b2 = Tex(r"$b^2$", font_size=96, color=BLACK)\
+            .move_to(square_b2.get_center_of_mass())
         self.play(
-            ReplacementTransform(txt2, txt3)
+            Create(square_b2),
+            Write(txt_b2)
         )
-        self.wait(0.5)
 
         rect = RoundedRectangle(
             height=2.0, width=6.0,
             color=BLACK,
             fill_color=WHITE, fill_opacity=1
-        ).move_to([-1, -2, 0])
+        ).move_to([0, -2, 0])
         txt = Tex(
-            r"$a^2$", r"$~+~$", r"$b^2$", r"$~=~$", r"$c^2$",
-            font_size=96, color=BLACK
-        ).move_to([1.5, -2, 0])
-
-        txt4 = Tex(
             r"$c^2$", r"$~=~$", r"$a^2$", r"$~+~$", r"$b^2$",
             font_size=96, color=BLACK
-        ).move_to([-1, -2, 0])
+        ).move_to([0, -2, 0])
 
         rect.z_index = 0
-        txt4.z_index = 1
-        self.play(
-            ReplacementTransform(txt3, txt4)
-        )
+        txt.z_index = 1
         self.play(
             Create(rect),
-            run_time=0.1
+            run_time=0.5
         )
-        self.wait(2)
+        self.play(
+            TransformFromCopy(txt_c2[0], txt[0]),
+            Write(txt[1]),
+            TransformFromCopy(txt_a2[0], txt[2]),
+            Write(txt[3]),
+            TransformFromCopy(txt_b2[0], txt[4])
+        )
+
+        self.wait(3)
