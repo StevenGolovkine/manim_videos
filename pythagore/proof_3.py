@@ -5,15 +5,16 @@ Proofs without Words I. Roger B. Nelsen. p. 4.
 import numpy as np
 
 from manim import MovingCameraScene, Mobject
-from manim import BraceBetweenPoints, Point, Square, Polygon, Line, Circle
+from manim import BraceBetweenPoints, Point, Square, Polygon, Line, Circle, Dot
 from manim import Create, Rotate, Transform, Uncreate, Write
 from manim import ReplacementTransform, TransformFromCopy
-from manim import FadeOut, FadeTransform
+from manim import FadeOut, FadeTransform, ApplyMatrix
 from manim import VGroup
 from manim import Tex
 
 from manim import LEFT, RIGHT, UP, DOWN, PI, DEGREES, UR
 
+import numpy as np
 
 # COLORS
 BLUE = "#648FFF"
@@ -23,6 +24,19 @@ ORANGE = "#FE6100"
 YELLOW = "#FFB000"
 BLACK = "#000000"
 WHITE = "#FFFFFF"
+
+
+def get_vertices(obj: Polygon) -> list[Line]:
+    vertices = obj.get_vertices()
+    coords_vertices = []
+    for i in range(len(vertices)):
+        if i < len(vertices)-1:
+            p1, p2 = [vertices[i], vertices[i + 1]]
+        else:
+            p1, p2 = [vertices[-1], vertices[0]]
+        guide_line = Line(p1, p2)
+        coords_vertices.append(guide_line)
+    return coords_vertices
 
 
 class RotateAndColor(Rotate, Transform):
@@ -55,8 +69,8 @@ class Pythagorean(MovingCameraScene):
 
         # Camera set
         points = [
-            Point(location=[0, 2.5, 0]),
-            Point(location=[6, 2.5, 0]),
+            Point(location=[0, 0, 0]),
+            Point(location=[0, 1, 0]),
             Point(location=[6, 1, 0])
         ]
 
@@ -99,46 +113,91 @@ class Pythagorean(MovingCameraScene):
             Rotate(triangle_b, 143 * DEGREES, about_point=[0, 0, 0]),
         )
 
-        vertices = triangle_b.get_vertices()
-        coords_vertices = []
-        for i in range(len(vertices)):
-            if i < len(vertices)-1:
-                p1, p2 = [vertices[i],vertices[i+1]]
-            else:
-                p1, p2 = [vertices[-1],vertices[0]]
-            guide_line = Line(p1, p2)
-            coords_vertices.append(guide_line)
-
         # Expand the squares
+        self.play(
+            self.camera.frame.animate.move_to(points[0]).set(height=12)
+        )
+
+        coords_vertices_b = get_vertices(triangle_b)
+
         sq_a2 = Square(side_length=3, stroke_color=BLACK)\
             .rotate(PI / 2 - np.arcsin(0.6))\
-            .move_to(coords_vertices[1], DOWN + RIGHT)
+            .move_to(coords_vertices_b[1], DOWN + RIGHT)
         txt_a2  = Tex(r"$a^2$", font_size=72, color=BLACK)\
             .move_to(sq_a2.get_center_of_mass())
         self.play(
-            FadeTransform(coords_vertices[1], sq_a2, stretch=True),
+            FadeTransform(coords_vertices_b[1], sq_a2, stretch=True),
             Write(txt_a2)
         )
 
         sq_b2 = Square(side_length=4, stroke_color=BLACK)\
             .rotate(np.arcsin(0.8))\
-            .move_to(coords_vertices[0], DOWN + LEFT)
+            .move_to(coords_vertices_b[0], DOWN + LEFT)
         txt_b2  = Tex(r"$b^2$", font_size=72, color=BLACK)\
             .move_to(sq_b2.get_center_of_mass())
         self.play(
-            FadeTransform(coords_vertices[0], sq_b2, stretch=True),
+            FadeTransform(coords_vertices_b[0], sq_b2, stretch=True),
             Write(txt_b2)
         )
 
         sq_c2 = Square(side_length=5, stroke_color=BLACK)\
-            .move_to(coords_vertices[2], UP)
+            .move_to(coords_vertices_b[2], UP)
         txt_c2  = Tex(r"$c^2$", font_size=72, color=BLACK)\
             .move_to(sq_c2.get_center_of_mass())
         self.play(
-            FadeTransform(coords_vertices[2], sq_c2, stretch=True),
+            FadeTransform(coords_vertices_b[2], sq_c2, stretch=True),
             Write(txt_c2)
         )
 
+        # Expand lines
+        coords_vertices_a2 = get_vertices(sq_a2)
+        line_a = coords_vertices_a2[0].copy()
+        self.play(
+            self.camera.frame.animate.move_to(points[1]).set(height=14),
+            Create(line_a.set(color=RED).set_length(15))
+        )
+
+        coords_vertices_b2 = get_vertices(sq_b2)
+        line_b = coords_vertices_b2[3].copy()
+        self.play(
+            Create(line_b.set(color=RED).set_length(15))
+        )
+
+        # Slope 
+        a1 = line_a.get_slope()
+
+        # Upper points
+        A = sq_a2.get_vertices()[0]
+        B = sq_a2.get_vertices()[1]
+        b = A[1] - a1 * A[0]
+
+        new_x = -6
+        new_point = [new_x, new_x * a1 + b, 0]
+
+        # Down points
+        N = sq_a2.get_vertices()[2]
+        O = sq_a2.get_vertices()[3]
+
+        a2 = (new_point[1] - O[1]) / (new_point[0] - O[0])
+
+        xx = (a1 * new_point[0] - a2 * N[0] - new_point[1] + N[1]) / (a1 - a2)
+        yy = N[1] + a2 * (xx - N[0])
+        new_new_point = [xx, yy, 0]
+
+        #y = 1.33333x + 8.33173
+        #C = Dot(new_point, radius=0.5, color=BLACK)
+        #Polygon(A, B)
+        self.play(
+            Create(Dot(A, color=RED, radius=0.5)),
+            Create(Dot(B, color=BLUE, radius=0.5)),
+            Create(Dot(N, color=BLACK, radius=0.5)),
+            Create(Dot(O, color=ORANGE, radius=0.5)),
+            Create(Dot(new_point, color=YELLOW, radius=0.5)),
+            Create(Dot(new_new_point, color=VIOLET, radius=0.5))
+
+        )
+
+        self.wait(1)
 
         # line_c = Line([-2.5, 0, 0], [2.5, 0, 0])
         # square_c  = Square(side_length=5, stroke_width=4, stroke_color=BLACK)
