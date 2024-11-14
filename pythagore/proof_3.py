@@ -5,16 +5,14 @@ Proofs without Words I. Roger B. Nelsen. p. 4.
 import numpy as np
 
 from manim import MovingCameraScene, Mobject
-from manim import BraceBetweenPoints, Point, Square, Polygon, Line, Circle, Dot
+from manim import Point, Square, Polygon, Line
 from manim import Create, Rotate, Transform, Uncreate, Write
-from manim import ReplacementTransform, TransformFromCopy
-from manim import FadeOut, FadeTransform, ApplyMatrix
+from manim import TransformFromCopy
+from manim import FadeTransform
 from manim import VGroup
 from manim import Tex
 
-from manim import LEFT, RIGHT, UP, DOWN, PI, DEGREES, UR
-
-import numpy as np
+from manim import LEFT, RIGHT, UP, DOWN, PI, DEGREES
 
 # COLORS
 BLUE = "#648FFF"
@@ -125,6 +123,7 @@ class Pythagorean(MovingCameraScene):
             .move_to(coords_vertices_b[1], DOWN + RIGHT)
         txt_a2  = Tex(r"$a^2$", font_size=72, color=BLACK)\
             .move_to(sq_a2.get_center_of_mass())
+        txt_a2.z_index = 1
         self.play(
             FadeTransform(coords_vertices_b[1], sq_a2, stretch=True),
             Write(txt_a2)
@@ -135,6 +134,7 @@ class Pythagorean(MovingCameraScene):
             .move_to(coords_vertices_b[0], DOWN + LEFT)
         txt_b2  = Tex(r"$b^2$", font_size=72, color=BLACK)\
             .move_to(sq_b2.get_center_of_mass())
+        txt_b2.z_index = 1
         self.play(
             FadeTransform(coords_vertices_b[0], sq_b2, stretch=True),
             Write(txt_b2)
@@ -163,274 +163,141 @@ class Pythagorean(MovingCameraScene):
             Create(line_b.set(color=RED).set_length(15))
         )
 
-        # Slope 
+        # Get parallelogram from square a2
         a1 = line_a.get_slope()
+        vertices = sq_a2.get_vertices()
+        b = vertices[0][1] - a1 * vertices[0][0]
+        point = [-6, -6 * a1 + b, 0]
+        a2 = (point[1] - vertices[3][1]) / (point[0] - vertices[3][0])
+        xx = (a1 * point[0] - a2 * vertices[2][0] - point[1] + vertices[2][1]) / (a1 - a2)
+        yy = vertices[2][1] + a2 * (xx - vertices[2][0])
+        new_point = [xx, yy, 0]
+        sq_a2_copy = sq_a2.copy()
 
-        # Upper points
-        A = sq_a2.get_vertices()[0]
-        B = sq_a2.get_vertices()[1]
-        b = A[1] - a1 * A[0]
+        txt_a2.add_updater(
+            lambda mob: mob.move_to(sq_a2_copy.get_center_of_mass())
+        )
+        self.add(txt_a2)
 
-        new_x = -6
-        new_point = [new_x, new_x * a1 + b, 0]
-
-        # Down points
-        N = sq_a2.get_vertices()[2]
-        O = sq_a2.get_vertices()[3]
-
-        a2 = (new_point[1] - O[1]) / (new_point[0] - O[0])
-
-        xx = (a1 * new_point[0] - a2 * N[0] - new_point[1] + N[1]) / (a1 - a2)
-        yy = N[1] + a2 * (xx - N[0])
-        new_new_point = [xx, yy, 0]
-
-        #y = 1.33333x + 8.33173
-        #C = Dot(new_point, radius=0.5, color=BLACK)
-        #Polygon(A, B)
+        para_a2 = Polygon(
+            point, new_point, vertices[2], vertices[3],
+            color=BLACK, fill_color=RED, fill_opacity=0.75
+        )
         self.play(
-            Create(Dot(A, color=RED, radius=0.5)),
-            Create(Dot(B, color=BLUE, radius=0.5)),
-            Create(Dot(N, color=BLACK, radius=0.5)),
-            Create(Dot(O, color=ORANGE, radius=0.5)),
-            Create(Dot(new_point, color=YELLOW, radius=0.5)),
-            Create(Dot(new_new_point, color=VIOLET, radius=0.5))
-
+            Transform(sq_a2_copy, para_a2)
         )
 
-        self.wait(1)
+        # Parallelogram sqaure a2 on top
+        point = [vertices[3][0], vertices[3][0] * a1 + b, 0]
+        new_point = [vertices[2][0], vertices[2][0] * a1 + b, 0]
+        para_a22 = Polygon(
+            point, new_point, vertices[2], vertices[3],
+            color=BLACK, fill_color=RED, fill_opacity=0.75
+        )
+        self.play(
+            Transform(sq_a2_copy, para_a22)
+        )
 
-        # line_c = Line([-2.5, 0, 0], [2.5, 0, 0])
-        # square_c  = Square(side_length=5, stroke_width=4, stroke_color=BLACK)
-        # square_c.next_to(triangle_b, 0.1 * DOWN)
-        # txt_c2  = Tex(r"$c^2$", font_size=72, color=BLACK)\
-        #     .move_to(square_c.get_center_of_mass())
-        
-        # self.play(
-        #     #self.camera.frame.animate.move_to(points[0]).set(width=18),
-        #     #FadeOut(txt_a_r),
-        #     FadeTransform(line_c, square_c, stretch=True),
-        #     Write(txt_c2)
-        # )
-        
-        # c = Circle(radius=0.1).move_to(
-        #     [-4.3 + 1.9 - (3 * np.sqrt(2) / 2), (3 * np.sqrt(2) / 2) - 0.05, 0]
-        # )
-        # line_a = Line(triangle_b.get_anchors()[3], triangle_b.get_anchors()[1])
-        # square_a  = Square(side_length=3, stroke_width=4, stroke_color=BLACK)\
-        #     .next_to([-4.3 + 1.9 - (3 * np.sqrt(2) / 2), (3 * np.sqrt(2) / 2) - 0.05, 0])\
-        #     .rotate(np.arcsin(0.8))
-        # txt_a2  = Tex(r"$a^2$", font_size=72, color=BLACK)\
-        #     .move_to(square_a.get_center_of_mass())
+        # Get parallelogram from square b2
+        a1 = line_b.get_slope()
+        vertices = sq_b2.get_vertices()
+        b = vertices[0][1] - a1 * vertices[0][0]
+        point = [6, 6 * a1 + b, 0]
+        a2 = (point[1] - vertices[1][1]) / (point[0] - vertices[1][0])
+        xx = (a1 * point[0] - a2 * vertices[2][0] - point[1] + vertices[2][1]) / (a1 - a2)
+        yy = vertices[2][1] + a2 * (xx - vertices[2][0])
+        new_point = [xx, yy, 0]
+        sq_b2_copy = sq_b2.copy()
 
-        # self.play(
-        #     Create(c),
-        #     #self.camera.frame.animate.move_to(points[0]).set(width=18),
-        #     #FadeOut(txt_a_r),
-        #     FadeTransform(line_a, square_a, stretch=True),
-        #     Write(txt_a2)
-        # )
+        txt_b2.add_updater(
+            lambda mob: mob.move_to(sq_b2_copy.get_center_of_mass())
+        )
+        self.add(txt_b2)
 
-        # # Create the square
-        # self.play(
-        #     self.camera.frame.animate.move_to(points[0])
-        # )
+        para_b2 = Polygon(
+            point, vertices[1], vertices[2], new_point,
+            color=BLACK, fill_color=RED, fill_opacity=0.75
+        )
+        self.play(
+           Transform(sq_b2_copy, para_b2)
+        )
 
-        # triangle_r = triangle_b.copy()
-        # self.play(
-        #     RotateAndColor(triangle_r, PI / 2, RED)
-        # )
-        # self.play(
-        #     triangle_r.animate.move_to(triangle_b, RIGHT + DOWN)
-        # )
+        # Parallelogram sqaure a2 on top
+        point = [vertices[1][0], vertices[1][0] * a1 + b, 0]
+        new_point = [vertices[2][0], vertices[2][0] * a1 + b, 0]
+        para_b22 = Polygon(
+            point, vertices[1], vertices[2], new_point,
+            color=BLACK, fill_color=RED, fill_opacity=0.75
+        )
+        self.play(
+            Transform(sq_b2_copy, para_b22)
+        )
 
-        # triangle_l = triangle_b.copy()
-        # self.play(
-        #     RotateAndColor(triangle_l, -PI / 2, RED)
-        # )
-        # self.play(
-        #     triangle_l.animate.move_to(triangle_b, LEFT + DOWN)
-        # )
+        new_poly_up = Polygon(
+            para_a22.get_vertices()[0],
+            para_a22.get_vertices()[1],
+            triangle_b.get_vertices()[2],
+            triangle_b.get_vertices()[1],
+            triangle_b.get_vertices()[0],
+            para_b22.get_vertices()[3],
+            color=BLACK, fill_color=RED, fill_opacity=0.75
+        )
 
-        # triangle_u = triangle_b.copy()
-        # self.play(
-        #     Rotate(triangle_u, PI)
-        # )
-        # self.play(
-        #     triangle_u.animate.move_to(triangle_l, LEFT + UP)
-        # )
+        new_poly_down = Polygon(
+            triangle_b.get_vertices()[1],
+            triangle_b.get_vertices()[2],
+            sq_c2.get_vertices()[2],
+            [triangle_b.get_vertices()[1][0], triangle_b.get_vertices()[1][1] - 5, 0],
+            sq_c2.get_vertices()[3],
+            sq_c2.get_vertices()[0],
+            color=BLACK, fill_color=RED, fill_opacity=0.75
+        )
+        txt_ab  = Tex(r"$a^2 + b^2$", font_size=72, color=BLACK)\
+            .move_to(new_poly_down.get_center_of_mass())
+        txt_ab.z_index = 1
+        self.remove(sq_a2_copy, txt_a2, sq_b2_copy, txt_b2)
+        self.play(
+            Transform(new_poly_up, new_poly_down),
+            Write(txt_ab)
+        )
 
-        # txt_c = Tex(r"$c$", font_size=48, color=BLACK)\
-        #     .next_to(triangle_u, UP)
-        # txt_c2 = Tex(r"$c$", font_size=48, color=BLACK)\
-        #     .next_to(triangle_l, LEFT)
-        # self.play(
-        #     Write(txt_c),
-        #     Write(txt_c2)
-        # )
+        triangle_b_copy = triangle_b.copy().set_color(RED).set_opacity(0.75)
+        vertices = triangle_b_copy.get_vertices()
+        new_triangle = Polygon(
+            [vertices[0][0], vertices[0][1] - 5, 0],
+            [vertices[1][0], vertices[1][1] - 5, 0],
+            [vertices[2][0], vertices[2][1] - 5, 0],
+            color=BLACK, fill_color=RED, fill_opacity=0.75
+        )
+        new_poly_down2 = Polygon(
+            triangle_b.get_vertices()[2],
+            sq_c2.get_vertices()[2],
+            [triangle_b.get_vertices()[1][0], triangle_b.get_vertices()[1][1] - 5, 0],
+            sq_c2.get_vertices()[3],
+            sq_c2.get_vertices()[0],
+            color=BLACK, fill_color=RED, fill_opacity=0.75
+        )
+        self.remove(new_poly_up)
+        self.add(new_poly_down2)
+        self.play(
+            Transform(triangle_b_copy, new_triangle)
+        )
 
-        # # Area
-        # txt_aire = Tex(r"Aire", font_size=96, color=BLACK)\
-        #     .move_to([-5, 2.5, 0])
-        # brace_l = BraceBetweenPoints(
-        #     [-3, -0.5, 0], [-3, 5.5, 0],
-        #     direction=[-1, 0, 0], color=BLACK
-        # )
-        # brace_r = BraceBetweenPoints(
-        #     [3, -0.5, 0], [3, 5.5, 0],
-        #     direction=[1, 0, 0], color=BLACK
-        # )
-        # self.play(
-        #     Write(txt_aire),
-        #     Create(brace_l),
-        #     Create(brace_r)
-        # )
+        sq_c2_copy = sq_c2.copy()
+        self.play(
+            sq_c2_copy.animate.set_color(RED).set_opacity(0.75)
+        )
+        self.remove(new_poly_down2, triangle_b_copy)
 
-        # # Areas equality
-        # txt_eq = Tex(r"$=$", font_size=96, color=BLACK)\
-        #     .move_to([4.5, 2.5, 0])
-        # txt_aire = Tex(r"Aire", font_size=96, color=BLACK)\
-        #     .move_to([6, 2.5, 0])
-        # brace_l = BraceBetweenPoints(
-        #     [8, -0.5, 0], [8, 5.5, 0],
-        #     direction=[-1, 0, 0], color=BLACK
-        # )
-        # brace_r = BraceBetweenPoints(
-        #     [17, -0.5, 0], [17, 5.5, 0],
-        #     direction=[1, 0, 0], color=BLACK
-        # )
+        txt = Tex(
+            r"$c^2$", r"$~=~$", r"$a^2 + b^2$",
+            font_size=96, color=BLACK
+        ).move_to([-8, 5, 0])
 
-        # self.play(
-        #     self.camera.frame.animate.move_to(points[1]).set(width=26)
-        # )
-        # self.play(
-        #     Write(txt_eq),
-        #     Write(txt_aire),
-        #     Create(brace_l),
-        #     Create(brace_r)
-        # )
+        self.play(
+            TransformFromCopy(txt_c2[0], txt[0]),
+            Write(txt[1]),
+            TransformFromCopy(txt_ab[0], txt[2])
+        )
 
-
-        # triangle_r2 = triangle_r.copy()
-        # triangle_l2 = triangle_l.copy()
-        # self.play(
-        #     triangle_r2.animate.move_to([8.5, 2.5, 0]),
-        #     triangle_l2.animate.move_to([8.5 + 12 / 5, 2.5, 0]),
-        #     run_time=0.5
-        # )
-        # triangle_g = VGroup(triangle_l2, triangle_r2)
-        # self.play(
-        #     Rotate(triangle_g, 37 * DEGREES),
-        #     run_time=0.5
-        # )
-        # txt_a = Tex(r"$a$", font_size=48, color=BLACK)\
-        #     .next_to(triangle_g, DOWN)
-        # txt_b = Tex(r"$b$", font_size=48, color=BLACK)\
-        #     .next_to(triangle_g, RIGHT)
-        # self.play(
-        #     Write(txt_a),
-        #     Write(txt_b),
-        #     run_time=0.1
-        # )
-
-
-        # triangle_u2 = triangle_u.copy()
-        # triangle_b2 = triangle_b.copy()
-        # self.play(
-        #     triangle_u2.animate.move_to([14.5, 2.5, 0]),
-        #     triangle_b2.animate.move_to([14.5, 2.5 + 12 / 5, 0]),
-        #     run_time=0.5
-        # )
-        # triangle_g = VGroup(triangle_u2, triangle_b2)
-        # self.play(
-        #     Rotate(triangle_g, 37 * DEGREES),
-        #     run_time=0.5
-        # )
-        # txt_a2 = Tex(r"$a$", font_size=48, color=BLACK)\
-        #     .next_to(triangle_g, LEFT)
-        # txt_b2 = Tex(r"$b$", font_size=48, color=BLACK)\
-        #     .next_to(triangle_g, UP)
-        # self.play(
-        #     Write(txt_a2),
-        #     Write(txt_b2),
-        #     run_time=0.1
-        # )
-
-
-        # square_ab  = Square(side_length=1, stroke_width=4, stroke_color=BLACK)\
-        #     .rotate(PI / 4, about_point=[0, 0, 0])\
-        #     .move_to([0, 2.5, 0])
-        # self.play(
-        #     square_ab.animate.move_to([14.5, 0.5, 0]),
-        #     run_time=0.5
-        # )
-        # self.play(
-        #     Rotate(square_ab, -PI / 4),
-        #     run_time=0.25
-        # )
-        # txt_ab = Tex(r"$b - a$", font_size=48, color=BLACK)\
-        #     .next_to(square_ab, RIGHT)
-        # txt_ab2 = Tex(r"$b - a$", font_size=48, color=BLACK)\
-        #     .next_to(square_ab, UP)
-        # self.play(
-        #     Write(txt_ab),
-        #     Write(txt_ab2),
-        #     run_time=0.1
-        # )
-
-        # # Write equation
-        # self.play(
-        #     self.camera.frame.animate.move_to(points[2]).set(width=26)
-        # )
-
-        # txt = Tex(
-        #     r"$c$", r"$~\times~$", r"$c$", r"$~=~$",
-        #     r"$a$", r"$~\times~$", r"$b$",
-        #     r"$~+~$",
-        #     r"$a$", r"$~\times~$", r"$b$",
-        #     r"$~+~$",
-        #     r"$(b - a)$", r"$~\times~$", r"$(b - a)$",
-        #     font_size=96, color=BLACK
-        # ).move_to([6.5, -3, 0])
-
-        # self.play(
-        #     TransformFromCopy(txt_c2[0], txt[0]),
-        #     Write(txt[1]),
-        #     TransformFromCopy(txt_c[0], txt[2]),
-        #     TransformFromCopy(txt_eq[0], txt[3]),
-        #     TransformFromCopy(txt_a[0], txt[4]),
-        #     Write(txt[5]),
-        #     TransformFromCopy(txt_b[0], txt[6]),
-        #     Write(txt[7]),
-        #     TransformFromCopy(txt_a2[0], txt[8]),
-        #     Write(txt[9]),
-        #     TransformFromCopy(txt_b2[0], txt[10]),
-        #     Write(txt[11]),
-        #     TransformFromCopy(txt_ab2[0], txt[12]),
-        #     Write(txt[13]),
-        #     TransformFromCopy(txt_ab[0], txt[14])
-        # )
-
-        # txt2 = Tex(
-        #     r"$c^2$", r"$~=~$", r"$2ab$", r"$~+~$", r"$(b - a)^2$",
-        #     font_size=96, color=BLACK
-        # ).move_to([6.5, -3, 0])
-        # self.play(
-        #     ReplacementTransform(txt, txt2)
-        # )
-
-        # txt3 = Tex(
-        #     r"$c^2$", r"$~=~$", r"$2ab$", r"$~+~$", r"$b^2 - 2ab + a^2$",
-        #     font_size=96, color=BLACK
-        # ).move_to([6.5, -3, 0])
-        # self.play(
-        #     ReplacementTransform(txt2, txt3)
-        # )
-
-        # txt4 = Tex(
-        #     r"$c^2$", r"$~=~$", r"$a^2$", r"$~+~$", r"$b^2$",
-        #     font_size=96, color=BLACK
-        # ).move_to([6.5, -3, 0])
-        # self.play(
-        #     ReplacementTransform(txt3, txt4)
-        # )
         self.wait(1)
