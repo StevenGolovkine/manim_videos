@@ -1,6 +1,6 @@
 """
 Visual proof of the Pythagorean theorem.
-Proofs without Words I. Roger B. Nelsen. p. 4.
+Proofs without Words I. Roger B. Nelsen. p. 5.
 """
 import numpy as np
 
