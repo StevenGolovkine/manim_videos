@@ -10,7 +10,7 @@ from manim import Create, Uncreate, Write
 from manim import VGroup, TransformFromCopy
 from manim import Tex
 
-from manim import LEFT, RIGHT, UP, DOWN, PI, DEGREES
+from manim import LEFT, RIGHT, DOWN
 
 # COLORS
 BLUE = "#648FFF"
@@ -192,9 +192,9 @@ class Sums(MovingCameraScene):
         txt = Tex(
             r"$1$", r"$~+~$", r"$3$", r"$~+~$", r"$5$", r"$~+~$", r"$7$",
             r"$~+ \cdots +~$", r"$(2n - 3)$", r"$~+~$", r"$(2n - 1)$",
-            r"$~=~$", r"$n^2$", r"$A$",
+            r"$~=~$", r"$n^2$",
             font_size=72, color=BLACK
-         ).move_to([10 + 1/ 9, -10, 0])
+         ).move_to([self.camera.frame_center[0], -10, 0])
 
         # self.play(Write(txt))
 
@@ -212,7 +212,7 @@ class Sums(MovingCameraScene):
             TransformFromCopy(txt_13[0], txt[10]),
             Write(txt[11]),
             TransformFromCopy(txt_n[0], txt[12]),
-            TransformFromCopy(txt_n_c[0], txt[13])
+            TransformFromCopy(txt_n_c[0], txt[12].copy())
         )
 
 
