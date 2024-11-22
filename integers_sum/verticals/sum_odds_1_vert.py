@@ -12,7 +12,7 @@ from manim import Tex
 
 from manim import config
 
-from manim import LEFT, RIGHT, DOWN
+from manim import LEFT, RIGHT, DOWN, DR
 
 # COLORS
 BLUE = "#648FFF"
@@ -37,6 +37,10 @@ class Sums(MovingCameraScene):
     def construct(self):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
+
+        print(config["frame_x_radius"])
+        txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK).to_corner(DR)
+        self.add(txt_copy)
 
         # Camera set
         points = [
@@ -80,9 +84,8 @@ class Sums(MovingCameraScene):
         self.wait(1)
 
         # Dots
-        self.play(
-            self.camera.frame.animate.move_to(points[0]).set(width=20)
-        )
+        self.camera.frame.move_to(points[0]).set(width=20)
+        print(config["frame_x_radius"])
 
         dot_1 = Dot([0, 0, 0], color=RED, radius=0.5)
         txt_1 = Tex(r"$k = 1$", font_size=72, color=BLACK).next_to(dot_1, 2 * LEFT)

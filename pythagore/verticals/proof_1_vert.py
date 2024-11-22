@@ -63,6 +63,14 @@ class Pythagorean(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
+        print(config.frame_height)
+        print(config.frame_width)
+
+        print(config.pixel_height)
+        print(config.pixel_width)
+        txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK).to_corner(DR)
+        self.add(txt_copy)
+
         # Camera set
         points = [
             Point(location=[0, 0, 0]),
