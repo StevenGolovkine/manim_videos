@@ -104,15 +104,15 @@ class Pythagorean(MovingCameraScene):
         self.wait(1)
         
         # First triangle and text
-        self.play(
-            self.camera.frame.animate.move_to(points[0]).set(width=6),
-            run_time=0.1
-        )
+        # self.play(
+        #     self.camera.frame.animate.move_to(points[0]).set(width=6),
+        #     run_time=0.1
+        # )
 
         triangle_b = Polygon(
             [-2, -1.5, 0], [2, -1.5, 0], [2, 1.5, 0],
             color=BLACK, fill_color=BLUE, fill_opacity=1
-        )
+        ).scale(0.5)
         txt_a = Tex(r"$a$", font_size=48, color=BLACK)\
             .next_to(triangle_b, DOWN)
         txt_b = Tex(r"$b$", font_size=48, color=BLACK)\
