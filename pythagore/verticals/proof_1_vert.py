@@ -3,7 +3,7 @@ Visual proof of the Pythagorean theorem.
 Proofs without Words I. Roger B. Nelsen. p. 3.
 """
 from manim import MovingCameraScene, Mobject
-from manim import BraceBetweenPoints, Point, Line, Polygon
+from manim import Brace, BraceBetweenPoints, Point, Line, Polygon
 from manim import RoundedRectangle, Square
 from manim import Create, Rotate, Transform, Uncreate, Write
 from manim import FadeOut, FadeTransform, TransformFromCopy
@@ -14,6 +14,7 @@ from manim import config
 
 from manim import LEFT, RIGHT, UP, DOWN, PI, DR, DL, UR, UL
 
+import numpy as np
 
 # COLORS
 BLUE = "#648FFF"
@@ -71,14 +72,6 @@ class Pythagorean(MovingCameraScene):
         txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK).to_corner(DR)
         self.add(txt_copy)
 
-        # Camera set
-        points = [
-            Point(location=[0, 0, 0]),
-            Point(location=[0.5, -1, 0]),
-            Point(location=[1.5, -2, 0]),
-            Point(location=[5.5, 1, 0])
-        ]
-
         # Introduction text
         txt_title = [
             Tex(r"Théorème de", font_size=48, color=BLACK),
@@ -89,11 +82,12 @@ class Pythagorean(MovingCameraScene):
         txt_dem = Tex(r"Démonstration I", font_size=48, color=BLACK)\
             .next_to(txt_title, DOWN, buff=0.7)
 
-        txt_desc = [    
+        txt_desc = [
             Tex(r"adapté de \textit{Zhoubi Suanjing", font_size=28, color=BLACK),
             Tex(r"(auteur inconnu, 200 av. J.C.$?$)", font_size=28, color=BLACK)
         ]
-        txt_desc = VGroup(*txt_desc).arrange(DOWN).next_to(txt_dem, DOWN, buff=0.5)
+        txt_desc = VGroup(*txt_desc).arrange(DOWN)\
+            .next_to(txt_dem, DOWN, buff=0.5)
 
         self.play(
             Write(txt_title), Write(txt_dem), Write(txt_desc),
@@ -104,20 +98,16 @@ class Pythagorean(MovingCameraScene):
         self.wait(1)
         
         # First triangle and text
-        # self.play(
-        #     self.camera.frame.animate.move_to(points[0]).set(width=6),
-        #     run_time=0.1
-        # )
-
         triangle_b = Polygon(
-            [-2, -1.5, 0], [2, -1.5, 0], [2, 1.5, 0],
+            [-1, -0.75, 0], [1, -0.75, 0], [1, 0.75, 0],
+            stroke_width=2,
             color=BLACK, fill_color=BLUE, fill_opacity=1
-        ).scale(0.5)
-        txt_a = Tex(r"$a$", font_size=48, color=BLACK)\
+        )
+        txt_a = Tex(r"$a$", font_size=36, color=BLACK)\
             .next_to(triangle_b, DOWN)
-        txt_b = Tex(r"$b$", font_size=48, color=BLACK)\
+        txt_b = Tex(r"$b$", font_size=36, color=BLACK)\
             .next_to(triangle_b, RIGHT)
-        txt_c = Tex(r"$c$", font_size=48, color=BLACK)\
+        txt_c = Tex(r"$c$", font_size=36, color=BLACK)\
             .next_to(triangle_b.get_center(), UP + LEFT)
 
         self.play(
@@ -129,9 +119,9 @@ class Pythagorean(MovingCameraScene):
 
         # Second triangle
         triangle_r = triangle_b.copy()
-        txt_a_r = Tex(r"$a$", font_size=48, color=BLACK)\
+        txt_a_r = Tex(r"$a$", font_size=36, color=BLACK)\
             .next_to(triangle_r, UP)
-        txt_b_r = Tex(r"$b$", font_size=48, color=BLACK)\
+        txt_b_r = Tex(r"$b$", font_size=36, color=BLACK)\
             .next_to(triangle_r, LEFT)
 
         self.play(
@@ -143,31 +133,48 @@ class Pythagorean(MovingCameraScene):
         self.wait(0.5)
 
         # Expand squares
-        line_a = Line([-2, 1.5, 0], [2, 1.5, 0])
-        square_a  = Square(side_length=4, stroke_width=4, stroke_color=BLACK)
+        line_a = Line(
+            [-1, 0.75, 0], [1, 0.75, 0],
+            stroke_width=2, stroke_color=BLACK
+        )
+        square_a  = Square(side_length=2, stroke_width=2, stroke_color=BLACK)
         square_a.next_to(triangle_r, 0.1 * UP)
-        txt_a2  = Tex(r"$a^2$", font_size=72, color=BLACK)\
+        txt_a2  = Tex(r"$a^2$", font_size=48, color=BLACK)\
             .move_to(square_a.get_center_of_mass())
 
         self.play(
-            self.camera.frame.animate.move_to(points[1]).set(width=10),
             FadeOut(txt_a_r),
+            txt_a.animate.next_to(triangle_b, DOWN, buff=-0.25),
             FadeTransform(line_a, square_a, stretch=True),
             Write(txt_a2),
             run_time=1.5
         )
 
-        line_b = Line([2, -1.5, 0], [2, 1.5, 0])
-        square_b = Square(side_length=3, stroke_width=4, color=BLACK)
+        self.play(
+            triangle_b.animate.move_to(triangle_b.get_center() + LEFT / 2),
+            triangle_r.animate.move_to(triangle_r.get_center() + LEFT / 2),
+            txt_a.animate.move_to(txt_a.get_center_of_mass() + LEFT / 2),
+            txt_b_r.animate.move_to(txt_b_r.get_center_of_mass() + LEFT / 2),
+            square_a.animate.move_to(square_a.get_center_of_mass() + LEFT / 2),
+            txt_a2.animate.move_to(txt_a2.get_center_of_mass() + LEFT / 2),
+            FadeOut(txt_b),
+        )
+
+        line_b = Line(
+            [0.5, -0.75, 0], [0.5, 0.75, 0],
+            stroke_width=2, stroke_color=BLACK
+        )
+        square_b = Square(side_length=1.5, stroke_width=2, color=BLACK)
         square_b.next_to(triangle_r, 0.1 * RIGHT)
-        txt_b2  = Tex(r"$b^2$", font_size=72, color=BLACK)\
+        txt_b2  = Tex(r"$b^2$", font_size=48, color=BLACK)\
             .move_to(square_b.get_center_of_mass())
         self.play(
-            FadeOut(txt_b),
+            txt_b_r.animate.next_to(triangle_r, LEFT, buff=-0.25),
             FadeTransform(line_b, square_b, stretch=True),
             Write(txt_b2),
             run_time=1.5
         )
+        self.wait(0.5)
 
         # Complete the square
         triangle_y = triangle_r.copy()
@@ -183,18 +190,24 @@ class Pythagorean(MovingCameraScene):
             run_time=1.5
         )
 
+        # Create a group for everything
+        big_square = VGroup(
+            triangle_b, triangle_r, triangle_y, triangle_v,
+            square_a, square_b,
+            txt_a2, txt_b2, txt_a, txt_b_r
+        )
+        self.play(
+            big_square.animate.scale(0.8)
+        )
+
         # Create braces
-        brace_r = BraceBetweenPoints(
-            [-2.5, -1.5, 0], [-2.5, 5.5, 0], direction=[-1, 0, 0], color=BLACK
-        )
-        brace_t = BraceBetweenPoints(
-            [-2, 5.6, 0], [5, 5.6, 0], direction=[0, 1, 0], color=BLACK
-        )
+        brace_r = Brace(big_square, direction=[-1, 0, 0], color=BLACK)
+        brace_t = Brace(big_square, direction=[0, 1, 0], color=BLACK)
         txt_ab_r = Tex(r"$a + b$", font_size=48, color=BLACK)\
-            .next_to(brace_r, LEFT)\
-            .rotate(PI / 2)
+            .rotate(PI / 2)\
+            .next_to(brace_r, 0.2 * LEFT)
         txt_ab_t = Tex(r"$a + b$", font_size=48, color=BLACK)\
-            .next_to(brace_t, UP)
+            .next_to(brace_t, 0.2 * UP)
 
         self.play(
             Create(brace_r),
@@ -205,8 +218,8 @@ class Pythagorean(MovingCameraScene):
         )
 
         # Create text
-        txt_area = Tex(r"Aire: $(a + b)^2$", font_size=72, color=BLACK)\
-            .move_to([0.5, -3, 0])
+        txt_area = Tex(r"Aire: $(a + b)^2$", font_size=52, color=BLACK)\
+            .next_to(big_square, 1.5 * DOWN)
 
         self.play(
             Create(txt_area)
@@ -215,7 +228,6 @@ class Pythagorean(MovingCameraScene):
 
         # Delete objects
         self.play(
-            self.camera.frame.animate.move_to(points[2]).set(width=10),
             Uncreate(txt_area),
             Uncreate(brace_r),
             Uncreate(txt_ab_r)
@@ -223,9 +235,9 @@ class Pythagorean(MovingCameraScene):
 
         # Create second square
         square_ab = Square(
-            side_length=7, stroke_width=4, color=BLACK, fill_color=WHITE
-        )
-        square_ab.move_to([1.5, -6, 0])
+            side_length=3.5, stroke_width=2, color=BLACK, fill_color=WHITE
+        ).scale(0.8)
+        square_ab.next_to(big_square, DOWN)
         brace_tt = BraceBetweenPoints(
             [-2, -9.6, 0], [5, -9.6, 0], direction=[0, -1, 0], color=BLACK
         )
