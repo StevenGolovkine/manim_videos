@@ -3,7 +3,7 @@ Visual proof of the Pythagorean theorem.
 Proofs without Words I. Roger B. Nelsen. p. 3.
 """
 from manim import MovingCameraScene, Mobject
-from manim import Brace, BraceBetweenPoints, Point, Line, Polygon
+from manim import Brace, Line, Polygon
 from manim import RoundedRectangle, Square
 from manim import Create, Rotate, Transform, Uncreate, Write
 from manim import FadeOut, FadeTransform, TransformFromCopy
@@ -13,8 +13,6 @@ from manim import Tex
 from manim import config
 
 from manim import LEFT, RIGHT, UP, DOWN, PI, DR, DL, UR, UL
-
-import numpy as np
 
 # COLORS
 BLUE = "#648FFF"
@@ -64,7 +62,8 @@ class Pythagorean(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK).to_edge(RIGHT + DOWN, buff=0.1)
+        txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK)\
+            .to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
 
         # Introduction text
