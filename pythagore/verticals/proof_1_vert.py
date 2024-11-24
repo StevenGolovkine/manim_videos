@@ -64,12 +64,7 @@ class Pythagorean(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        print(config.frame_height)
-        print(config.frame_width)
-
-        print(config.pixel_height)
-        print(config.pixel_width)
-        txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK).to_corner(DR)
+        txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK).to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
 
         # Introduction text
@@ -226,11 +221,13 @@ class Pythagorean(MovingCameraScene):
         )
         self.wait(1)
 
-        # Delete objects
+        # Delete objects and move square
+        square_brace = VGroup(big_square, brace_t, txt_ab_t)
         self.play(
             Uncreate(txt_area),
             Uncreate(brace_r),
-            Uncreate(txt_ab_r)
+            Uncreate(txt_ab_r),
+            square_brace.animate.move_to([0, 2, 0])
         )
 
         # Create second square
@@ -238,10 +235,8 @@ class Pythagorean(MovingCameraScene):
             side_length=3.5, stroke_width=2, color=BLACK, fill_color=WHITE
         ).scale(0.8)
         square_ab.next_to(big_square, DOWN)
-        brace_tt = BraceBetweenPoints(
-            [-2, -9.6, 0], [5, -9.6, 0], direction=[0, -1, 0], color=BLACK
-        )
-        txt_ab_tt = txt_ab_t.copy().next_to(brace_tt, DOWN)
+        brace_tt = Brace(square_ab, direction=[0, -1, 0], color=BLACK)
+        txt_ab_tt = txt_ab_t.copy().next_to(brace_tt, 0.2 * DOWN)
 
         self.play(
             Create(square_ab),
@@ -274,7 +269,7 @@ class Pythagorean(MovingCameraScene):
             run_time=0.5
         )
 
-        txt_c2  = Tex(r"$c^2$", font_size=72, color=BLACK)\
+        txt_c2  = Tex(r"$c^2$", font_size=48, color=BLACK)\
             .move_to(square_ab.get_center_of_mass())
         self.play(
             Write(txt_c2)
@@ -282,14 +277,14 @@ class Pythagorean(MovingCameraScene):
 
         # Finish the animation
         rect = RoundedRectangle(
-            height=2.0, width=6.0,
+            height=1, width=4,
             color=BLACK,
             fill_color=WHITE, fill_opacity=1
-        ).move_to([1.5, -2, 0])
+        )
         txt = Tex(
             r"$a^2$", r"$~+~$", r"$b^2$", r"$~=~$", r"$c^2$",
-            font_size=96, color=BLACK
-        ).move_to([1.5, -2, 0])
+            font_size=52, color=BLACK
+        )
 
         rect.z_index = 0
         txt.z_index = 1
