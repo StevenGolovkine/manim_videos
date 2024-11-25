@@ -7,8 +7,8 @@ import numpy as np
 from manim import MovingCameraScene, Mobject
 from manim import Point, Square, Polygon, Line, RoundedRectangle
 from manim import Create, Rotate, Transform, Uncreate, Write
-from manim import TransformFromCopy
-from manim import FadeTransform
+from manim import TransformFromCopy, ReplacementTransform
+from manim import FadeTransform, FadeIn, FadeOut
 from manim import VGroup
 from manim import Tex
 
@@ -77,14 +77,11 @@ class Pythagorean(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        # Camera set
-        points = [
-            Point(location=[0, 0, 0]),
-            Point(location=[0, 1, 0]),
-            Point(location=[6, 1, 0])
-        ]
+        txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK)\
+            .to_edge(RIGHT + DOWN, buff=0.1)
+        self.add(txt_copy)
 
-                # Introduction text
+        # Introduction text
         txt_title = [
             Tex(r"Théorème de", font_size=48, color=BLACK),
             Tex(r"Pythagore", font_size=72, color=BLACK)
@@ -109,19 +106,16 @@ class Pythagorean(MovingCameraScene):
 
 
         # First triangle and text
-        self.play(
-            self.camera.frame.animate.move_to(points[0]).set(height=10),
-            run_time=0.1
-        )
         triangle_b = Polygon(
-            [-2, -1.5, 0], [2, -1.5, 0], [2, 1.5, 0],
+            [-1, -0.75, 0], [1, -0.75, 0], [1, 0.75, 0],
+            stroke_width=2,
             color=BLACK, fill_color=BLUE, fill_opacity=1
         )
-        txt_a = Tex(r"$a$", font_size=48, color=BLACK)\
+        txt_a = Tex(r"$a$", font_size=36, color=BLACK)\
             .next_to(triangle_b, DOWN)
-        txt_b = Tex(r"$b$", font_size=48, color=BLACK)\
+        txt_b = Tex(r"$b$", font_size=36, color=BLACK)\
             .next_to(triangle_b, RIGHT)
-        txt_c = Tex(r"$c$", font_size=48, color=BLACK)\
+        txt_c = Tex(r"$c$", font_size=36, color=BLACK)\
             .next_to(triangle_b.get_center(), UP + LEFT)
 
         self.play(
@@ -141,17 +135,17 @@ class Pythagorean(MovingCameraScene):
             Rotate(triangle_b, 143 * DEGREES, about_point=[0, 0, 0]),
         )
 
-        # Expand the squares
         self.play(
-            self.camera.frame.animate.move_to(points[0]).set(height=18)
+            triangle_b.animate.scale(0.8)
         )
 
+        # Expand the squares
         coords_vertices_b = get_vertices(triangle_b)
 
-        sq_a2 = Square(side_length=3, stroke_color=BLACK)\
+        sq_a2 = Square(side_length=1.5 * 0.8, stroke_color=BLACK, stroke_width=2)\
             .rotate(PI / 2 - np.arcsin(0.6))\
             .move_to(coords_vertices_b[1], DOWN + RIGHT)
-        txt_a2  = Tex(r"$a^2$", font_size=72, color=BLACK)\
+        txt_a2  = Tex(r"$a^2$", font_size=52, color=BLACK)\
             .move_to(sq_a2.get_center_of_mass())
         txt_a2.z_index = 1
         self.play(
@@ -161,10 +155,10 @@ class Pythagorean(MovingCameraScene):
         )
 
 
-        sq_b2 = Square(side_length=4, stroke_color=BLACK)\
+        sq_b2 = Square(side_length=2 * 0.8, stroke_color=BLACK, stroke_width=2)\
             .rotate(np.arcsin(0.8))\
             .move_to(coords_vertices_b[0], DOWN + LEFT)
-        txt_b2  = Tex(r"$b^2$", font_size=72, color=BLACK)\
+        txt_b2  = Tex(r"$b^2$", font_size=52, color=BLACK)\
             .move_to(sq_b2.get_center_of_mass())
         txt_b2.z_index = 1
         self.play(
@@ -173,9 +167,9 @@ class Pythagorean(MovingCameraScene):
             run_time=1.5
         )
 
-        sq_c2 = Square(side_length=5, stroke_color=BLACK)\
+        sq_c2 = Square(side_length=2.5 * 0.8, stroke_color=BLACK, stroke_width=2)\
             .move_to(coords_vertices_b[2], UP)
-        txt_c2  = Tex(r"$c^2$", font_size=72, color=BLACK)\
+        txt_c2  = Tex(r"$c^2$", font_size=52, color=BLACK)\
             .move_to(sq_c2.get_center_of_mass())
         self.play(
             FadeTransform(coords_vertices_b[2], sq_c2, stretch=True),
@@ -187,7 +181,6 @@ class Pythagorean(MovingCameraScene):
         coords_vertices_a2 = get_vertices(sq_a2)
         line_a = coords_vertices_a2[0].copy()
         self.play(
-            self.camera.frame.animate.move_to(points[1]).set(height=20),
             Create(line_a.set(color=RED).set_length(15))
         )
 
@@ -201,7 +194,7 @@ class Pythagorean(MovingCameraScene):
         a1 = line_a.get_slope()
         vertices = sq_a2.get_vertices()
         b = vertices[0][1] - a1 * vertices[0][0]
-        point = [-4, -4 * a1 + b, 0]
+        point = [-2, -2 * a1 + b, 0]
         a2 = (point[1] - vertices[3][1]) / (point[0] - vertices[3][0])
         xx = (a1 * point[0] - a2 * vertices[2][0] - point[1] + vertices[2][1]) / (a1 - a2)
         yy = vertices[2][1] + a2 * (xx - vertices[2][0])
@@ -214,18 +207,18 @@ class Pythagorean(MovingCameraScene):
         self.add(txt_a2)
 
         para_a2 = Polygon(
-            point, new_point, vertices[2], vertices[3],
+            point, new_point, vertices[2], vertices[3], stroke_width=2,
             color=BLACK, fill_color=RED, fill_opacity=0.75
         )
         self.play(
             Transform(sq_a2_copy, para_a2)
         )
 
-        # Parallelogram sqaure a2 on top
+        # Parallelogram square a2 on top
         point = [vertices[3][0], vertices[3][0] * a1 + b, 0]
         new_point = [vertices[2][0], vertices[2][0] * a1 + b, 0]
         para_a22 = Polygon(
-            point, new_point, vertices[2], vertices[3],
+            point, new_point, vertices[2], vertices[3], stroke_width=2,
             color=BLACK, fill_color=RED, fill_opacity=0.75
         )
         self.play(
@@ -236,7 +229,7 @@ class Pythagorean(MovingCameraScene):
         a1 = line_b.get_slope()
         vertices = sq_b2.get_vertices()
         b = vertices[0][1] - a1 * vertices[0][0]
-        point = [4, 4 * a1 + b, 0]
+        point = [2, 2 * a1 + b, 0]
         a2 = (point[1] - vertices[1][1]) / (point[0] - vertices[1][0])
         xx = (a1 * point[0] - a2 * vertices[2][0] - point[1] + vertices[2][1]) / (a1 - a2)
         yy = vertices[2][1] + a2 * (xx - vertices[2][0])
@@ -249,7 +242,7 @@ class Pythagorean(MovingCameraScene):
         self.add(txt_b2)
 
         para_b2 = Polygon(
-            point, vertices[1], vertices[2], new_point,
+            point, vertices[1], vertices[2], new_point, stroke_width=2,
             color=BLACK, fill_color=RED, fill_opacity=0.75
         )
         self.play(
@@ -261,15 +254,24 @@ class Pythagorean(MovingCameraScene):
         new_point = [vertices[2][0], vertices[2][0] * a1 + b, 0]
         para_b22 = Polygon(
             point, vertices[1], vertices[2], new_point,
+            stroke_width=2, 
             color=BLACK, fill_color=RED, fill_opacity=0.75
         )
         self.play(
             Transform(sq_b2_copy, para_b22)
         )
 
-        self.play(
-            self.camera.frame.animate.move_to(points[0]).set(height=16)
+        group = VGroup(
+            triangle_b, sq_a2, sq_b2, sq_c2, line_a, line_b,
+            sq_a2_copy, sq_b2_copy,
+            para_a22.set_opacity(0), para_b22.set_opacity(0),
+            txt_c2.scale(0.8)
         )
+        self.play(
+            group.animate.scale(1.25)
+        )
+
+        group.remove(para_a22, para_b22)
 
         new_poly_up = Polygon(
             para_a22.get_vertices()[0],
@@ -278,6 +280,7 @@ class Pythagorean(MovingCameraScene):
             triangle_b.get_vertices()[1],
             triangle_b.get_vertices()[0],
             para_b22.get_vertices()[3],
+            stroke_width=2,
             color=BLACK, fill_color=RED, fill_opacity=0.75
         )
 
@@ -285,18 +288,29 @@ class Pythagorean(MovingCameraScene):
             triangle_b.get_vertices()[1],
             triangle_b.get_vertices()[2],
             sq_c2.get_vertices()[2],
-            [triangle_b.get_vertices()[1][0], triangle_b.get_vertices()[1][1] - 5, 0],
+            [triangle_b.get_vertices()[1][0], triangle_b.get_vertices()[1][1] - 2.5, 0],
             sq_c2.get_vertices()[3],
             sq_c2.get_vertices()[0],
+            stroke_width=2,
             color=BLACK, fill_color=RED, fill_opacity=0.75
         )
-        txt_ab  = Tex(r"$a^2 + b^2$", font_size=72, color=BLACK)\
+        txt_ab  = Tex(r"$a^2 + b^2$", font_size=52, color=BLACK)\
+            .move_to(new_poly_up.get_center_of_mass())
+        txt_ab2  = Tex(r"$a^2 + b^2$", font_size=52, color=BLACK)\
             .move_to(new_poly_down.get_center_of_mass())
         txt_ab.z_index = 1
-        self.remove(sq_a2_copy, txt_a2, sq_b2_copy, txt_b2)
+        self.play(
+            FadeOut(sq_a2_copy),
+            FadeOut(sq_b2_copy),
+            FadeOut(txt_a2),
+            FadeOut(txt_b2),
+            FadeIn(new_poly_up),
+            FadeIn(txt_ab)
+        )
+        self.wait(0.5)
         self.play(
             Transform(new_poly_up, new_poly_down),
-            Write(txt_ab)
+            Transform(txt_ab, txt_ab2)
         )
 
         self.wait(1)
@@ -304,17 +318,19 @@ class Pythagorean(MovingCameraScene):
         triangle_b_copy = triangle_b.copy().set_color(RED).set_opacity(0.75)
         vertices = triangle_b_copy.get_vertices()
         new_triangle = Polygon(
-            [vertices[0][0], vertices[0][1] - 5, 0],
-            [vertices[1][0], vertices[1][1] - 5, 0],
-            [vertices[2][0], vertices[2][1] - 5, 0],
+            [vertices[0][0], vertices[0][1] - 2.5, 0],
+            [vertices[1][0], vertices[1][1] - 2.5, 0],
+            [vertices[2][0], vertices[2][1] - 2.5, 0],
+            stroke_width=2,
             color=BLACK, fill_color=RED, fill_opacity=0.75
         )
         new_poly_down2 = Polygon(
             triangle_b.get_vertices()[2],
             sq_c2.get_vertices()[2],
-            [triangle_b.get_vertices()[1][0], triangle_b.get_vertices()[1][1] - 5, 0],
+            [triangle_b.get_vertices()[1][0], triangle_b.get_vertices()[1][1] - 2.5, 0],
             sq_c2.get_vertices()[3],
             sq_c2.get_vertices()[0],
+            stroke_width=2,
             color=BLACK, fill_color=RED, fill_opacity=0.75
         )
         self.remove(new_poly_up)
@@ -325,19 +341,20 @@ class Pythagorean(MovingCameraScene):
 
         sq_c2_copy = sq_c2.copy()
         self.play(
-            sq_c2_copy.animate.set_color(RED).set_opacity(0.75)
+            FadeOut(VGroup(new_poly_down2, triangle_b_copy)),
+            FadeIn(sq_c2_copy.set_color(RED).set_opacity(0.75))
         )
-        self.remove(new_poly_down2, triangle_b_copy)
+        self.wait(0.5)
 
         rect = RoundedRectangle(
-            height=2.0, width=6.0,
+            height=1, width=4,
             color=BLACK,
             fill_color=WHITE, fill_opacity=1
-        ).move_to([0, 5, 0])
+        ).move_to([0, 2, 0])
         txt = Tex(
             r"$c^2$", r"$~=~$", r"$a^2 + b^2$",
-            font_size=96, color=BLACK
-        ).move_to([0, 5, 0])
+            font_size=52, color=BLACK
+        ).move_to([0, 2, 0])
 
         rect.z_index = 0
         txt.z_index = 1
