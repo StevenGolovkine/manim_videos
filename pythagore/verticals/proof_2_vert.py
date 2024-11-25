@@ -187,7 +187,7 @@ class Pythagorean(MovingCameraScene):
             run_time=0.5
         )
         txt_a = Tex(r"$a$", font_size=36, color=BLACK)\
-            .next_to(triangle_g1, DOWN)
+            .next_to(triangle_g1, DOWN, aligned_edge=DOWN, buff=-0.2)
         txt_b = Tex(r"$b$", font_size=36, color=BLACK)\
             .next_to(triangle_g1, RIGHT, buff=-0.25)
         self.play(
@@ -216,7 +216,7 @@ class Pythagorean(MovingCameraScene):
         txt_a2 = Tex(r"$a$", font_size=36, color=BLACK)\
             .next_to(triangle_g2, LEFT, buff=-0.25)
         txt_b2 = Tex(r"$b$", font_size=36, color=BLACK)\
-            .next_to(triangle_g2, DOWN)
+            .next_to(triangle_g2, DOWN, aligned_edge=DOWN, buff=-0.25)
         self.play(
             Write(txt_a2),
             Write(txt_b2),
@@ -266,7 +266,8 @@ class Pythagorean(MovingCameraScene):
             .move_to(square_a2.get_center_of_mass())
         self.play(
             Create(square_a2),
-            Write(txt_a2)
+            Write(txt_a2),
+            Uncreate(txt_ab)
         )
 
         square_b2 = Square(
@@ -277,7 +278,8 @@ class Pythagorean(MovingCameraScene):
             .move_to(square_b2.get_center_of_mass())
         self.play(
             Create(square_b2),
-            Write(txt_b2)
+            Write(txt_b2),
+            Uncreate(txt_ab2)
         )
 
 
