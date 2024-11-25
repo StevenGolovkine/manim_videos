@@ -5,9 +5,9 @@ Proofs without Words I. Roger B. Nelsen. p. 5.
 import numpy as np
 
 from manim import MovingCameraScene, Mobject
-from manim import Point, Square, Polygon, Line, RoundedRectangle
+from manim import Square, Polygon, Line, RoundedRectangle
 from manim import Create, Rotate, Transform, Uncreate, Write
-from manim import TransformFromCopy, ReplacementTransform
+from manim import TransformFromCopy
 from manim import FadeTransform, FadeIn, FadeOut
 from manim import VGroup
 from manim import Tex
@@ -305,7 +305,8 @@ class Pythagorean(MovingCameraScene):
             FadeOut(txt_a2),
             FadeOut(txt_b2),
             FadeIn(new_poly_up),
-            FadeIn(txt_ab)
+            FadeIn(txt_ab),
+            run_time=1.5
         )
         self.wait(0.5)
         self.play(
