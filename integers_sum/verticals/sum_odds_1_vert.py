@@ -5,14 +5,14 @@ Proofs without Words I. Roger B. Nelsen. p. 71.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Point, Dot, BraceBetweenPoints, RoundedRectangle
+from manim import Dot, BraceBetweenPoints, RoundedRectangle
 from manim import Create, Uncreate, Write
 from manim import VGroup, TransformFromCopy
 from manim import Tex
 
 from manim import config
 
-from manim import LEFT, RIGHT, DOWN, DR
+from manim import LEFT, RIGHT, DOWN
 
 # COLORS
 BLUE = "#648FFF"
@@ -38,21 +38,13 @@ class Sums(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        print(config["frame_x_radius"])
-        txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK).to_corner(DR)
+        print(config.frame_height)
+        print(config.frame_width)
+
+        txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK)\
+            .to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
 
-        # Camera set
-        points = [
-            Point(location=[4.5, -1, 0]),
-            Point(location=[4.5, -1.5, 0]),
-            Point(location=[4.5, -2, 0]),
-            Point(location=[4.5, -2.5, 0]),
-            Point(location=[4.5, -3, 0]),
-            Point(location=[4.5, -3.5, 0]),
-            Point(location=[4.5, -4, 0]),
-            Point(location=[4.5, -10, 0]),
-        ]
 
         # Introduction text
         txt_title = [
@@ -84,126 +76,183 @@ class Sums(MovingCameraScene):
         self.wait(1)
 
         # Dots
-        self.camera.frame.move_to(points[0]).set(width=20)
-        print(config["frame_x_radius"])
+        # self.camera.frame.move_to(points[0]).set(width=20)
 
-        dot_1 = Dot([0, 0, 0], color=RED, radius=0.5)
-        txt_1 = Tex(r"$k = 1$", font_size=72, color=BLACK).next_to(dot_1, 2 * LEFT)
+        dot_1 = Dot([-1, 2.5, 0], color=RED, radius=0.1)
+        txt_1 = Tex(r"$k = 1$", font_size=20, color=BLACK)\
+            .next_to(dot_1, 0.5 * LEFT)
         self.play(
             Create(dot_1),
             Write(txt_1)
         )
 
-        dots_3 = [Dot([i, -1.25, 0], color=BLUE, radius=0.5) for i in np.arange(3)]
-        txt_3 = Tex(r"$k = 3$", font_size=72, color=BLACK).next_to(dots_3[0], 2 * LEFT)
+        dots_3 = [
+            Dot([-1 + 0.25 * i, 2.25, 0], color=BLUE, radius=0.1)
+            for i in np.arange(3)
+        ]
+        txt_3 = Tex(r"$k = 3$", font_size=20, color=BLACK)\
+            .next_to(dots_3[0], 0.5 * LEFT)
         self.play(
-            self.camera.frame.animate.move_to(points[1]),
             [Create(dots_3[i]) for i in range(len(dots_3))],
             Write(txt_3)
         )
 
-        dots_5 = [Dot([i, -2.5, 0], color=RED, radius=0.5) for i in np.arange(5)]
-        txt_5 = Tex(r"$k = 5$", font_size=72, color=BLACK).next_to(dots_5[0], 2 * LEFT)
+        dots_5 = [
+            Dot([-1 + 0.25 * i, 2, 0], color=RED, radius=0.1)
+            for i in np.arange(5)
+        ]
+        txt_5 = Tex(r"$k = 5$", font_size=20, color=BLACK)\
+            .next_to(dots_5[0], 0.5 * LEFT)
         self.play(
-            self.camera.frame.animate.move_to(points[2]),
             [Create(dots_5[i]) for i in range(len(dots_5))],
             Write(txt_5)
         )
         
-        dots_7 = [Dot([i, -3.75, 0], color=BLUE, radius=0.5) for i in np.arange(7)]
-        txt_7 = Tex(r"$k = 7$", font_size=72, color=BLACK).next_to(dots_7[0], 2 * LEFT)
+        dots_7 = [
+            Dot([-1 + 0.25 * i, 1.75, 0], color=BLUE, radius=0.1)
+            for i in np.arange(7)
+        ]
+        txt_7 = Tex(r"$k = 7$", font_size=20, color=BLACK)\
+            .next_to(dots_7[0], 0.5 * LEFT)
         self.play(
-            self.camera.frame.animate.move_to(points[3]),
             [Create(dots_7[i]) for i in range(len(dots_7))],
             Write(txt_7)
         )
 
-        dots_9 = [Dot([i, -5, 0], color=RED, radius=0.5) for i in np.arange(9)]
-        txt_9 = Tex(r"$\cdots$", font_size=72, color=BLACK).next_to(dots_9[0], 2 * LEFT)
+        dots_9 = [
+            Dot([-1 + 0.25 * i, 1.5, 0], color=RED, radius=0.1)
+            for i in np.arange(9)
+        ]
+        txt_9 = Tex(r"$\cdots$", font_size=20, color=BLACK)\
+            .next_to(dots_9[0], 0.5 * LEFT)
         self.play(
-            self.camera.frame.animate.move_to(points[4]),
             [Create(dots_9[i]) for i in range(len(dots_9))],
             Write(txt_9)
         )
 
-        dots_11 = [Dot([i, -6.25, 0], color=BLUE, radius=0.5) for i in np.arange(11)]
-        txt_11 = Tex(r"$k = 2n - 3$", font_size=72, color=BLACK).next_to(dots_11[0], 2 * LEFT)
+        dots_11 = [
+            Dot([-1 + 0.25 * i, 1.25, 0], color=BLUE, radius=0.1)
+            for i in np.arange(11)
+        ]
+        txt_11 = Tex(r"$k = 2n - 3$", font_size=20, color=BLACK)\
+            .next_to(dots_11[0], 0.5 * LEFT)
         self.play(
-            self.camera.frame.animate.move_to(points[5]),
             [Create(dots_11[i]) for i in range(len(dots_11))],
             Write(txt_11)
         )
         
-        dots_13 = [Dot([i, -7.5, 0], color=RED, radius=0.5) for i in np.arange(13)]
-        txt_13 = Tex(r"$k = 2n - 1$", font_size=72, color=BLACK).next_to(dots_13[0], 2 * LEFT)
+        dots_13 = [
+            Dot([-1 + 0.25 * i, 1, 0], color=RED, radius=0.1)
+            for i in np.arange(13)
+        ]
+        txt_13 = Tex(r"$k = 2n - 1$", font_size=20, color=BLACK)\
+            .next_to(dots_13[0], 0.5 * LEFT)
         self.play(
-            self.camera.frame.animate.move_to(points[6]),
             [Create(dots_13[i]) for i in range(len(dots_13))],
             Write(txt_13)
         )
 
-        self.play(
-            self.camera.frame.animate.move_to(points[7])
-        )
-
         dot_1_c = dot_1.copy()
         self.play(
-            dot_1_c.animate.move_to([0, -14, 0])
+            dot_1_c.animate.move_to([-1, -1, 0])
         )
 
         dots_3_c = [d.copy() for d in dots_3]
-        pos = [RIGHT, RIGHT + DOWN, DOWN]
-        self.play(
-            [d.animate.next_to(dot_1_c, p) for (d, p) in zip(dots_3_c, pos)]
-        )
+        pos = [DOWN, RIGHT + DOWN, RIGHT]
+        self.play([
+            d.animate.next_to(dot_1_c, 0.25 * p)
+            for (d, p) in zip(dots_3_c, pos)
+        ])
 
         dots_5_c = [d.copy() for d in dots_5]
         self.play(
-            *[dots_5_c[i].animate.next_to(dots_3_c[i], RIGHT) for i in range(2)],
-            dots_5_c[2].animate.next_to(dots_3_c[1], RIGHT + DOWN),
-            *[dots_5_c[i].animate.next_to(dots_3_c[j], DOWN) for i, j in zip(range(3, 5), range(1, 3))]
+            *[
+                dots_5_c[i].animate.next_to(dots_3_c[i], 0.25 * DOWN)
+                for i in range(2)
+            ],
+            dots_5_c[2].animate.next_to(
+                dots_3_c[1], 0.25 * RIGHT + 0.25 * DOWN
+            ),
+            *[
+                dots_5_c[i].animate.next_to(dots_3_c[j], 0.25 * RIGHT)
+                for i, j in zip(range(3, 5), range(1, 3))
+            ]
         )
 
         dots_7_c = [d.copy() for d in dots_7]
         self.play(
-            *[dots_7_c[i].animate.next_to(dots_5_c[i], RIGHT) for i in range(3)],
-            dots_7_c[3].animate.next_to(dots_5_c[2], RIGHT + DOWN),
-            *[dots_7_c[i].animate.next_to(dots_5_c[j], DOWN) for i, j in zip(range(4, 7), range(2, 5))]
+            *[
+                dots_7_c[i].animate.next_to(dots_5_c[i], 0.25 * DOWN)
+                for i in range(3)
+            ],
+            dots_7_c[3].animate.next_to(
+                dots_5_c[2], 0.25 * RIGHT + 0.25 * DOWN
+            ),
+            *[
+                dots_7_c[i].animate.next_to(dots_5_c[j], 0.25 * RIGHT)
+                for i, j in zip(range(4, 7), range(2, 5))
+            ]
         )
 
         dots_9_c = [d.copy() for d in dots_9]
         self.play(
-            *[dots_9_c[i].animate.next_to(dots_7_c[i], RIGHT) for i in range(4)],
-            dots_9_c[4].animate.next_to(dots_7_c[3], RIGHT + DOWN),
-            *[dots_9_c[i].animate.next_to(dots_7_c[j], DOWN) for i, j in zip(range(5, 9), range(3, 7))]
+            *[
+                dots_9_c[i].animate.next_to(dots_7_c[i], 0.25 * DOWN)
+                for i in range(4)
+            ],
+            dots_9_c[4].animate.next_to(
+                dots_7_c[3], 0.25 * RIGHT + 0.25 * DOWN
+            ),
+            *[
+                dots_9_c[i].animate.next_to(dots_7_c[j], 0.25 * RIGHT)
+                for i, j in zip(range(5, 9), range(3, 7))
+            ]
         )
 
         dots_11_c = [d.copy() for d in dots_11]
         self.play(
-            *[dots_11_c[i].animate.next_to(dots_9_c[i], RIGHT) for i in range(5)],
-            dots_11_c[5].animate.next_to(dots_9_c[4], RIGHT + DOWN),
-            *[dots_11_c[i].animate.next_to(dots_9_c[j], DOWN) for i, j in zip(range(6, 11), range(4, 9))]
+            *[
+                dots_11_c[i].animate.next_to(dots_9_c[i], 0.25 * DOWN)
+                for i in range(5)
+            ],
+            dots_11_c[5].animate.next_to(
+                dots_9_c[4], 0.25 * RIGHT + 0.25 * DOWN
+            ),
+            *[
+                dots_11_c[i].animate.next_to(dots_9_c[j], 0.25 * RIGHT)
+                for i, j in zip(range(6, 11), range(4, 9))
+            ]
         )
 
         dots_13_c = [d.copy() for d in dots_13]
         self.play(
-            *[dots_13_c[i].animate.next_to(dots_11_c[i], RIGHT) for i in range(6)],
-            dots_13_c[6].animate.next_to(dots_11_c[5], RIGHT + DOWN),
-            *[dots_13_c[i].animate.next_to(dots_11_c[j], DOWN) for i, j in zip(range(7, 13), range(5, 11))]
+            *[
+                dots_13_c[i].animate.next_to(dots_11_c[i], 0.25 * DOWN)
+                for i in range(6)
+            ],
+            dots_13_c[6].animate.next_to(
+                dots_11_c[5], 0.25 * RIGHT + 0.25 * DOWN
+            ),
+            *[
+                dots_13_c[i].animate.next_to(dots_11_c[j], 0.25 * RIGHT)
+                for i, j in zip(range(7, 13), range(5, 11))
+            ]
         )
 
+        print(dots_13_c[12].get_center_of_mass())
+        print(dots_13_c[6].get_center_of_mass())
         brace_bt = BraceBetweenPoints(
-            dots_13_c[12].get_center() + [-0.5, -0.5, 0],
-            dots_13_c[6].get_center() + [0.5, -0.5, 0],
+            dots_13_c[0].get_center_of_mass(),
+            dots_13_c[6].get_center_of_mass(),
             direction=[0, -1, 0], color=BLACK
         )
         brace_rt = BraceBetweenPoints(
-            dots_13_c[0].get_center() + [0.5, 0.5, 0],
-            dots_13_c[6].get_center() + [0.5, -0.5, 0],
+            dots_13_c[12].get_center(),
+            dots_13_c[6].get_center(),
             direction=[1, 0, 0], color=BLACK
         )
-        txt_n = Tex(r"$n$", font_size=72, color=BLACK).next_to(brace_rt, RIGHT)
-        txt_n_c = txt_n.copy().next_to(brace_bt, DOWN)
+        txt_n = Tex(r"$n$", font_size=30, color=BLACK).next_to(brace_rt, 0.5 * RIGHT)
+        txt_n_c = txt_n.copy().next_to(brace_bt, 0.5 * DOWN)
         self.play(
             Create(brace_bt),
             Create(brace_rt),
@@ -212,16 +261,16 @@ class Sums(MovingCameraScene):
         )
 
         rect = RoundedRectangle(
-            height=2.0, width=18.0,
+            height=1, width=4,
             color=BLACK,
             fill_color=WHITE, fill_opacity=1
-        ).move_to([self.camera.frame_center[0], -11, 0])
+        )
         txt = Tex(
-            r"$1$", r"$~+~$", r"$3$", r"$~+~$", r"$5$", r"$~+~$", r"$7$",
-            r"$~+ \cdots +~$", r"$(2n - 3)$", r"$~+~$", r"$(2n - 1)$",
+            r"$1$", r"$~+~$", r"$3$",
+            r"$~+ \cdots +~$", r"$(2n - 1)$",
             r"$~=~$", r"$n^2$",
-            font_size=72, color=BLACK
-         ).move_to([self.camera.frame_center[0], -11, 0])
+            font_size=30, color=BLACK
+         )
 
         # self.play(Write(txt))
 
@@ -236,16 +285,10 @@ class Sums(MovingCameraScene):
             Write(txt[1]),
             TransformFromCopy(txt_3[0], txt[2]),
             Write(txt[3]),
-            TransformFromCopy(txt_5[0], txt[4]),
+            TransformFromCopy(txt_13[0], txt[4]),
             Write(txt[5]),
-            TransformFromCopy(txt_7[0], txt[6]),
-            Write(txt[7]),
-            TransformFromCopy(txt_11[0], txt[8]),
-            Write(txt[9]),
-            TransformFromCopy(txt_13[0], txt[10]),
-            Write(txt[11]),
-            TransformFromCopy(txt_n[0], txt[12]),
-            TransformFromCopy(txt_n_c[0], txt[12].copy())
+            TransformFromCopy(txt_n[0], txt[6]),
+            TransformFromCopy(txt_n_c[0], txt[6].copy())
         )
 
         self.wait(1)
