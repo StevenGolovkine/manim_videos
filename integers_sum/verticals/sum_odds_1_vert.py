@@ -38,9 +38,6 @@ class Sums(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        print(config.frame_height)
-        print(config.frame_width)
-
         txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK)\
             .to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
