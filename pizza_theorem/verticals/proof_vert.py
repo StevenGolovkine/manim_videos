@@ -5,7 +5,7 @@ Proofs without Words II. Roger B. Nelsen. p. 27.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Dot, BraceBetweenPoints, RoundedRectangle, Line
+from manim import Dot, ArcBetweenPoints, RoundedRectangle, Line, ArcPolygonFromArcs
 from manim import Create, Uncreate, Write
 from manim import VGroup, TransformFromCopy
 from manim import Tex
@@ -77,55 +77,172 @@ class Pizza(MovingCameraScene):
         )
 
         # Different point on the circle
-        theta_v = PI / 2.5
-        theta_h = PI / 8
-        point_A = Dot([2 * np.cos(theta_v), 2 * np.sin(theta_v), 0], color=BLACK)
-        point_B = Dot([2 * np.cos(theta_h), 2 * np.sin(theta_h), 0], color=BLACK)
-        point_C = Dot([2 * np.cos(theta_v), 2 * np.sin(-theta_v), 0], color=RED)
-        point_D = Dot([2 * np.cos(PI - theta_h), 2 * np.sin(theta_h), 0], color=BLACK)
-        
-        self.add(point_A, point_B, point_C, point_D)
+        theta_1 = PI / 9
+        theta_2 = PI / 3
+        point_A = Dot([2 * np.cos(theta_1), 2 * np.sin(theta_1), 0], color=BLUE)
+        point_B = Dot([2 * np.cos(theta_2), 2 * np.sin(theta_2), 0], color=RED)
+        point_D = Dot([2 * np.cos(PI - theta_1), 2 * np.sin(theta_1), 0], color=VIOLET)
+        point_E = Dot([2 * np.cos(theta_2), 2 * np.sin(-theta_2), 0], color=YELLOW)
+        self.add(point_A, point_E, point_B, point_D)
 
-        point_center = Dot([2 * np.cos(theta_v), 2 * np.sin(theta_h), 0], color=BLACK)
+        point_C = Dot([2 * np.cos(theta_2), 2 * np.sin(theta_1), 0], color=BLACK)
+        point_C2 = Dot([2 * np.cos(theta_2), -2 * np.sin(theta_1), 0], color=BLACK)
+        point_C3 = Dot([-2 * np.cos(theta_2), 2 * np.sin(theta_1), 0], color=BLACK)
+        point_C4 = Dot([2 * np.cos(theta_2) - 4 * np.sin(theta_1), 2 * np.sin(theta_1), 0], color=BLACK)
+        point_C5 = Dot([4 * np.sin(theta_1) - 2 * np.cos(theta_2), 2 * np.sin(theta_1), 0], color=BLACK)
+        self.add(point_C, point_C2, point_C3, point_C4, point_C5)
 
-        self.add(point_center)
-
-        line_v = Line(start=point_A, end=point_C, color=RED)
-        line_h = Line(start=point_B, end=point_D, color=RED)
-
-
-        b = np.sin(theta_h) - np.cos(theta_v)
+        b = np.sin(theta_1) - np.cos(theta_2)
         x = (- 2 * b + 2 * np.sqrt(2 - b**2)) / 2
         y = (2 * b + 2 * np.sqrt(2 - b**2)) / 2
-        point_E = Dot([x, y, 0], color=RED)
+        point_F = Dot([x, y, 0], color=RED)
+        point_F2 = Dot([x, -y, 0], color=BLUE)
+        point_F3 = Dot([-x, y, 0], color=BLUE)
+        self.add(point_F, point_F2, point_F3)
 
         x = (- 2 * b - 2 * np.sqrt(2 - b**2)) / 2
         y = (2 * b - 2 * np.sqrt(2 - b**2)) / 2
-        point_F = Dot([x, y, 0], color=RED)
-        self.add(point_E, point_F)
-
-        line_bt = Line(start=point_E, end=point_F, color=RED)
+        point_G = Dot([x, y, 0], color=RED)
+        self.add(point_G)
 
 
-        b = np.sin(theta_h) + np.cos(theta_v)
+        b = np.sin(theta_1) + np.cos(theta_2)
         x = (2 * b + 2 * np.sqrt(2 - b**2)) / 2
         y = (2 * b - 2 * np.sqrt(2 - b**2)) / 2
-        point_G = Dot([x, y, 0], color=RED)
+        point_I = Dot([x, y, 0], color=ORANGE)
+        point_I2 = Dot([-x, y, 0], color=ORANGE)
+        self.add(point_I, point_I2)
 
         x = (2 * b - 2 * np.sqrt(2 - b**2)) / 2
         y = (2 * b + 2 * np.sqrt(2 - b**2)) / 2
         point_H = Dot([x, y, 0], color=RED)
-        self.add(point_G, point_H)
+        point_H2 = Dot([x, -y, 0], color=RED)
+        self.add(point_H, point_H2)
         
-        line_tb = Line(start=point_G, end=point_H, color=RED)
+        point_J = Dot([-2 * np.sin(theta_1), 4 * np.sin(theta_1) - 2 * np.cos(theta_2), 0], color=BLUE)
+        point_J2 = Dot([-2 * np.sin(theta_1), 2 * np.cos(theta_2), 0], color=BLUE)
+        self.add(point_J, point_J2)
+        
+        point_K = Dot([2 * np.sin(theta_1), 2 * np.cos(theta_2), 0], color=BLUE)
+        self.add(point_K)
 
-        mid = Dot([0, 0, 0], color=BLUE)
-        self.add(mid)
+        point_L = Dot([-2 * np.sin(theta_1), -2 * np.cos(theta_2), 0], color=BLUE)
+        point_L2 = Dot([2 * np.sin(theta_1), -2 * np.cos(theta_2), 0], color=BLUE)
+        self.add(point_L, point_L2)
 
-        self.play(
-            Create(line_v),
-            Create(line_h),
-            Create(line_bt),
-            Create(line_tb)
+
+        point_O = Dot([0, 0, 0], color=BLUE)
+        self.add(point_O)        
+
+        lines = [
+            Line(start=point_B, end=point_E, color=RED),
+            Line(start=point_A, end=point_D, color=YELLOW),
+            Line(start=point_F, end=point_G, color=BLUE),
+            Line(start=point_H, end=point_I, color=VIOLET),
+            Line(start=point_C2, end=point_F2, color=RED),
+            Line(start=point_C2, end=point_H2, color=RED),
+            Line(start=point_C3, end=point_F3, color=RED),
+            Line(start=point_C3, end=point_I2, color=RED),
+            Line(start=point_C3, end=point_J, color=BLACK),
+            Line(start=point_C4, end=point_J, color=BLACK),
+            Line(start=point_C5, end=point_K, color=BLACK),
+            Line(start=point_J, end=point_L, color=BLACK),
+            Line(start=point_L, end=point_L2, color=RED)
+        ]
+
+        self.play([Create(line) for line in lines])
+
+        arc_AF = ArcBetweenPoints(
+            point_A.get_center_of_mass(),
+            point_F.get_center_of_mass(),
+            stroke_width=0,
+            radius=2
         )
+        line_FC = ArcBetweenPoints(
+            point_F.get_center_of_mass(),
+            point_C.get_center_of_mass(),
+            stroke_width=0,
+            radius=100
+        )
+        line_CA = ArcBetweenPoints(
+            point_C.get_center_of_mass(),
+            point_A.get_center_of_mass(),
+            stroke_width=0,
+            radius=100
+        )
+
+        arc_FB = ArcBetweenPoints(
+            point_F.get_center_of_mass(),
+            point_B.get_center_of_mass(),
+            stroke_width=0,
+            radius=2
+        )
+        line_BC = ArcBetweenPoints(
+            point_B.get_center_of_mass(),
+            point_C.get_center_of_mass(),
+            stroke_width=0,
+            radius=100
+        )
+        line_CF = ArcBetweenPoints(
+            point_C.get_center_of_mass(),
+            point_F.get_center_of_mass(),
+            stroke_width=0,
+            radius=100
+        )
+
+        arc_BH = ArcBetweenPoints(
+            point_B.get_center_of_mass(),
+            point_H.get_center_of_mass(),
+            stroke_width=0,
+            radius=2
+        )
+        line_HC = ArcBetweenPoints(
+            point_H.get_center_of_mass(),
+            point_C.get_center_of_mass(),
+            stroke_color=BLACK,
+            stroke_width=0,
+            radius=100
+        )
+        line_CB = ArcBetweenPoints(
+            point_C.get_center_of_mass(),
+            point_B.get_center_of_mass(),
+            stroke_color=BLACK,
+            stroke_width=0,
+            radius=100
+        )
+
+        poly_AFC = ArcPolygonFromArcs(
+            arc_AF, line_FC, line_CA, color=RED, fill_opacity=1
+        )
+        poly_FBC = ArcPolygonFromArcs(
+            arc_FB, line_BC, line_CF, color=BLUE, fill_opacity=1
+        )
+        poly_BHC = ArcPolygonFromArcs(
+            arc_BH, line_HC, line_CB, color=RED, fill_opacity=1
+        )
+        self.play(
+            Create(poly_AFC),
+            Create(poly_FBC),
+            Create(poly_BHC)
+        )
+
+        self.wait(2)
+
+        circle2 = circle.copy()
+        self.play(
+            Create(circle2)
+        )
+
+        lines = [
+            Line(start=point_A, end=point_D, color=RED),
+            Line(start=point_B, end=point_E, color=RED),
+            Line(start=point_F, end=point_G, color=RED),
+            Line(start=point_I, end=point_H, color=RED),
+            Line(start=point_C2, end=point_F2, color=RED),
+            Line(start=point_C2, end=point_H2, color=RED),
+            Line(start=point_C3, end=point_F3, color=RED),
+            Line(start=point_C3, end=point_I2, color=RED)
+        ]
+        self.play([Create(line) for line in lines])
+
         self.wait(1)
