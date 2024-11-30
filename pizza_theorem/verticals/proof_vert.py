@@ -46,7 +46,7 @@ class Pizza(MovingCameraScene):
         # Introduction text
         txt_title = [
             Tex(r"Comment couper", font_size=48, color=BLACK),
-            Tex(r"une pizza en huit", font_size=48, color=BLACK)
+            Tex(r"une pizza en huit ?", font_size=48, color=BLACK)
         ]
         txt_title = VGroup(*txt_title).arrange(DOWN).move_to([0, 2, 0])
 
@@ -67,9 +67,25 @@ class Pizza(MovingCameraScene):
         )
         self.wait(1)
 
+        # Theorem
+        txt_theorem = [
+            Tex(r"Si une pizza est coupée en huit", font_size=28, color=BLACK),
+            Tex(r"en faisant des coupes à $45^{\circ}$", font_size=28, color=BLACK),
+            Tex(r"à partir d'un point quelconque", font_size=28, color=BLACK),
+            Tex(r"de la pizza, alors les sommes", font_size=28, color=BLACK),
+            Tex(r"des aires des parts alternées", font_size=28, color=BLACK),
+            Tex(r"sont égales.", font_size=28, color=BLACK)
+        ]
+        txt_theorem = VGroup(*txt_theorem)\
+            .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
+                .move_to([0, 2.5, 0])
+
+        self.play(Write(txt_theorem))
+
+
         # Pizza
         circle = Dot(
-            [0, 0, 0], radius=2,
+            [0, -1, 0], radius=2,
             color=WHITE, stroke_color=BLACK, stroke_width=2
         )
         self.play(
@@ -211,19 +227,151 @@ class Pizza(MovingCameraScene):
             radius=100
         )
 
+        arc_HD = ArcBetweenPoints(
+            point_H.get_center_of_mass(),
+            point_D.get_center_of_mass(),
+            stroke_width=0,
+            radius=2
+        )
+        line_DC = ArcBetweenPoints(
+            point_D.get_center_of_mass(),
+            point_C.get_center_of_mass(),
+            stroke_color=BLACK,
+            stroke_width=0,
+            radius=100
+        )
+        line_CH = ArcBetweenPoints(
+            point_C.get_center_of_mass(),
+            point_H.get_center_of_mass(),
+            stroke_color=BLACK,
+            stroke_width=0,
+            radius=100
+        )
+
+        arc_DG = ArcBetweenPoints(
+            point_D.get_center_of_mass(),
+            point_G.get_center_of_mass(),
+            stroke_width=0,
+            radius=2
+        )
+        line_GC = ArcBetweenPoints(
+            point_G.get_center_of_mass(),
+            point_C.get_center_of_mass(),
+            stroke_color=BLACK,
+            stroke_width=0,
+            radius=100
+        )
+        line_CD = ArcBetweenPoints(
+            point_C.get_center_of_mass(),
+            point_D.get_center_of_mass(),
+            stroke_color=BLACK,
+            stroke_width=0,
+            radius=100
+        )
+
+        arc_GE = ArcBetweenPoints(
+            point_G.get_center_of_mass(),
+            point_E.get_center_of_mass(),
+            stroke_width=0,
+            radius=2
+        )
+        line_EC = ArcBetweenPoints(
+            point_E.get_center_of_mass(),
+            point_C.get_center_of_mass(),
+            stroke_color=BLACK,
+            stroke_width=0,
+            radius=100
+        )
+        line_CG = ArcBetweenPoints(
+            point_C.get_center_of_mass(),
+            point_G.get_center_of_mass(),
+            stroke_color=BLACK,
+            stroke_width=0,
+            radius=100
+        )
+
+        arc_EI = ArcBetweenPoints(
+            point_E.get_center_of_mass(),
+            point_I.get_center_of_mass(),
+            stroke_width=0,
+            radius=2
+        )
+        line_IC = ArcBetweenPoints(
+            point_I.get_center_of_mass(),
+            point_C.get_center_of_mass(),
+            stroke_color=BLACK,
+            stroke_width=0,
+            radius=100
+        )
+        line_CE = ArcBetweenPoints(
+            point_C.get_center_of_mass(),
+            point_E.get_center_of_mass(),
+            stroke_color=BLACK,
+            stroke_width=0,
+            radius=100
+        )
+
+        arc_IA = ArcBetweenPoints(
+            point_I.get_center_of_mass(),
+            point_A.get_center_of_mass(),
+            stroke_width=0,
+            radius=2
+        )
+        line_AC = ArcBetweenPoints(
+            point_A.get_center_of_mass(),
+            point_C.get_center_of_mass(),
+            stroke_color=BLACK,
+            stroke_width=0,
+            radius=100
+        )
+        line_CI = ArcBetweenPoints(
+            point_C.get_center_of_mass(),
+            point_I.get_center_of_mass(),
+            stroke_color=BLACK,
+            stroke_width=0,
+            radius=100
+        )
+
+
+        poly_param = {
+            'stroke_color': BLACK,
+            'fill_opacity': 0.5,
+            'stroke_width': 1
+        }
         poly_AFC = ArcPolygonFromArcs(
-            arc_AF, line_FC, line_CA, color=RED, fill_opacity=1
+            arc_AF, line_FC, line_CA, color=RED, **poly_param
         )
         poly_FBC = ArcPolygonFromArcs(
-            arc_FB, line_BC, line_CF, color=BLUE, fill_opacity=1
+            arc_FB, line_BC, line_CF, color=BLUE, **poly_param
         )
         poly_BHC = ArcPolygonFromArcs(
-            arc_BH, line_HC, line_CB, color=RED, fill_opacity=1
+            arc_BH, line_HC, line_CB, color=RED, **poly_param
         )
+        poly_HDC = ArcPolygonFromArcs(
+            arc_HD, line_DC, line_CH, color=BLUE, **poly_param
+        )
+        poly_DGC = ArcPolygonFromArcs(
+            arc_DG, line_GC, line_CD, color=RED, **poly_param
+        )
+        poly_GEC = ArcPolygonFromArcs(
+            arc_GE, line_EC, line_CG, color=BLUE, **poly_param
+        )
+        poly_EIC = ArcPolygonFromArcs(
+            arc_EI, line_IC, line_CE, color=RED, **poly_param
+        )
+        poly_IAC = ArcPolygonFromArcs(
+            arc_IA, line_AC, line_CI, color=BLUE, **poly_param
+        )
+
         self.play(
             Create(poly_AFC),
             Create(poly_FBC),
-            Create(poly_BHC)
+            Create(poly_BHC),
+            Create(poly_HDC),
+            Create(poly_DGC),
+            Create(poly_GEC),
+            Create(poly_EIC),
+            Create(poly_IAC)
         )
 
         self.wait(2)
