@@ -8,20 +8,21 @@ from manim import MovingCameraScene
 from manim import Dot, ArcBetweenPoints, Line, ArcPolygonFromArcs, RoundedRectangle
 from manim import Create, Uncreate, Write
 from manim import VGroup, Transform
-from manim import Tex
+from manim import Tex, TexFontTemplates
 
 from manim import config
 
 from manim import LEFT, RIGHT, DOWN, PI
 
 # COLORS
-BLUE = "#648FFF"
-VIOLET = "#785EF0"
-RED = "#DC267F"
-ORANGE = "#FE6100"
-YELLOW = "#FFB000"
+BLUE = "#B0E1FA"
+VIOLET = "#E8C9FA"
+RED = "#F79BC5"
+GREEN = "#DBF9E7"
+YELLOW = "#EFE9B7"
+ORANGE = "#F6CCB0"
 BLACK = "#000000"
-WHITE = "#FFFFFF"
+WHITE = "#F4EDDE"
 
 # Make it vertical
 SCALE_FACTOR = 1
@@ -39,8 +40,10 @@ class Pizza(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK)\
-            .to_edge(RIGHT + DOWN, buff=0.1)
+        Tex.set_default(tex_template=TexFontTemplates.droid_sans)
+        txt_copy = Tex(
+            r"@Maths\&Chill", font_size=12, color=BLACK
+        ).to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
 
         # Introduction text
@@ -358,6 +361,7 @@ class Pizza(MovingCameraScene):
         rect = RoundedRectangle(
             height=1, width=4,
             color=BLACK,
+            stroke_width=2,
             fill_color=WHITE, fill_opacity=1
         ).move_to([0, 0.75, 0])
         txt = Tex(

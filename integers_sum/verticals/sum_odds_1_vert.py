@@ -8,20 +8,21 @@ from manim import MovingCameraScene
 from manim import Dot, BraceBetweenPoints, RoundedRectangle
 from manim import Create, Uncreate, Write
 from manim import VGroup, TransformFromCopy
-from manim import Tex
+from manim import Tex, TexFontTemplates
 
 from manim import config
 
 from manim import LEFT, RIGHT, DOWN
 
 # COLORS
-BLUE = "#648FFF"
-VIOLET = "#785EF0"
-RED = "#DC267F"
-ORANGE = "#FE6100"
-YELLOW = "#FFB000"
+BLUE = "#B0E1FA"
+VIOLET = "#E8C9FA"
+RED = "#F79BC5"
+GREEN = "#DBF9E7"
+YELLOW = "#EFE9B7"
+ORANGE = "#F6CCB0"
 BLACK = "#000000"
-WHITE = "#FFFFFF"
+WHITE = "#F4EDDE"
 
 # Make it vertical
 SCALE_FACTOR = 1
@@ -38,8 +39,10 @@ class Sums(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK)\
-            .to_edge(RIGHT + DOWN, buff=0.1)
+        Tex.set_default(tex_template=TexFontTemplates.droid_sans)
+        txt_copy = Tex(
+            r"@Maths\&Chill", font_size=12, color=BLACK
+        ).to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
 
 
@@ -236,8 +239,6 @@ class Sums(MovingCameraScene):
             ]
         )
 
-        print(dots_13_c[12].get_center_of_mass())
-        print(dots_13_c[6].get_center_of_mass())
         brace_bt = BraceBetweenPoints(
             dots_13_c[0].get_center_of_mass(),
             dots_13_c[6].get_center_of_mass(),

@@ -10,20 +10,21 @@ from manim import Create, Rotate, Transform, Uncreate, Write
 from manim import TransformFromCopy
 from manim import FadeTransform, FadeIn, FadeOut
 from manim import VGroup
-from manim import Tex
+from manim import Tex, TexFontTemplates
 
 from manim import config
 
 from manim import LEFT, RIGHT, UP, DOWN, PI, DEGREES
 
 # COLORS
-BLUE = "#648FFF"
-VIOLET = "#785EF0"
-RED = "#DC267F"
-ORANGE = "#FE6100"
-YELLOW = "#FFB000"
+BLUE = "#B0E1FA"
+VIOLET = "#E8C9FA"
+RED = "#F79BC5"
+GREEN = "#DBF9E7"
+YELLOW = "#EFE9B7"
+ORANGE = "#F6CCB0"
 BLACK = "#000000"
-WHITE = "#FFFFFF"
+WHITE = "#F4EDDE"
 
 # Make it vertical
 SCALE_FACTOR = 1
@@ -77,8 +78,10 @@ class Pythagorean(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        txt_copy = Tex(r"@Math\&Moi", font_size=12, color=BLACK)\
-            .to_edge(RIGHT + DOWN, buff=0.1)
+        Tex.set_default(tex_template=TexFontTemplates.droid_sans)
+        txt_copy = Tex(
+            r"@Maths\&Chill", font_size=12, color=BLACK
+        ).to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
 
         # Introduction text
@@ -149,7 +152,7 @@ class Pythagorean(MovingCameraScene):
             .move_to(sq_a2.get_center_of_mass())
         txt_a2.z_index = 1
         self.play(
-            FadeTransform(coords_vertices_b[1], sq_a2, stretch=True),
+            FadeTransform(coords_vertices_b[1].set_color(WHITE), sq_a2, stretch=True),
             Write(txt_a2),
             run_time=1.5
         )
@@ -162,7 +165,7 @@ class Pythagorean(MovingCameraScene):
             .move_to(sq_b2.get_center_of_mass())
         txt_b2.z_index = 1
         self.play(
-            FadeTransform(coords_vertices_b[0], sq_b2, stretch=True),
+            FadeTransform(coords_vertices_b[0].set_color(WHITE), sq_b2, stretch=True),
             Write(txt_b2),
             run_time=1.5
         )
@@ -172,7 +175,7 @@ class Pythagorean(MovingCameraScene):
         txt_c2  = Tex(r"$c^2$", font_size=52, color=BLACK)\
             .move_to(sq_c2.get_center_of_mass())
         self.play(
-            FadeTransform(coords_vertices_b[2], sq_c2, stretch=True),
+            FadeTransform(coords_vertices_b[2].set_color(WHITE), sq_c2, stretch=True),
             Write(txt_c2),
             run_time=1.5
         )
