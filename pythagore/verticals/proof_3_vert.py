@@ -78,9 +78,9 @@ class Pythagorean(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        Tex.set_default(tex_template=TexFontTemplates.droid_sans)
         txt_copy = Tex(
-            r"@Maths\&Chill", font_size=12, color=BLACK
+            r"@Maths\&Chill", font_size=12,
+            color=BLACK, tex_template=TexFontTemplates.droid_sans
         ).to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
 
@@ -352,6 +352,7 @@ class Pythagorean(MovingCameraScene):
 
         rect = RoundedRectangle(
             height=1, width=4,
+            stroke_width=2,
             color=BLACK,
             fill_color=WHITE, fill_opacity=1
         ).move_to([0, 2, 0])

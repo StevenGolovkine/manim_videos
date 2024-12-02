@@ -40,9 +40,9 @@ class Pizza(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        Tex.set_default(tex_template=TexFontTemplates.droid_sans)
         txt_copy = Tex(
-            r"@Maths\&Chill", font_size=12, color=BLACK
+            r"@Maths\&Chill", font_size=12,
+            color=BLACK, tex_template=TexFontTemplates.droid_sans
         ).to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
 
