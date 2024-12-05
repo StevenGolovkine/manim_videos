@@ -35,7 +35,7 @@ config.frame_height = config.frame_height / SCALE_FACTOR
 config.frame_width = config.frame_height * 9 / 16
 
 
-class Pizza(MovingCameraScene):
+class Young(MovingCameraScene):
     def construct(self):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
@@ -48,14 +48,14 @@ class Pizza(MovingCameraScene):
 
         # Introduction text
         txt_title = [
-            Tex(r"Une i", font_size=48, color=BLACK),
-            Tex(r"une pizza en huit ?", font_size=48, color=BLACK)
+            Tex(r"Une inégalité d'aire", font_size=48, color=BLACK),
+            Tex(r"Théorème de Young", font_size=48, color=BLACK)
         ]
         txt_title = VGroup(*txt_title).arrange(DOWN).move_to([0, 2, 0])
 
         txt = [
             Tex(r"Démonstration", font_size=36, color=BLACK),
-            Tex(r"Carter and Wagon (1994)", font_size=28, color=BLACK)
+            Tex(r"Young (1912)", font_size=28, color=BLACK)
         ]
         txt = VGroup(*txt).arrange(DOWN)
 
@@ -70,18 +70,18 @@ class Pizza(MovingCameraScene):
         )
         self.wait(1)
 
-        # Theorem
-        txt_theorem = [
-            Tex(r"Si une pizza est coupée en huit", font_size=28, color=BLACK),
-            Tex(r"en faisant des coupes à $45^{\circ}$", font_size=28, color=BLACK),
-            Tex(r"à partir d'un point quelconque", font_size=28, color=BLACK),
-            Tex(r"de la pizza, alors les sommes", font_size=28, color=BLACK),
-            Tex(r"des aires des parts alternées", font_size=28, color=BLACK),
-            Tex(r"sont égales.", font_size=28, color=BLACK)
-        ]
-        txt_theorem = VGroup(*txt_theorem)\
-            .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
-                .move_to([0, 2.5, 0])
+        # # Theorem
+        # txt_theorem = [
+        #     Tex(r"Si une pizza est coupée en huit", font_size=28, color=BLACK),
+        #     Tex(r"en faisant des coupes à $45^{\circ}$", font_size=28, color=BLACK),
+        #     Tex(r"à partir d'un point quelconque", font_size=28, color=BLACK),
+        #     Tex(r"de la pizza, alors les sommes", font_size=28, color=BLACK),
+        #     Tex(r"des aires des parts alternées", font_size=28, color=BLACK),
+        #     Tex(r"sont égales.", font_size=28, color=BLACK)
+        # ]
+        # txt_theorem = VGroup(*txt_theorem)\
+        #     .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
+        #         .move_to([0, 2.5, 0])
 
-        self.play(Write(txt_theorem))
+        # self.play(Write(txt_theorem))
 
