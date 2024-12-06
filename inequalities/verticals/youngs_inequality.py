@@ -2,17 +2,15 @@
 Visual proof of the sums of odd integers.
 Proofs without Words II. Roger B. Nelsen. p. 80.
 """
-import numpy as np
-
 from manim import MovingCameraScene
-from manim import Dot, ArcBetweenPoints, Line, ArcPolygonFromArcs, RoundedRectangle
+from manim import Dot, ArcBetweenPoints, Line, RoundedRectangle
 from manim import Create, Uncreate, Write
 from manim import VGroup, Transform
 from manim import Tex, TexFontTemplates
 
 from manim import config
 
-from manim import LEFT, RIGHT, DOWN, PI
+from manim import LEFT, RIGHT, DOWN
 
 # COLORS
 BLUE = "#B0E1FA"
