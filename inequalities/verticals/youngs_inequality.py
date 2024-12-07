@@ -3,7 +3,7 @@ Visual proof of the sums of odd integers.
 Proofs without Words II. Roger B. Nelsen. p. 80.
 """
 from manim import MovingCameraScene
-from manim import Dot, ArcBetweenPoints, Line, RoundedRectangle
+from manim import Dot, Line, RoundedRectangle
 from manim import Create, Uncreate, Write
 from manim import VGroup, Transform
 from manim import Tex, TexFontTemplates
