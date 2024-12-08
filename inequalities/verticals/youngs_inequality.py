@@ -68,18 +68,18 @@ class Young(MovingCameraScene):
         )
         self.wait(1)
 
-        # # Theorem
-        # txt_theorem = [
-        #     Tex(r"Si une pizza est coupée en huit", font_size=28, color=BLACK),
-        #     Tex(r"en faisant des coupes à $45^{\circ}$", font_size=28, color=BLACK),
-        #     Tex(r"à partir d'un point quelconque", font_size=28, color=BLACK),
-        #     Tex(r"de la pizza, alors les sommes", font_size=28, color=BLACK),
-        #     Tex(r"des aires des parts alternées", font_size=28, color=BLACK),
-        #     Tex(r"sont égales.", font_size=28, color=BLACK)
-        # ]
-        # txt_theorem = VGroup(*txt_theorem)\
-        #     .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
-        #         .move_to([0, 2.5, 0])
+        # Theorem
+        txt_theorem = [
+            Tex(r"Si une pizza est coupée en huit", font_size=28, color=BLACK),
+            Tex(r"en faisant des coupes à $45^{\circ}$", font_size=28, color=BLACK),
+            Tex(r"à partir d'un point quelconque", font_size=28, color=BLACK),
+            Tex(r"de la pizza, alors les sommes", font_size=28, color=BLACK),
+            Tex(r"des aires des parts alternées", font_size=28, color=BLACK),
+            Tex(r"sont égales.", font_size=28, color=BLACK)
+        ]
+        txt_theorem = VGroup(*txt_theorem)\
+            .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
+                .move_to([0, 2.5, 0])
 
-        # self.play(Write(txt_theorem))
+        self.play(Write(txt_theorem))
 
