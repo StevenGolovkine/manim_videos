@@ -2,15 +2,16 @@
 Visual proof of the sums of odd integers.
 Proofs without Words II. Roger B. Nelsen. p. 80.
 """
+import numpy as np
+
 from manim import MovingCameraScene
 from manim import Dot, Line, RoundedRectangle
 from manim import Create, Uncreate, Write
-from manim import VGroup, Transform
-from manim import Tex, TexFontTemplates
+from manim import VGroup, Transform, FadeIn, FadeOut, FunctionGraph
+from manim import Text, Tex
 
 from manim import config
-
-from manim import LEFT, RIGHT, DOWN
+from manim import LEFT, RIGHT, DOWN, LIGHT
 
 # COLORS
 BLUE = "#B0E1FA"
@@ -38,9 +39,9 @@ class Young(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        txt_copy = Tex(
-            r"@Maths\&Chill", font_size=12,
-            color=BLACK, tex_template=TexFontTemplates.droid_sans
+        txt_copy = Text(
+            r"@chillmath", font_size=12,
+            font="CMU Typewriter Text", weight=LIGHT, color=BLACK
         ).to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
 
@@ -83,3 +84,37 @@ class Young(MovingCameraScene):
 
         self.play(Write(txt_theorem))
 
+        self.wait(2)
+        self.play(*[FadeOut(mob)for mob in self.mobjects])
+
+        # Logo
+        ref = [
+            Tex(r"On classes of summable", font_size=26, color=BLACK),
+            Tex(r"functions and their Fourier series", font_size=26, color=BLACK),
+            Tex(r"Proc. Royal Soc. (A), 87,", font_size=26, color=BLACK),
+            Tex(r"W. H. Young (1912), pp. 225-229", font_size=26, color=BLACK)
+        ]
+        ref = VGroup(*ref)\
+            .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
+            .move_to([0, 2, 0])
+
+        self.play(Write(ref))
+
+        text = Text(
+            "chillmath", font="CMU Typewriter Text", weight=LIGHT, color=BLACK
+        )
+        # Ajouter un élément mathématique, par exemple une sinusoïde
+        sine_wave = FunctionGraph(
+            lambda x: 0.1 * np.sin(2 * np.pi * x),
+            x_range=[-3, 3],
+            color=BLACK
+        )
+        sine_wave.next_to(text, DOWN, buff=0.2)
+        
+        self.play(
+            FadeIn(text, scale=0.5),
+            Create(sine_wave),
+            run_time=2
+        )
+
+        self.wait(1)

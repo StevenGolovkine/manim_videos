@@ -7,12 +7,12 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Dot, ArcBetweenPoints, Line, ArcPolygonFromArcs, RoundedRectangle
 from manim import Create, Uncreate, Write
-from manim import VGroup, Transform
-from manim import Tex, TexFontTemplates
+from manim import VGroup, Transform, FadeIn, FadeOut, FunctionGraph
+from manim import Text, Tex
 
 from manim import config
 
-from manim import LEFT, RIGHT, DOWN, PI
+from manim import LEFT, RIGHT, DOWN, PI, LIGHT
 
 # COLORS
 BLUE = "#B0E1FA"
@@ -40,9 +40,9 @@ class Pizza(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        txt_copy = Tex(
-            r"@Maths\&Chill", font_size=12,
-            color=BLACK, tex_template=TexFontTemplates.droid_sans
+        txt_copy = Text(
+            r"@chillmath", font_size=12,
+            font="CMU Typewriter Text", weight=LIGHT, color=BLACK
         ).to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
 
@@ -380,7 +380,40 @@ class Pizza(MovingCameraScene):
             run_time=0.5
         )
 
-        self.wait(3)
+        self.wait(2)
+        self.play(*[FadeOut(mob)for mob in self.mobjects])
+
+        # Logo
+        ref = [
+            Tex(r"Problem 660,", font_size=30, color=BLACK),
+            Tex(r"Mathematics Magazine 41", font_size=30, color=BLACK),
+            Tex(r"L. J. Upton (1968), p. 46", font_size=30, color=BLACK)
+        ]
+        ref = VGroup(*ref)\
+            .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
+            .move_to([0, 2, 0])
+
+        self.play(Write(ref))
+
+        text = Text(
+            "chillmath", font="CMU Typewriter Text", weight=LIGHT, color=BLACK
+        )
+        # Ajouter un élément mathématique, par exemple une sinusoïde
+        sine_wave = FunctionGraph(
+            lambda x: 0.1 * np.sin(2 * np.pi * x),
+            x_range=[-3, 3],
+            color=BLACK
+        )
+        sine_wave.next_to(text, DOWN, buff=0.2)
+        
+        self.play(
+            FadeIn(text, scale=0.5),
+            Create(sine_wave),
+            run_time=2
+        )
+
+        self.wait(1)
+
         # # Different point on the circle
         # point_A = Dot(points['A'], color=BLUE)
         # point_B = Dot(points['B'], color=RED)

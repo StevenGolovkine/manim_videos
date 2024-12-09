@@ -2,17 +2,19 @@
 Visual proof of the Pythagorean theorem.
 Proofs without Words I. Roger B. Nelsen. p. 3.
 """
+import numpy as np
+
 from manim import MovingCameraScene, Mobject
 from manim import Brace, Line, Polygon
 from manim import RoundedRectangle, Square
 from manim import Create, Rotate, Transform, Uncreate, Write
-from manim import FadeOut, FadeTransform, TransformFromCopy
-from manim import VGroup
-from manim import Tex, TexFontTemplates
+from manim import FadeIn, FadeOut, FadeTransform, TransformFromCopy
+from manim import FunctionGraph, VGroup
+from manim import Text, Tex
 
 from manim import config
 
-from manim import LEFT, RIGHT, UP, DOWN, PI, DR, DL, UR, UL
+from manim import LEFT, RIGHT, UP, DOWN, PI, DR, DL, UR, UL, LIGHT
 
 # COLORS
 BLUE = "#B0E1FA"
@@ -63,9 +65,9 @@ class Pythagorean(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        txt_copy = Tex(
-            r"@Maths\&Chill", font_size=12, color=BLACK,
-            tex_template=TexFontTemplates.droid_sans
+        txt_copy = Text(
+            r"@chillmath", font_size=12,
+            font="CMU Typewriter Text", weight=LIGHT, color=BLACK
         ).to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
 
@@ -303,4 +305,36 @@ class Pythagorean(MovingCameraScene):
             TransformFromCopy(txt_c2[0], txt[4])
         )
 
-        self.wait(4)
+        self.wait(2)
+        self.play(*[FadeOut(mob)for mob in self.mobjects])
+
+        # Logo
+        ref = [
+            Tex(r"Proofs without words:", font_size=30, color=BLACK),
+            Tex(r"Exercises in visual thinking", font_size=30, color=BLACK),
+            Tex(r"Roger B. Nelsen (1993), p. 3", font_size=30, color=BLACK)
+        ]
+        ref = VGroup(*ref)\
+            .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
+            .move_to([0, 2, 0])
+
+        self.play(Write(ref))
+
+        text = Text(
+            "chillmath", font="CMU Typewriter Text", weight=LIGHT, color=BLACK
+        )
+        # Ajouter un élément mathématique, par exemple une sinusoïde
+        sine_wave = FunctionGraph(
+            lambda x: 0.1 * np.sin(2 * np.pi * x),
+            x_range=[-3, 3],
+            color=BLACK
+        )
+        sine_wave.next_to(text, DOWN, buff=0.2)
+        
+        self.play(
+            FadeIn(text, scale=0.5),
+            Create(sine_wave),
+            run_time=2
+        )
+
+        self.wait(1)

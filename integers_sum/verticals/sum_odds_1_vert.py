@@ -7,12 +7,12 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Dot, BraceBetweenPoints, RoundedRectangle
 from manim import Create, Uncreate, Write
-from manim import VGroup, TransformFromCopy
-from manim import Tex, TexFontTemplates
+from manim import VGroup, TransformFromCopy, FadeIn, FadeOut, FunctionGraph
+from manim import Text, Tex
 
 from manim import config
 
-from manim import LEFT, RIGHT, DOWN
+from manim import LEFT, RIGHT, DOWN, LIGHT
 
 # COLORS
 BLUE = "#B0E1FA"
@@ -39,9 +39,9 @@ class Sums(MovingCameraScene):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
 
-        txt_copy = Tex(
-            r"@Maths\&Chill", font_size=12,
-            color=BLACK, tex_template=TexFontTemplates.droid_sans
+        txt_copy = Text(
+            r"@chillmath", font_size=12,
+            font="CMU Typewriter Text", weight=LIGHT, color=BLACK
         ).to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
 
@@ -288,6 +288,38 @@ class Sums(MovingCameraScene):
             Write(txt[5]),
             TransformFromCopy(txt_n[0], txt[6]),
             TransformFromCopy(txt_n_c[0], txt[6].copy())
+        )
+
+        self.wait(2)
+        self.play(*[FadeOut(mob)for mob in self.mobjects])
+
+        # Logo
+        ref = [
+            Tex(r"Proofs without words:", font_size=30, color=BLACK),
+            Tex(r"Exercises in visual thinking", font_size=30, color=BLACK),
+            Tex(r"Roger B. Nelsen (1993), p. 71", font_size=30, color=BLACK)
+        ]
+        ref = VGroup(*ref)\
+            .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
+            .move_to([0, 2, 0])
+
+        self.play(Write(ref))
+
+        text = Text(
+            "chillmath", font="CMU Typewriter Text", weight=LIGHT, color=BLACK
+        )
+        # Ajouter un élément mathématique, par exemple une sinusoïde
+        sine_wave = FunctionGraph(
+            lambda x: 0.1 * np.sin(2 * np.pi * x),
+            x_range=[-3, 3],
+            color=BLACK
+        )
+        sine_wave.next_to(text, DOWN, buff=0.2)
+        
+        self.play(
+            FadeIn(text, scale=0.5),
+            Create(sine_wave),
+            run_time=2
         )
 
         self.wait(1)
