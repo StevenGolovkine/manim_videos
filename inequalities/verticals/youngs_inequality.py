@@ -71,12 +71,11 @@ class Young(MovingCameraScene):
 
         # Theorem
         txt_theorem = [
-            Tex(r"Si une pizza est coupée en huit", font_size=28, color=BLACK),
-            Tex(r"en faisant des coupes à $45^{\circ}$", font_size=28, color=BLACK),
-            Tex(r"à partir d'un point quelconque", font_size=28, color=BLACK),
-            Tex(r"de la pizza, alors les sommes", font_size=28, color=BLACK),
-            Tex(r"des aires des parts alternées", font_size=28, color=BLACK),
-            Tex(r"sont égales.", font_size=28, color=BLACK)
+            Tex(r"Soit $f$ une fonction, continue,", font_size=28, color=BLACK),
+            Tex(r"strictement croissante, inversible", font_size=28, color=BLACK),
+            Tex(r"et tel que $f(0) = 0$.", font_size=28, color=BLACK),
+            Tex(r"Pour $a, b \geq 0$, on a", font_size=28, color=BLACK),
+            Tex(r"$ab \leq \int_{0}^a f(x)dx + \int_{0}^b f^{-1}(x)dx$", font_size=28, color=BLACK)
         ]
         txt_theorem = VGroup(*txt_theorem)\
             .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
