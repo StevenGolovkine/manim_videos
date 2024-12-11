@@ -5,9 +5,8 @@ Proofs without Words II. Roger B. Nelsen. p. 80.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Dot, Line, RoundedRectangle
 from manim import Create, Uncreate, Write
-from manim import VGroup, Transform, FadeIn, FadeOut, FunctionGraph
+from manim import VGroup, FadeIn, FadeOut, FunctionGraph
 from manim import Text, Tex
 
 from manim import config
