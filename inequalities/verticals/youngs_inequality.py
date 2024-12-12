@@ -39,7 +39,7 @@ class Young(MovingCameraScene):
         self.camera.frame.save_state()
 
         txt_copy = Text(
-            r"@chillmath", font_size=12,
+            r"@chill.maths", font_size=12,
             font="CMU Typewriter Text", weight=LIGHT, color=BLACK
         ).to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
@@ -72,7 +72,7 @@ class Young(MovingCameraScene):
         txt_theorem = [
             Tex(r"Soit $f$ une fonction, continue,", font_size=28, color=BLACK),
             Tex(r"strictement croissante, inversible", font_size=28, color=BLACK),
-            Tex(r"et tel que $f(0) = 0$.", font_size=28, color=BLACK),
+            Tex(r"et tel que $f(0) = 0$ et $f^{-1}(0) = 0$.", font_size=28, color=BLACK),
             Tex(r"Pour $a, b \geq 0$, on a", font_size=28, color=BLACK),
             Tex(r"$ab \leq \int_{0}^a f(x)dx + \int_{0}^b f^{-1}(x)dx$", font_size=28, color=BLACK)
         ]
@@ -99,7 +99,7 @@ class Young(MovingCameraScene):
         self.play(Write(ref))
 
         text = Text(
-            "chillmath", font="CMU Typewriter Text", weight=LIGHT, color=BLACK
+            "chill.maths", font="CMU Typewriter Text", weight=LIGHT, color=BLACK
         )
         # Ajouter un élément mathématique, par exemple une sinusoïde
         sine_wave = FunctionGraph(

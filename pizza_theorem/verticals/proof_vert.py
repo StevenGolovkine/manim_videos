@@ -41,7 +41,7 @@ class Pizza(MovingCameraScene):
         self.camera.frame.save_state()
 
         txt_copy = Text(
-            r"@chillmath", font_size=12,
+            r"@chill.maths", font_size=12,
             font="CMU Typewriter Text", weight=LIGHT, color=BLACK
         ).to_edge(RIGHT + DOWN, buff=0.1)
         self.add(txt_copy)
@@ -396,7 +396,7 @@ class Pizza(MovingCameraScene):
         self.play(Write(ref))
 
         text = Text(
-            "chillmath", font="CMU Typewriter Text", weight=LIGHT, color=BLACK
+            "chill.maths", font="CMU Typewriter Text", weight=LIGHT, color=BLACK
         )
         # Ajouter un élément mathématique, par exemple une sinusoïde
         sine_wave = FunctionGraph(
