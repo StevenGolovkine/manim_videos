@@ -6,7 +6,7 @@ import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
-from manim import VGroup, FadeIn, FadeOut, FunctionGraph
+from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph
 from manim import Text, Tex
 
 from manim import config
@@ -81,6 +81,34 @@ class Young(MovingCameraScene):
                 .move_to([0, 2.5, 0])
 
         self.play(Write(txt_theorem))
+
+        # b > f(a)
+        txt = Tex(r"$b > f(a)$:", font_size=28, color=BLACK)\
+            .move_to([-1.5, 1, 0])
+        self.play(Write(txt))
+
+
+        ax = Axes(
+            x_range=[0, 10, 1],
+            y_range=[-1, 10, 1],
+            x_length=5,
+            y_length=5,
+            tips=False,
+            x_axis_config={
+                "color": BLACK,
+            },
+            y_axis_config={
+                "color": BLACK
+            }
+        ).scale(0.4).move_to([0, -2, 0])
+
+        graph = ax.plot(
+            lambda x: x ** 2,
+            x_range=[0.001, 10],
+            use_smoothing=False,
+            color=BLACK
+        )
+        self.add(ax, graph)
 
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
