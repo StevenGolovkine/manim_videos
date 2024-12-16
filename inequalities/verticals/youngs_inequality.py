@@ -6,7 +6,7 @@ import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
-from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph
+from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Line
 from manim import Text, Tex
 
 from manim import config
@@ -112,6 +112,22 @@ class Young(MovingCameraScene):
             Create(ax),
             Create(graph)
         )
+
+        point = ax.c2p(0.972669, 1.5)
+        line_b = ax.get_horizontal_line(point, line_func=Line, color=BLACK)
+        self.play(Create(line_b))
+
+        point = ax.c2p(0.8, 1.5)
+        line_a = ax.get_vertical_line(point, line_func=Line, color=BLACK)
+        self.play(Create(line_a))
+
+        area = ax.get_area(
+            graph,
+            x_range=(0, 0.8),
+            color=BLUE,
+            opacity=0.8,
+        )
+        self.add(area)
 
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
