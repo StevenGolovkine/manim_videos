@@ -6,7 +6,7 @@ import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
-from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Line
+from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Line, Polygon
 from manim import Text, Tex
 
 from manim import config
@@ -126,8 +126,22 @@ class Young(MovingCameraScene):
             x_range=(0, 0.8),
             color=BLUE,
             opacity=0.8,
+            stroke_width=0
         )
         self.add(area)
+
+        x_vals = np.arange(0, 0.972669, 0.01)
+        points = [
+            graph.get_point_from_function(x) for x in x_vals
+        ]
+
+        region = Polygon(
+            *[*points, ax.c2p(0, 1.5)],
+            stroke_width=0,
+            fill_color=RED,
+            fill_opacity=0.5
+        )
+        self.add(region)
 
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
