@@ -83,16 +83,16 @@ class Young(MovingCameraScene):
         self.play(Write(txt_theorem))
 
         # b > f(a)
-        txt = Tex(r"$b > f(a)$:", font_size=28, color=BLACK)\
-            .move_to([-1.5, 1, 0])
+        txt = Tex(r"Pour $b > f(a)$:", font_size=28, color=BLACK)\
+            .move_to([-1.25, 1, 0])
         self.play(Write(txt))
 
 
         ax = Axes(
-            x_range=[0, 10, 1],
-            y_range=[-1, 10, 1],
-            x_length=5,
-            y_length=5,
+            x_range=[0, 1, 0.1],
+            y_range=[-0.1, 2, 0.2],
+            x_length=7,
+            y_length=7,
             tips=False,
             x_axis_config={
                 "color": BLACK,
@@ -100,15 +100,18 @@ class Young(MovingCameraScene):
             y_axis_config={
                 "color": BLACK
             }
-        ).scale(0.4).move_to([0, -2, 0])
+        ).scale(0.5).move_to([0, -1.25, 0])
 
         graph = ax.plot(
-            lambda x: x ** 2,
-            x_range=[0.001, 10],
+            lambda x: x + 0.1 * x**3 + 0.5 * x**5,
+            x_range=[0, 1],
             use_smoothing=False,
             color=BLACK
         )
-        self.add(ax, graph)
+        self.play(
+            Create(ax),
+            Create(graph)
+        )
 
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
