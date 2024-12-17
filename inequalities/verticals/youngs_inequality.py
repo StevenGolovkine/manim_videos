@@ -71,8 +71,8 @@ class Young(MovingCameraScene):
         # Theorem
         txt_theorem = [
             Tex(r"Soit $f$ une fonction, continue,", font_size=28, color=BLACK),
-            Tex(r"strictement croissante, inversible", font_size=28, color=BLACK),
-            Tex(r"et tel que $f(0) = 0$ et $f^{-1}(0) = 0$.", font_size=28, color=BLACK),
+            Tex(r"strictement croissante, inversible,", font_size=28, color=BLACK),
+            Tex(r"tel que $f(0) = 0$ et $f^{-1}(0) = 0$.", font_size=28, color=BLACK),
             Tex(r"Pour $a, b \geq 0$, on a", font_size=28, color=BLACK),
             Tex(r"$ab \leq \int_{0}^a f(x)dx + \int_{0}^b f^{-1}(x)dx$", font_size=28, color=BLACK)
         ]
@@ -86,7 +86,6 @@ class Young(MovingCameraScene):
         txt = Tex(r"Pour $b > f(a)$:", font_size=28, color=BLACK)\
             .move_to([-1.25, 1, 0])
         self.play(Write(txt))
-
 
         ax = Axes(
             x_range=[0, 1, 0.1],
@@ -113,13 +112,42 @@ class Young(MovingCameraScene):
             Create(graph)
         )
 
+        point_b = ax.c2p(0, 1.5)
+        txt_b = Tex(r"$b$", font_size=28, color=BLACK).next_to(point_b, LEFT)  
+
         point = ax.c2p(0.972669, 1.5)
         line_b = ax.get_horizontal_line(point, line_func=Line, color=BLACK)
-        self.play(Create(line_b))
+        self.play(
+            Write(txt_b),
+            Create(line_b)
+        )
+
+        x_vals = np.arange(0, 0.972669, 0.01)
+        points = [
+            graph.get_point_from_function(x) for x in x_vals
+        ]
+        region = Polygon(
+            *[*points, ax.c2p(0, 1.5)],
+            stroke_width=0,
+            fill_color=RED,
+            fill_opacity=0.5
+        )
+        txt_int_b = Tex(r"$\int_{0}^b f^{-1}(x)dx$", font_size=28, color=BLACK)\
+            .move_to([-0.5, -1, 0])
+        self.play(
+            Create(region),
+            Write(txt_int_b)
+        )
+
+        point_a = ax.c2p(0.8, 0)
+        txt_a = Tex(r"$a$", font_size=28, color=BLACK).next_to(point_a, DOWN)  
 
         point = ax.c2p(0.8, 1.5)
         line_a = ax.get_vertical_line(point, line_func=Line, color=BLACK)
-        self.play(Create(line_a))
+        self.play(
+            Write(txt_a),
+            Create(line_a)
+        )
 
         area = ax.get_area(
             graph,
@@ -127,21 +155,14 @@ class Young(MovingCameraScene):
             color=BLUE,
             opacity=0.8,
             stroke_width=0
+        ).reverse_direction()
+        txt_int_a = Tex(r"$\int_{0}^a f(x)dx$", font_size=28, color=BLACK)\
+            .move_to([0.2, -2.5, 0])
+        self.play(
+            Create(area),
+            Write(txt_int_a)
         )
-        self.add(area)
 
-        x_vals = np.arange(0, 0.972669, 0.01)
-        points = [
-            graph.get_point_from_function(x) for x in x_vals
-        ]
-
-        region = Polygon(
-            *[*points, ax.c2p(0, 1.5)],
-            stroke_width=0,
-            fill_color=RED,
-            fill_opacity=0.5
-        )
-        self.add(region)
 
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
