@@ -179,7 +179,95 @@ class Young(MovingCameraScene):
             Write(txt_b2)
         )
 
+        # b < f(a)
+        self.play(
+            FadeOut(txt),
+            FadeOut(txt_b),
+            FadeOut(line_b),
+            FadeOut(txt_a),
+            FadeOut(line_a),
+            FadeOut(region_b),
+            FadeOut(region_a),
+            FadeOut(txt_int_a),
+            FadeOut(txt_int_b),
+            FadeOut(square_ab),
+            FadeOut(txt_b2)
+        )
 
+
+        txt = Tex(r"Pour $b < f(a)$:", font_size=28, color=BLACK)\
+            .move_to([-1.25, 1, 0])
+        self.play(Write(txt))
+
+
+        point_a = ax.c2p(1, 0)
+        txt_a = Tex(r"$a$", font_size=28, color=BLACK).next_to(point_a, DOWN)  
+
+        point = ax.c2p(1, 1.6)
+        line_a = ax.get_vertical_line(point, line_func=Line, color=BLACK)
+        self.play(
+            Write(txt_a),
+            Create(line_a)
+        )
+
+        x_vals = np.arange(0, 1, 0.01)
+        points = [
+            graph.get_point_from_function(x) for x in x_vals
+        ]
+        region_a = Polygon(
+            *[ax.c2p(1, 0), *points],
+            stroke_width=0,
+            fill_color=BLUE,
+            fill_opacity=0.5
+        )
+        txt_int_a = Tex(r"$\int_{0}^a f(x)dx$", font_size=28, color=BLACK)\
+            .move_to([1, -2.5, 0])
+        self.play(
+            Create(region_a),
+            Write(txt_int_a)
+        )
+
+        point_b = ax.c2p(0, 1)
+        txt_b = Tex(r"$b$", font_size=28, color=BLACK).next_to(point_b, LEFT)  
+
+        point = ax.c2p(1, 1)
+        line_b = ax.get_horizontal_line(point, line_func=Line, color=BLACK)
+        self.play(
+            Write(txt_b),
+            Create(line_b)
+        )
+
+        x_vals = np.arange(0, 0.793154, 0.01)
+        points = [
+            graph.get_point_from_function(x) for x in x_vals
+        ]
+        region_b = Polygon(
+            *[*points, ax.c2p(0, 1)],
+            stroke_width=0,
+            fill_color=RED,
+            fill_opacity=0.5
+        )
+        txt_int_b = Tex(r"$\int_{0}^b f^{-1}(x)dx$", font_size=28, color=BLACK)\
+            .move_to([-0.75, -1.5, 0])
+        self.play(
+            Create(region_b),
+            Write(txt_int_b)
+        )
+
+        square_ab = Polygon(
+            ax.c2p(0, 0), ax.c2p(1, 0),
+            ax.c2p(1, 1), ax.c2p(0, 1),
+            stroke_color=BLACK, stroke_width=2,
+            fill_color=WHITE, fill_opacity=0.8
+        )
+        txt_b2 = Tex(r"$ab$", font_size=28, color=BLACK)\
+            .move_to(square_ab.get_center_of_mass())
+        self.play(
+            Create(square_ab),
+            Write(txt_b2)
+        )
+
+        # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
 
