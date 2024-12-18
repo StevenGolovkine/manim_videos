@@ -126,7 +126,7 @@ class Young(MovingCameraScene):
         points = [
             graph.get_point_from_function(x) for x in x_vals
         ]
-        region = Polygon(
+        region_b = Polygon(
             *[*points, ax.c2p(0, 1.5)],
             stroke_width=0,
             fill_color=RED,
@@ -135,7 +135,7 @@ class Young(MovingCameraScene):
         txt_int_b = Tex(r"$\int_{0}^b f^{-1}(x)dx$", font_size=28, color=BLACK)\
             .move_to([-0.5, -1, 0])
         self.play(
-            Create(region),
+            Create(region_b),
             Write(txt_int_b)
         )
 
@@ -149,18 +149,34 @@ class Young(MovingCameraScene):
             Create(line_a)
         )
 
-        area = ax.get_area(
-            graph,
-            x_range=(0, 0.8),
-            color=BLUE,
-            opacity=0.8,
-            stroke_width=0
-        ).reverse_direction()
+        x_vals = np.arange(0, 0.8, 0.01)
+        points = [
+            graph.get_point_from_function(x) for x in x_vals
+        ]
+        region_a = Polygon(
+            *[ax.c2p(0.8, 0), *points],
+            stroke_width=0,
+            fill_color=BLUE,
+            fill_opacity=0.5
+        )
         txt_int_a = Tex(r"$\int_{0}^a f(x)dx$", font_size=28, color=BLACK)\
             .move_to([0.2, -2.5, 0])
         self.play(
-            Create(area),
+            Create(region_a),
             Write(txt_int_a)
+        )
+
+        square_ab = Polygon(
+            ax.c2p(0, 0), ax.c2p(0.8, 0),
+            ax.c2p(0.8, 1.5), ax.c2p(0, 1.5),
+            stroke_color=BLACK, stroke_width=2,
+            fill_color=WHITE, fill_opacity=0.8
+        )
+        txt_b2 = Tex(r"$ab$", font_size=28, color=BLACK)\
+            .move_to(square_ab.get_center_of_mass())
+        self.play(
+            Create(square_ab),
+            Write(txt_b2)
         )
 
 
