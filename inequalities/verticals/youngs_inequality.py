@@ -10,7 +10,7 @@ from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Line, Polygon
 from manim import Text, Tex
 
 from manim import config
-from manim import LEFT, RIGHT, DOWN, LIGHT
+from manim import LEFT, RIGHT, DOWN, LIGHT, UP
 
 # COLORS
 BLUE = "#B0E1FA"
@@ -83,7 +83,7 @@ class Young(MovingCameraScene):
         self.play(Write(txt_theorem))
 
         # b > f(a)
-        txt = Tex(r"Pour $b > f(a)$:", font_size=28, color=BLACK)\
+        txt = Tex(r"Si $b > f(a)$:", font_size=28, color=BLACK)\
             .move_to([-1.25, 1, 0])
         self.play(Write(txt))
 
@@ -107,9 +107,12 @@ class Young(MovingCameraScene):
             use_smoothing=False,
             color=BLACK
         )
+        txt_f = Tex(r"$f(x)$", font_size=28, color=BLACK)\
+            .next_to(ax.c2p(1, 1.6), UP)
         self.play(
             Create(ax),
-            Create(graph)
+            Create(graph),
+            Write(txt_f)
         )
 
         point_b = ax.c2p(0, 1.5)
@@ -149,7 +152,7 @@ class Young(MovingCameraScene):
             Create(line_a)
         )
 
-        x_vals = np.arange(0, 0.8, 0.01)
+        x_vals = np.arange(0, 0.81, 0.01)
         points = [
             graph.get_point_from_function(x) for x in x_vals
         ]
@@ -165,6 +168,7 @@ class Young(MovingCameraScene):
             Create(region_a),
             Write(txt_int_a)
         )
+        self.wait(1)
 
         square_ab = Polygon(
             ax.c2p(0, 0), ax.c2p(0.8, 0),
@@ -178,6 +182,8 @@ class Young(MovingCameraScene):
             Create(square_ab),
             Write(txt_b2)
         )
+
+        self.wait(2)
 
         # b < f(a)
         self.play(
@@ -195,33 +201,33 @@ class Young(MovingCameraScene):
         )
 
 
-        txt = Tex(r"Pour $b < f(a)$:", font_size=28, color=BLACK)\
+        txt = Tex(r"Si $b < f(a)$:", font_size=28, color=BLACK)\
             .move_to([-1.25, 1, 0])
         self.play(Write(txt))
 
 
-        point_a = ax.c2p(1, 0)
+        point_a = ax.c2p(0.9, 0)
         txt_a = Tex(r"$a$", font_size=28, color=BLACK).next_to(point_a, DOWN)  
 
-        point = ax.c2p(1, 1.6)
+        point = ax.c2p(0.9, 1.268145)
         line_a = ax.get_vertical_line(point, line_func=Line, color=BLACK)
         self.play(
             Write(txt_a),
             Create(line_a)
         )
 
-        x_vals = np.arange(0, 1, 0.01)
+        x_vals = np.arange(0, 0.91, 0.01)
         points = [
             graph.get_point_from_function(x) for x in x_vals
         ]
         region_a = Polygon(
-            *[ax.c2p(1, 0), *points],
+            *[ax.c2p(0.9, 0), *points],
             stroke_width=0,
             fill_color=BLUE,
             fill_opacity=0.5
         )
         txt_int_a = Tex(r"$\int_{0}^a f(x)dx$", font_size=28, color=BLACK)\
-            .move_to([1, -2.5, 0])
+            .move_to([0.6, -2.5, 0])
         self.play(
             Create(region_a),
             Write(txt_int_a)
@@ -230,7 +236,7 @@ class Young(MovingCameraScene):
         point_b = ax.c2p(0, 1)
         txt_b = Tex(r"$b$", font_size=28, color=BLACK).next_to(point_b, LEFT)  
 
-        point = ax.c2p(1, 1)
+        point = ax.c2p(0.9, 1)
         line_b = ax.get_horizontal_line(point, line_func=Line, color=BLACK)
         self.play(
             Write(txt_b),
@@ -254,9 +260,11 @@ class Young(MovingCameraScene):
             Write(txt_int_b)
         )
 
+        self.wait(1)
+
         square_ab = Polygon(
-            ax.c2p(0, 0), ax.c2p(1, 0),
-            ax.c2p(1, 1), ax.c2p(0, 1),
+            ax.c2p(0, 0), ax.c2p(0.9, 0),
+            ax.c2p(0.9, 1), ax.c2p(0, 1),
             stroke_color=BLACK, stroke_width=2,
             fill_color=WHITE, fill_opacity=0.8
         )
