@@ -338,3 +338,5 @@ class Pythagorean(MovingCameraScene):
         )
 
         self.wait(1)
+
+        
