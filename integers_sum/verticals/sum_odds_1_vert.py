@@ -62,18 +62,19 @@ class Sums(MovingCameraScene):
         txt_formula = Tex(r"$1 + 3 + \cdots + (2n - 1) = n^2$", font_size=28, color=BLACK)\
             .next_to(txt, 2 * DOWN)
 
-        self.play(
-            Write(txt_title),
-            Write(txt),
-            Write(txt_formula)
+        self.add(
+            txt_title,
+            txt,
+            txt_formula
         )
         self.wait(1)
         self.play(
             Uncreate(txt_title),
             Uncreate(txt),
-            Uncreate(txt_formula)
+            Uncreate(txt_formula),
+            run_time=0.5
         )
-        self.wait(1)
+        self.wait(0.5)
 
         # Dots
         # self.camera.frame.move_to(points[0]).set(width=20)
