@@ -1,5 +1,5 @@
 """
-Visual proof of the sums of odd integers.
+Visual proof of the sums of triangular numbers.
 Proofs without Words. Roger B. Nelsen. p. 96.
 """
 import numpy as np

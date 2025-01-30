@@ -1,5 +1,5 @@
 """
-Visual proof of the sums of odd integers.
+Visual proof of the Young inequality.
 Proofs without Words II. Roger B. Nelsen. p. 80.
 """
 import numpy as np
@@ -66,7 +66,6 @@ class Young(MovingCameraScene):
             Uncreate(txt_title),
             Uncreate(txt)
         )
-        self.wait(1)
 
         # Theorem
         txt_theorem = [
@@ -125,23 +124,6 @@ class Young(MovingCameraScene):
             Create(line_b)
         )
 
-        x_vals = np.arange(0, 0.972669, 0.01)
-        points = [
-            graph.get_point_from_function(x) for x in x_vals
-        ]
-        region_b = Polygon(
-            *[*points, ax.c2p(0, 1.5)],
-            stroke_width=0,
-            fill_color=RED,
-            fill_opacity=0.5
-        )
-        txt_int_b = Tex(r"$\int_{0}^b f^{-1}(x)dx$", font_size=28, color=BLACK)\
-            .move_to([-0.5, -1, 0])
-        self.play(
-            Create(region_b),
-            Write(txt_int_b)
-        )
-
         point_a = ax.c2p(0.8, 0)
         txt_a = Tex(r"$a$", font_size=28, color=BLACK).next_to(point_a, DOWN)  
 
@@ -168,6 +150,24 @@ class Young(MovingCameraScene):
             Create(region_a),
             Write(txt_int_a)
         )
+
+        x_vals = np.arange(0, 0.972669, 0.01)
+        points = [
+            graph.get_point_from_function(x) for x in x_vals
+        ]
+        region_b = Polygon(
+            *[*points, ax.c2p(0, 1.5)],
+            stroke_width=0,
+            fill_color=RED,
+            fill_opacity=0.5
+        )
+        txt_int_b = Tex(r"$\int_{0}^b f^{-1}(x)dx$", font_size=28, color=BLACK)\
+            .move_to([-0.5, -1, 0])
+        self.play(
+            Create(region_b),
+            Write(txt_int_b)
+        )
+
         self.wait(1)
 
         square_ab = Polygon(
@@ -183,7 +183,7 @@ class Young(MovingCameraScene):
             Write(txt_b2)
         )
 
-        self.wait(2)
+        self.wait(1)
 
         # b < f(a)
         self.play(
@@ -216,6 +216,16 @@ class Young(MovingCameraScene):
             Create(line_a)
         )
 
+        point_b = ax.c2p(0, 1)
+        txt_b = Tex(r"$b$", font_size=28, color=BLACK).next_to(point_b, LEFT)  
+
+        point = ax.c2p(0.9, 1)
+        line_b = ax.get_horizontal_line(point, line_func=Line, color=BLACK)
+        self.play(
+            Write(txt_b),
+            Create(line_b)
+        )
+
         x_vals = np.arange(0, 0.91, 0.01)
         points = [
             graph.get_point_from_function(x) for x in x_vals
@@ -233,15 +243,7 @@ class Young(MovingCameraScene):
             Write(txt_int_a)
         )
 
-        point_b = ax.c2p(0, 1)
-        txt_b = Tex(r"$b$", font_size=28, color=BLACK).next_to(point_b, LEFT)  
 
-        point = ax.c2p(0.9, 1)
-        line_b = ax.get_horizontal_line(point, line_func=Line, color=BLACK)
-        self.play(
-            Write(txt_b),
-            Create(line_b)
-        )
 
         x_vals = np.arange(0, 0.793154, 0.01)
         points = [
