@@ -83,14 +83,9 @@ class Pythagorean(MovingCameraScene):
         txt_desc = Tex(r"de Bhāskara (12e siècle)", font_size=28, color=BLACK)\
             .next_to(txt_dem, DOWN, buff=0.5)
 
-        self.play(
-            Write(txt_title), Write(txt_dem), Write(txt_desc),
-            run_time=3
-        )
-        self.wait(3)
-        self.play(Uncreate(txt_title), Uncreate(txt_dem), Uncreate(txt_desc))
+        self.add(txt_title, txt_dem, txt_desc)
         self.wait(1)
-
+        self.play(Uncreate(txt_title), Uncreate(txt_dem), Uncreate(txt_desc))
 
         # First triangle and text
         triangle_b = Polygon(
