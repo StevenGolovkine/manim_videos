@@ -7,7 +7,8 @@ import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
-from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Line, Polygon
+from manim import VGroup, FadeIn, FadeOut , FunctionGraph
+from manim import Line, Point
 from manim import Text, Tex
 
 from manim import config
@@ -70,6 +71,39 @@ class Triangle(MovingCameraScene):
             Uncreate(txt)
         )
 
+        # Triangle
+        pA = Point([-2, -1, 0], color=BLACK)
+        pB = Point([2, -1, 0], color=BLACK)
+        pC = Point([-1, 2, 0], color=BLACK)
+        AB = Line(pA, pB, color=BLACK)
+        BC = Line(pB, pC, color=BLACK)
+        CA = Line(pC, pA, color=BLACK)
+        AMb = Line(pA, BC.get_center_of_mass(), color=BLUE)
+        BMc = Line(pB, CA.get_center_of_mass(), color=VIOLET)
+        CMa = Line(pC, AB.get_center_of_mass(), color=RED)
+        A = Tex(r"$A$", font_size=36, color=BLACK).next_to(pA, DOWN, buff=0.1)
+        B = Tex(r"$B$", font_size=36, color=BLACK).next_to(pB, DOWN, buff=0.1)
+        C = Tex(r"$C$", font_size=36, color=BLACK).next_to(pC, UP, buff=0.1)
+        Ma = Tex(r"$M_a$", font_size=36, color=BLUE).\
+            next_to(BC.get_center_of_mass(), RIGHT, buff=0.1)
+        Mb = Tex(r"$M_b$", font_size=36, color=VIOLET).\
+            next_to(CA.get_center_of_mass(), LEFT, buff=0.1)
+        Mc = Tex(r"$M_c$", font_size=36, color=RED).\
+            next_to(AB.get_center_of_mass(), DOWN, buff=0.1)
+        self.play(
+            Create(AB),
+            Create(BC),
+            Create(CA),
+            Create(AMb),
+            Create(BMc),
+            Create(CMa),
+            Create(A),
+            Create(B),
+            Create(C),
+            Create(Ma),
+            Create(Mb),
+            Create(Mc)
+        )
 
         # Finish
         self.wait(2)
