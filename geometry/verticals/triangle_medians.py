@@ -7,7 +7,7 @@ import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
-from manim import VGroup, FadeIn, FadeOut , FunctionGraph
+from manim import Group, VGroup, FadeIn, FadeOut , FunctionGraph
 from manim import Line, Point
 from manim import Text, Tex
 
@@ -90,20 +90,29 @@ class Triangle(MovingCameraScene):
             next_to(CA.get_center_of_mass(), LEFT, buff=0.1)
         Mc = Tex(r"$M_c$", font_size=36, color=RED).\
             next_to(AB.get_center_of_mass(), DOWN, buff=0.1)
+        triangle = VGroup(AB, BC, CA, A, B, C)
+
         self.play(
-            Create(AB),
-            Create(BC),
-            Create(CA),
+            Create(triangle),
+        )
+
+        self.play(           
             Create(AMb),
             Create(BMc),
             Create(CMa),
-            Create(A),
-            Create(B),
-            Create(C),
             Create(Ma),
             Create(Mb),
             Create(Mc)
         )
+
+        self.play(
+            triangle.animate.scale(0.5).shift(2 * UP),
+            AMb.animate.shift(1.5 * UP + 0.5 * RIGHT),
+            CMa.animate.shift(2 * RIGHT),
+        )
+        
+
+        
 
         # Finish
         self.wait(2)

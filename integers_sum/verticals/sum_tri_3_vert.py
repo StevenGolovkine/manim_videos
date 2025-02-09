@@ -6,8 +6,8 @@ import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
-from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Transform
-from manim import Dot, MathTable, Brace, RoundedRectangle
+from manim import VGroup, FadeIn, FadeOut, FunctionGraph, Transform
+from manim import MathTable, Brace, RoundedRectangle
 from manim import Text, Tex
 
 from manim import config
