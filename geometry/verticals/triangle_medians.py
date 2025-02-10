@@ -112,8 +112,6 @@ class Triangle(MovingCameraScene):
         )
         
 
-        
-
         # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
