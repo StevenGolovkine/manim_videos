@@ -6,13 +6,13 @@ Proofs without Words II. Roger B. Nelsen. p. 16.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Create, Uncreate, Write
+from manim import Create, Uncreate, Write, Transform, Rotate
 from manim import Group, VGroup, FadeIn, FadeOut , FunctionGraph
-from manim import Line, Point
+from manim import DashedVMobject, Line, Point, Polygon
 from manim import Text, Tex
 
 from manim import config
-from manim import LEFT, RIGHT, DOWN, LIGHT, UP
+from manim import ORIGIN, LEFT, RIGHT, DOWN, LIGHT, UP, PI
 
 # COLORS
 BLUE = "#B0E1FA"
@@ -75,9 +75,9 @@ class Triangle(MovingCameraScene):
         pA = Point([-2, -1, 0], color=BLACK)
         pB = Point([2, -1, 0], color=BLACK)
         pC = Point([-1, 2, 0], color=BLACK)
-        AB = Line(pA, pB, color=BLACK)
-        BC = Line(pB, pC, color=BLACK)
-        CA = Line(pC, pA, color=BLACK)
+        AB = Line(pA, pB, color=BLACK, stroke_width=2)
+        BC = Line(pB, pC, color=BLACK, stroke_width=2)
+        CA = Line(pC, pA, color=BLACK, stroke_width=2)
         AMb = Line(pA, BC.get_center_of_mass(), color=BLUE)
         BMc = Line(pB, CA.get_center_of_mass(), color=VIOLET)
         CMa = Line(pC, AB.get_center_of_mass(), color=RED)
@@ -90,26 +90,161 @@ class Triangle(MovingCameraScene):
             next_to(CA.get_center_of_mass(), LEFT, buff=0.1)
         Mc = Tex(r"$M_c$", font_size=36, color=RED).\
             next_to(AB.get_center_of_mass(), DOWN, buff=0.1)
-        triangle = VGroup(AB, BC, CA, A, B, C)
+        triangle = VGroup(AB, BC, CA)
 
         self.play(
             Create(triangle),
         )
-
         self.play(           
             Create(AMb),
             Create(BMc),
             Create(CMa),
             Create(Ma),
             Create(Mb),
-            Create(Mc)
+            Create(Mc),
+            Create(A),
+            Create(B),
+            Create(C),
         )
 
-        self.play(
-            triangle.animate.scale(0.5).shift(2 * UP),
-            AMb.animate.shift(1.5 * UP + 0.5 * RIGHT),
-            CMa.animate.shift(2 * RIGHT),
+        # Small triangles
+        triangle_MaMbMc = Polygon(
+            AB.get_center_of_mass(),
+            BC.get_center_of_mass(),
+            CA.get_center_of_mass(),
+            stroke_width=0
         )
+        triangle_MaMbMc.set_fill(GREEN, 0.5)
+        triangle_MaMbMc_c = DashedVMobject(
+            triangle_MaMbMc.copy(),
+            num_dashes=15, dashed_ratio=0.3,
+        ).set_color(BLACK).set_stroke(width=2)
+        self.play(
+            Create(triangle_MaMbMc),
+            Create(triangle_MaMbMc_c)
+        )
+
+        triangle_MaMbMc_cc = triangle_MaMbMc.copy()
+        triangle_MbMaC = Polygon(
+            BC.get_center_of_mass(),
+            CA.get_center_of_mass(),
+            pC.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_MbMaC.set_fill(ORANGE, 0.5)
+        self.play(
+            Transform(triangle_MaMbMc_cc, triangle_MbMaC)
+        )
+
+        triangle_MaMbMc_ccc = triangle_MaMbMc_cc.copy()
+        triangle_McMbA = Polygon(
+            AB.get_center_of_mass(),
+            pA.get_center_of_mass(),
+            CA.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_McMbA.set_fill(ORANGE, 0.5)
+        self.play(
+            Transform(triangle_MaMbMc_ccc, triangle_McMbA)
+        )
+
+        triangle_MaMbMc_cccc = triangle_MaMbMc_ccc.copy()
+        triangle_McMaB = Polygon(
+            pB.get_center_of_mass(),
+            AB.get_center_of_mass(),
+            BC.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_McMaB.set_fill(ORANGE, 0.5)
+        self.play(
+            Transform(triangle_MaMbMc_cccc, triangle_McMaB)
+        )
+
+        # Parallelogram
+        triangle_and_medians = VGroup(
+            triangle,  # triangle
+            triangle_MaMbMc, triangle_MaMbMc_c, triangle_MaMbMc_cc, triangle_MaMbMc_ccc, triangle_MaMbMc_cccc,  # small triangles
+            AMb, BMc, CMa,  # medians
+            A, B, C, Ma, Mb, Mc  # points
+        )
+        self.play(
+            triangle_and_medians.animate.move_to([0, 2, 0]),
+        )
+
+        pA_copy = Point([-2, 0.5, 0], color=BLACK)
+        pB_copy = Point([2, 0.5, 0], color=BLACK)
+        pC_copy = Point([1, -2.5, 0], color=BLACK)
+        CA_copy = Line(pC_copy, pA_copy, color=BLACK, stroke_width=2)
+        BC_copy = Line(pB_copy, pC_copy, color=BLACK, stroke_width=2)
+        triangle_down = VGroup(AB, BC_copy, CA_copy)
+        self.play(
+            Transform(triangle.copy(), triangle_down),
+        )
+
+        # More small triangle
+        triangle_MaMbMc_ccccc = triangle_MaMbMc_cccc.copy()
+        triangle_BMcMb = Polygon(
+            pB.get_center_of_mass() + 1.5 * UP,
+            AB.get_center_of_mass(),
+            BC_copy.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_BMcMb.set_fill(GREEN, 0.5)
+        self.play(
+            Transform(triangle_MaMbMc_ccccc, triangle_BMcMb)
+        )
+
+        triangle_MaMbMc_cccccc = triangle_MaMbMc_ccccc.copy()
+        triangle_McMaMc = Polygon(
+            AB.get_center_of_mass(),
+            CA_copy.get_center_of_mass(),
+            BC_copy.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_McMaMc.set_fill(ORANGE, 0.5)
+        self.play(
+            Transform(triangle_MaMbMc_cccccc, triangle_McMaMc)
+        )
+
+        triangle_MaMbMc_ccccccc = triangle_MaMbMc_cccccc.copy()
+        triangle_AMbMc = Polygon(
+            AB.get_center_of_mass(),
+            CA_copy.get_center_of_mass(),
+            pA.get_center_of_mass() + 1.5 * UP,
+            stroke_width=0
+        )
+        triangle_AMbMc.set_fill(GREEN, 0.5)
+        self.play(
+            Transform(triangle_MaMbMc_ccccccc, triangle_AMbMc)
+        )
+
+        triangle_MaMbMc_cccccccc = triangle_MaMbMc_ccccccc.copy()
+        triangle_CMaMb = Polygon(
+            CA_copy.get_center_of_mass(),
+            pC_copy.get_center_of_mass(),
+            BC_copy.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_CMaMb.set_fill(GREEN, 0.5)
+        self.play(
+            Transform(triangle_MaMbMc_cccccccc, triangle_CMaMb)
+        )
+
+        # Move medians
+        self.play(
+            AMb.animate.shift(1.5 * RIGHT + 1.5 * DOWN),
+            Ma.animate.next_to(triangle_and_medians[5], UP),
+            CMa.animate.shift(0.5 * LEFT + 1.5 * DOWN),
+            Mc.animate.next_to(triangle_down[1].get_center_of_mass(), LEFT)
+        )
+
+
+        # self.play(
+        #     Transform(triangle_MaMbMc_c, triangle_MaMbMc)
+        # )
+
+        # self.wait(1)
+       
         
 
         # Finish
