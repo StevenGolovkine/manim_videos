@@ -59,9 +59,9 @@ class Pizza(MovingCameraScene):
         ]
         txt = VGroup(*txt).arrange(DOWN)
 
-        self.play(
-            Write(txt_title),
-            Write(txt)
+        self.add(
+            txt_title,
+            txt
         )
         self.wait(1)
         self.play(
