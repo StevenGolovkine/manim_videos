@@ -6,9 +6,9 @@ Proofs without Words II. Roger B. Nelsen. p. 16.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Create, Uncreate, Write, Transform, Rotate
-from manim import Group, VGroup, FadeIn, FadeOut , FunctionGraph
-from manim import DashedVMobject, Line, Point, Polygon
+from manim import Create, Uncreate, Write, Transform, TransformFromCopy
+from manim import VGroup, FadeIn, FadeOut , FunctionGraph
+from manim import DashedVMobject, Line, Point, Polygon, RoundedRectangle
 from manim import Text, Tex
 
 from manim import config
@@ -121,7 +121,8 @@ class Triangle(MovingCameraScene):
         ).set_color(BLACK).set_stroke(width=2)
         self.play(
             Create(triangle_MaMbMc),
-            Create(triangle_MaMbMc_c)
+            Create(triangle_MaMbMc_c),
+            run_time=0.5
         )
 
         triangle_MaMbMc_cc = triangle_MaMbMc.copy()
@@ -133,7 +134,8 @@ class Triangle(MovingCameraScene):
         )
         triangle_MbMaC.set_fill(ORANGE, 0.5)
         self.play(
-            Transform(triangle_MaMbMc_cc, triangle_MbMaC)
+            Transform(triangle_MaMbMc_cc, triangle_MbMaC),
+            run_time=0.5
         )
 
         triangle_MaMbMc_ccc = triangle_MaMbMc_cc.copy()
@@ -145,7 +147,8 @@ class Triangle(MovingCameraScene):
         )
         triangle_McMbA.set_fill(ORANGE, 0.5)
         self.play(
-            Transform(triangle_MaMbMc_ccc, triangle_McMbA)
+            Transform(triangle_MaMbMc_ccc, triangle_McMbA),
+            run_time=0.5
         )
 
         triangle_MaMbMc_cccc = triangle_MaMbMc_ccc.copy()
@@ -157,7 +160,8 @@ class Triangle(MovingCameraScene):
         )
         triangle_McMaB.set_fill(ORANGE, 0.5)
         self.play(
-            Transform(triangle_MaMbMc_cccc, triangle_McMaB)
+            Transform(triangle_MaMbMc_cccc, triangle_McMaB),
+            run_time=0.5
         )
 
         # Parallelogram
@@ -179,6 +183,7 @@ class Triangle(MovingCameraScene):
         triangle_down = VGroup(AB, BC_copy, CA_copy)
         self.play(
             Transform(triangle.copy(), triangle_down),
+            run_time=0.5
         )
 
         # More small triangle
@@ -191,7 +196,8 @@ class Triangle(MovingCameraScene):
         )
         triangle_BMcMb.set_fill(GREEN, 0.5)
         self.play(
-            Transform(triangle_MaMbMc_ccccc, triangle_BMcMb)
+            Transform(triangle_MaMbMc_ccccc, triangle_BMcMb),
+            run_time=0.5
         )
 
         triangle_MaMbMc_cccccc = triangle_MaMbMc_ccccc.copy()
@@ -203,7 +209,8 @@ class Triangle(MovingCameraScene):
         )
         triangle_McMaMc.set_fill(ORANGE, 0.5)
         self.play(
-            Transform(triangle_MaMbMc_cccccc, triangle_McMaMc)
+            Transform(triangle_MaMbMc_cccccc, triangle_McMaMc),
+            run_time=0.5
         )
 
         triangle_MaMbMc_ccccccc = triangle_MaMbMc_cccccc.copy()
@@ -215,7 +222,8 @@ class Triangle(MovingCameraScene):
         )
         triangle_AMbMc.set_fill(GREEN, 0.5)
         self.play(
-            Transform(triangle_MaMbMc_ccccccc, triangle_AMbMc)
+            Transform(triangle_MaMbMc_ccccccc, triangle_AMbMc),
+            run_time=0.5
         )
 
         triangle_MaMbMc_cccccccc = triangle_MaMbMc_ccccccc.copy()
@@ -227,25 +235,267 @@ class Triangle(MovingCameraScene):
         )
         triangle_CMaMb.set_fill(GREEN, 0.5)
         self.play(
-            Transform(triangle_MaMbMc_cccccccc, triangle_CMaMb)
+            Transform(triangle_MaMbMc_cccccccc, triangle_CMaMb),
+            run_time=0.5
         )
 
         # Move medians
         self.play(
             AMb.animate.shift(1.5 * RIGHT + 1.5 * DOWN),
-            Ma.animate.next_to(triangle_and_medians[5], UP),
+            Ma.animate.next_to(triangle_and_medians[10], UP),
             CMa.animate.shift(0.5 * LEFT + 1.5 * DOWN),
-            Mc.animate.next_to(triangle_down[1].get_center_of_mass(), LEFT)
+            Mc.animate.next_to(triangle_down[2].get_center_of_mass(), LEFT)
         )
 
+        # Small triangles for the triangle of medians
+        HK = Line(AB.get_center_of_mass(), BC.get_center_of_mass())
+        AH = Line(pA.get_center_of_mass() + 1.5 * UP, AB.get_center_of_mass())
+        McMa = Line(CA_copy.get_center_of_mass(), pB_copy.get_center_of_mass())
 
-        # self.play(
-        #     Transform(triangle_MaMbMc_c, triangle_MaMbMc)
-        # )
+        triangle_MbHK = Polygon(
+            CA.get_center_of_mass(),
+            HK.get_center_of_mass(),
+            AB.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_MbHK.set_fill(RED, 0.5)
+        txt_1 = Tex(r"$1$", font_size=28, color=BLACK).\
+            next_to(triangle_MbHK.get_center_of_mass(), buff=0)
+        self.play(
+            Create(triangle_MbHK),
+            Write(txt_1),
+            run_time=0.5
+        )
 
-        # self.wait(1)
-       
+        triangle_HKB = Polygon(
+            pB.get_center_of_mass() + 1.5 * UP,
+            HK.get_center_of_mass(),
+            AB.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_HKB.set_fill(RED, 0.5)
+        txt_2 = Tex(r"$2$", font_size=28, color=BLACK).\
+            next_to(triangle_HKB.get_center_of_mass(), buff=0)
+        self.play(
+            Transform(triangle_MbHK, triangle_HKB),
+            Write(txt_2),
+            run_time=0.5
+        )
+
+        triangle_MbIH = Polygon(
+            AH.get_center_of_mass(),
+            CA.get_center_of_mass(),
+            AB.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_MbIH.set_fill(RED, 0.5)
+        txt_3 = Tex(r"$3$", font_size=28, color=BLACK).\
+            next_to(triangle_MbIH.get_center_of_mass(), buff=0)
+        self.play(
+            Transform(triangle_MbHK, triangle_MbIH),
+            Write(txt_3),
+            run_time=0.5
+        )
+
+        triangle_IMcH = Polygon(
+            AH.get_center_of_mass(),
+            CA_copy.get_center_of_mass(),
+            AB.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_IMcH.set_fill(RED, 0.5)
+        txt_4 = Tex(r"$4$", font_size=28, color=BLACK).\
+            next_to(triangle_IMcH.get_center_of_mass(), buff=0)
+        self.play(
+            Transform(triangle_MbHK, triangle_IMcH),
+            Write(txt_4),
+            run_time=0.5
+        )
+
+        triangle_McJH = Polygon(
+            CA_copy.get_center_of_mass(),
+            McMa.get_center_of_mass(),
+            AB.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_McJH.set_fill(RED, 0.5)
+        txt_5 = Tex(r"$5$", font_size=28, color=BLACK).\
+            next_to(triangle_McJH.get_center_of_mass(), buff=0)
+        self.play(
+            Transform(triangle_MbHK, triangle_McJH),
+            Write(txt_5),
+            run_time=0.5
+        )
+
+        triangle_MaJH = Polygon(
+            pB_copy.get_center_of_mass(),
+            McMa.get_center_of_mass(),
+            AB.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_MaJH.set_fill(RED, 0.5)
+        txt_6 = Tex(r"$6$", font_size=28, color=BLACK).\
+            next_to(triangle_MaJH.get_center_of_mass(), buff=0)
+        self.play(
+            Transform(triangle_MbHK, triangle_MaJH),
+            Write(txt_6),
+            run_time=0.5
+        )
+
+        self.play(FadeOut(triangle_MbHK), run_time=0.5)
+
+        # Small triangles for the big triangle
+        triangle_AMbI = Polygon(
+            pA_copy.get_center_of_mass(),
+            CA.get_center_of_mass(),
+            AH.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_AMbI.set_fill(BLUE, 0.5)
+        txt_1 = Tex(r"$1$", font_size=28, color=RED).\
+            next_to(triangle_AMbI.get_center_of_mass(), buff=0)
+        self.play(
+            Create(triangle_AMbI),
+            Write(txt_1),
+            run_time=0.5
+        )
+
+        triangle_MbIH = Polygon(
+            AH.get_center_of_mass(),
+            CA.get_center_of_mass(),
+            AB.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_MbIH.set_fill(BLUE, 0.5)
+        txt_2 = Tex(r"$2$", font_size=28, color=RED).\
+            next_to(triangle_MbIH.get_center_of_mass() + 0.2 * LEFT + 0.2 * UP, buff=0)
+        self.play(
+            Transform(triangle_AMbI, triangle_MbIH),
+            Write(txt_2),
+            run_time=0.5
+        )
+
+        triangle_MbHK = Polygon(
+            CA.get_center_of_mass(),
+            HK.get_center_of_mass(),
+            AB.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_MbHK.set_fill(BLUE, 0.5)
+        txt_3 = Tex(r"$3$", font_size=28, color=RED).\
+            next_to(
+                triangle_MbHK.get_center_of_mass() + 0.2 * RIGHT + 0.2 * DOWN, buff=0
+            )
+        self.play(
+            Transform(triangle_AMbI, triangle_MbHK),
+            Write(txt_3),
+            run_time=0.5
+        )
+
+        triangle_HKB = Polygon(
+            pB_copy.get_center_of_mass(),
+            HK.get_center_of_mass(),
+            AB.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_HKB.set_fill(BLUE, 0.5)
+        txt_4 = Tex(r"$4$", font_size=28, color=RED).\
+            next_to(triangle_HKB.get_center_of_mass() + 0.2 * LEFT + 0.2 * UP, buff=0)
+        self.play(
+            Transform(triangle_AMbI, triangle_HKB),
+            Write(txt_4),
+            run_time=0.5
+        )
+
+        triangle_MaKB = Polygon(
+            pB_copy.get_center_of_mass(),
+            BC.get_center_of_mass(),
+            HK.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_MaKB.set_fill(BLUE, 0.5)
+        txt_5 = Tex(r"$5$", font_size=28, color=RED).\
+            next_to(triangle_MaKB.get_center_of_mass(), buff=0)
+        self.play(
+            Transform(triangle_AMbI, triangle_MaKB),
+            Write(txt_5),
+            run_time=0.5
+        )
+
+        triangle_MaKMb = Polygon(
+            CA.get_center_of_mass(),
+            BC.get_center_of_mass(),
+            HK.get_center_of_mass(),
+            stroke_width=0
+        )
+        triangle_MaKMb.set_fill(BLUE, 0.5)
+        txt_6_2 = Tex(r"$6$", font_size=28, color=RED).\
+            next_to(triangle_MaKMb.get_center_of_mass(), buff=0)
+        self.play(
+            Transform(triangle_AMbI, triangle_MaKMb),
+            Write(txt_6_2),
+            run_time=0.5
+        )
+
+        MbMa = Line(CA.get_center_of_mass(), BC.get_center_of_mass())
+        triangle_CMbL = Polygon(
+            CA.get_center_of_mass(),
+            MbMa.get_center_of_mass(),
+            pC.get_center_of_mass() + 1.5 * UP,
+            stroke_width=0
+        )
+        triangle_CMbL.set_fill(BLUE, 0.5)
+        txt_7 = Tex(r"$7$", font_size=28, color=RED).\
+            next_to(triangle_CMbL.get_center_of_mass(), buff=0)
+        self.play(
+            Transform(triangle_AMbI, triangle_CMbL),
+            Write(txt_7),
+            run_time=0.5
+        )
+
+        triangle_CMaL = Polygon(
+            MbMa.get_center_of_mass(),
+            BC.get_center_of_mass(),
+            pC.get_center_of_mass() + 1.5 * UP,
+            stroke_width=0
+        )
+        triangle_CMaL.set_fill(BLUE, 0.5)
+        txt_8 = Tex(r"$8$", font_size=28, color=RED).\
+            next_to(triangle_CMaL.get_center_of_mass(), buff=0)
+        self.play(
+            Transform(triangle_AMbI, triangle_CMaL),
+            Write(txt_8),
+            run_time=0.5
+        )
+
+        self.play(FadeOut(triangle_AMbI), run_time=0.5)
+
+        # Write results
+        rect = RoundedRectangle(
+            height=1, width=4,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to([0, -2.5, 0])
+        txt = Tex(
+            r"Aire $M_aM_bM_c = \frac{6}{8}$ Aire $ABC$",
+            font_size=28, color=BLACK
+        ).move_to([0, -2.5, 0])
+
+        self.play(
+            Create(rect),
+            Write(txt)
+        )
+        self.wait(0.5)
+
+        txt_2 = Tex(
+            r"Aire $M_aM_bM_c = \frac{3}{4}$ Aire $ABC$",
+            font_size=28, color=BLACK
+        ).move_to([0, -2.5, 0])
         
+        self.play(
+            Transform(txt, txt_2),
+        )
 
         # Finish
         self.wait(2)
