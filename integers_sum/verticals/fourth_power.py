@@ -8,7 +8,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write, Transform, Group
 from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Dot, Line, Polygon
-from manim import Text, Tex, DashedVMobject, DashedLine, RoundedRectangle
+from manim import Text, Tex, Square, DashedLine, RoundedRectangle
 
 from manim import config
 from manim import LEFT, RIGHT, DOWN, LIGHT, UP
@@ -47,27 +47,62 @@ class FourthPower(MovingCameraScene):
 
         # Introduction text
         txt_title = [
-            Tex(r"Comment intégrer", font_size=40, color=BLACK),
-            Tex(r"des fonctions concaves ?", font_size=40, color=BLACK)
+            Tex(r"Les puissances 4", font_size=48, color=BLACK),
+            Tex(r"sont la somme de", font_size=48, color=BLACK),
+            Tex(r"triangulaires", font_size=48, color=BLACK)
         ]
         txt_title = VGroup(*txt_title).arrange(DOWN).move_to([0, 2, 0])
 
         txt = [
             Tex(r"Démonstration", font_size=36, color=BLACK),
-            Tex(r"Frank Burk", font_size=28, color=BLACK)
         ]
         txt = VGroup(*txt).arrange(DOWN)
 
+        results = [
+            Tex(r"Si $T_k = 1 + 2 + \cdots + k$,", font_size=24, color=BLACK),
+            Tex(r"alors $n^4 = T_{n^2 + n - 1} + T_{n^2 - n - 1}$", font_size=24, color=BLACK),
+        ]
+        results = VGroup(*results).arrange(DOWN).move_to([0, -1, 0])
+
         self.add(
             txt_title,
-            txt
+            txt,
+            results
         )
         self.wait(1)
         self.play(
             Uncreate(txt_title),
-            Uncreate(txt)
+            Uncreate(txt),
+            Uncreate(results),
+            run_time=0.5
         )
+        self.wait(0.5)
 
+        # Create the table
+        squares = VGroup()
+        squares.add(Square(side_length=0.1, color=BLACK, stroke_width=1))
+        for idx in range(3):
+            new_square = Square(side_length=0.1, color=BLACK, stroke_width=1).\
+                next_to(squares[idx], direction=RIGHT, buff=0)
+            squares.add(new_square)
+        for idx in range(12):
+            new_square = Square(side_length=0.1, color=BLACK, stroke_width=1).\
+                next_to(squares[idx], direction=DOWN, buff=0)
+            squares.add(new_square)
+
+        big_squares = VGroup()
+        big_squares.add(squares)
+        for idx in range(3):
+            new_square = squares.copy().\
+                next_to(big_squares[idx], direction=RIGHT, buff=0.1)
+            big_squares.add(new_square)
+        for idx in range(12):
+            new_square = squares.copy().\
+                next_to(big_squares[idx], direction=DOWN, buff=0.1)
+            big_squares.add(new_square)
+        self.play(
+            Create(big_squares)
+        )
 
         # Finish
         self.wait(2)
@@ -75,8 +110,10 @@ class FourthPower(MovingCameraScene):
 
         # Logo
         ref = [
-            Tex(r"College Mathematics Journal,", font_size=26, color=BLACK),
-            Tex(r"vol. 16, no. 1 (Jan. 1985), p. 56", font_size=26, color=BLACK)
+            Tex(r"Proofs without words III:", font_size=30, color=BLACK),
+            Tex(r"Further exercises in", font_size=30, color=BLACK),
+            Tex(r"visual thinking", font_size=30, color=BLACK),
+            Tex(r"Roger B. Nelsen (2015), p. 137", font_size=30, color=BLACK)
         ]
         ref = VGroup(*ref)\
             .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
