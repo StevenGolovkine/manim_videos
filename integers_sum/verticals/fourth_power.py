@@ -7,8 +7,8 @@ import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write, Transform, Group
-from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Dot, Line, Polygon
-from manim import Text, Tex, Square, DashedLine, RoundedRectangle
+from manim import Brace, VGroup, FadeIn, FadeOut, FunctionGraph
+from manim import Text, Tex, Square, RoundedRectangle
 
 from manim import config
 from manim import LEFT, RIGHT, DOWN, LIGHT, UP
@@ -80,13 +80,13 @@ class FourthPower(MovingCameraScene):
 
         # Create the table
         squares = VGroup()
-        squares.add(Square(side_length=0.1, color=BLACK, stroke_width=1))
+        squares.add(Square(side_length=0.15, color=BLACK, stroke_width=1))
         for idx in range(3):
-            new_square = Square(side_length=0.1, color=BLACK, stroke_width=1).\
+            new_square = Square(side_length=0.15, color=BLACK, stroke_width=1).\
                 next_to(squares[idx], direction=RIGHT, buff=0)
             squares.add(new_square)
         for idx in range(12):
-            new_square = Square(side_length=0.1, color=BLACK, stroke_width=1).\
+            new_square = Square(side_length=0.15, color=BLACK, stroke_width=1).\
                 next_to(squares[idx], direction=DOWN, buff=0)
             squares.add(new_square)
 
@@ -100,8 +100,76 @@ class FourthPower(MovingCameraScene):
             new_square = squares.copy().\
                 next_to(big_squares[idx], direction=DOWN, buff=0.1)
             big_squares.add(new_square)
+        big_squares.move_to([0, 0, 0])
         self.play(
             Create(big_squares)
+        )
+
+        brace = Brace(big_squares, direction=[0, 1, 0], sharpness=1, color=BLACK)
+        txt_n = Tex(r"$n^2$", font_size=30, color=BLACK).next_to(brace, 0.5 * UP)
+        
+        self.play(
+            Create(brace),
+            Write(txt_n)
+        )
+
+        upper = [0, 1, 2, 4, 5, 8]
+        lower = [7, 10, 11, 13, 14, 15]
+        diag = [3, 6, 9, 12]
+
+        upper_group = VGroup(
+            big_squares[0],
+            big_squares[1],
+            big_squares[4],
+            *[big_squares[2][i] for i in upper],
+            *[big_squares[5][i] for i in upper],
+            *[big_squares[8][i] for i in upper],
+        )
+        diag_group = VGroup(
+            *[big_squares[2][i] for i in diag],
+            *[big_squares[5][i] for i in diag],
+            *[big_squares[8][i] for i in diag],
+        )
+        lower_group = VGroup(
+            big_squares[3],
+            big_squares[6],
+            big_squares[7],
+            big_squares[9:16],
+            *[big_squares[2][i] for i in lower],
+            *[big_squares[5][i] for i in lower],
+            *[big_squares[8][i] for i in lower],
+        )
+        self.play(
+            # Upper
+            upper_group.animate.set_fill(RED, 1),
+            # Diagonal
+            diag_group.animate.set_fill(BLUE, 1),
+            # Lower
+            lower_group.animate.set_fill(GREEN, 1)
+        )
+
+        self.play(
+            FadeOut(brace),
+            FadeOut(txt_n),
+            upper_group.animate.move_to([0, 1.5, 0]),
+            diag_group.animate.move_to([-0.5, 0, 0]),
+            lower_group.animate.move_to([0, -1, 0])
+        )
+
+        brace_up = Brace(upper_group, direction=[0, 1, 0], sharpness=1, color=BLACK)
+        txt_up = Tex(r"$n^2 - n - 1$", font_size=30, color=BLACK).\
+            next_to(brace_up, 0.5 * UP)
+        
+        brace_low = Brace(lower_group, direction=[0, -1, 0], sharpness=1, color=BLACK)
+        txt_low = Tex(r"$n^2 + n - 1$", font_size=30, color=BLACK).\
+            next_to(brace_low, 0.5 * DOWN)
+        
+
+        self.play(
+            Create(brace_up),
+            Write(txt_up),
+            Create(brace_low),
+            Write(txt_low)
         )
 
         # Finish
