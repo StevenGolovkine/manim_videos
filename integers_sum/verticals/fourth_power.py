@@ -156,11 +156,59 @@ class FourthPower(MovingCameraScene):
             lower_group.animate.move_to([0, -1, 0])
         )
 
+        # Transform diag into small triangle
+        self.play(
+            diag_group[1].animate.next_to(diag_group[0], DOWN, buff=0),
+            diag_group[10].animate.next_to(diag_group[11], UP, buff=0),
+            run_time=0.1
+        )
+        self.play(
+            diag_group[2].animate.next_to(diag_group[1], DOWN, buff=0),
+            diag_group[9].animate.next_to(diag_group[10], UP, buff=0),
+            run_time=0.1
+        )
+        self.play(
+            diag_group[3].animate.next_to(diag_group[1], LEFT, buff=0),
+            diag_group[8].animate.next_to(diag_group[10], LEFT, buff=0),
+            run_time=0.1
+        )
+        self.play(
+            diag_group[4].animate.next_to(diag_group[2], LEFT, buff=0),
+            diag_group[7].animate.next_to(diag_group[11], LEFT, buff=0),
+            run_time=0.1
+        )
+        self.play(
+            diag_group[5].animate.next_to(diag_group[4], LEFT, buff=0),
+            diag_group[6].animate.next_to(diag_group[7], LEFT, buff=0),
+            run_time=0.1
+        )
+
+        little_tri_up = VGroup(
+            *[diag_group[i] for i in range(6)]
+        )
+        little_tri_down = VGroup(
+            *[diag_group[i] for i in range(6, 12)]
+        )
+        self.play(
+            little_tri_up.animate.\
+                next_to(lower_group, UP, buff=0.1).\
+                align_to(lower_group, RIGHT),
+            little_tri_down.animate.\
+                next_to(lower_group, LEFT + 0.01 * DOWN, buff=0.1).\
+                align_to(lower_group, DOWN)
+        )
+
+        new_lower_group = VGroup(
+            lower_group, little_tri_up, little_tri_down
+        )
+
         brace_up = Brace(upper_group, direction=[0, 1, 0], sharpness=1, color=BLACK)
         txt_up = Tex(r"$n^2 - n - 1$", font_size=30, color=BLACK).\
             next_to(brace_up, 0.5 * UP)
         
-        brace_low = Brace(lower_group, direction=[0, -1, 0], sharpness=1, color=BLACK)
+        brace_low = Brace(
+            new_lower_group, direction=[0, -1, 0], sharpness=1, color=BLACK
+        )
         txt_low = Tex(r"$n^2 + n - 1$", font_size=30, color=BLACK).\
             next_to(brace_low, 0.5 * DOWN)
         
@@ -170,6 +218,25 @@ class FourthPower(MovingCameraScene):
             Write(txt_up),
             Create(brace_low),
             Write(txt_low)
+        )
+
+        self.wait(1)
+
+        # Write equation
+        rect = RoundedRectangle(
+            height=1, width=4,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to([0, 0, 0])
+        txt = Tex(
+            r"$n^4 = T_{n^2 + n - 1} + T_{n^2 - n - 1}$",
+            font_size=28, color=BLACK
+        ).move_to([0, 0, 0])
+
+        self.play(
+            Create(rect),
+            Write(txt)
         )
 
         # Finish
