@@ -7,7 +7,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write, Transform, Group
 from manim import Brace, VGroup, FadeIn, FadeOut, FunctionGraph
-from manim import Text, Tex, Square, RoundedRectangle
+from manim import Text, Tex, Triangle, RoundedRectangle, Circle
 
 from manim import config
 from manim import LEFT, RIGHT, DOWN, LIGHT, UP
@@ -65,6 +65,32 @@ class Golden(MovingCameraScene):
         self.play(
             Uncreate(txt_title),
             Uncreate(txt)
+        )
+
+        # Create the triangle
+        triangle = Triangle(color=BLACK, stroke_width=2).scale(2)
+        points = triangle.get_vertices()
+
+        p_A = Tex(r"$A$", font_size=28, color=BLACK).\
+            next_to(points[0], 0.5 * UP)
+        p_B = Tex(r"$B$", font_size=28, color=BLACK).\
+            next_to(points[1], 0.5 * (DOWN + LEFT))
+        p_C = Tex(r"$C$", font_size=28, color=BLACK).\
+            next_to(points[2], 0.5 * (DOWN + RIGHT))
+
+        self.play(
+            Create(triangle),
+            Write(p_A),
+            Write(p_B),
+            Write(p_C)
+        )
+
+        # Create the middle points
+        origin = triangle.get_center_of_mass()
+
+        circle = Circle(radius=2, color=BLACK, stroke_width=2).move_to(origin)
+        self.play(
+            Create(circle)
         )
 
 

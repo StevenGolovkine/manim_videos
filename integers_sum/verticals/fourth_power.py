@@ -6,7 +6,7 @@ Proofs without Words III. Roger B. Nelsen. p. 137.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Create, Uncreate, Write, Transform, Group
+from manim import Create, Uncreate, Write
 from manim import Brace, VGroup, FadeIn, FadeOut, FunctionGraph
 from manim import Text, Tex, Square, RoundedRectangle
 
