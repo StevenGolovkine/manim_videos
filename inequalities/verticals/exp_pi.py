@@ -66,6 +66,16 @@ class ExpPi(MovingCameraScene):
             Uncreate(txt)
         )
 
+        # Equation
+        txt_eq = [
+            Tex(r"$e^\pi > \pi^e$", font_size=32, color=BLACK),
+            Tex(r"$\Longleftrightarrow$", font_size=32, color=BLACK),
+            Tex(r"$\frac{\log e}{e} > \frac{\log \pi}{\pi}$", font_size=32, color=BLACK),
+        ]
+        txt_eq = VGroup(*txt_eq).arrange(DOWN).move_to([0, 2.5, 0])
+        self.play(Write(txt_eq))
+
+
         # Create the graph
         ax = Axes(
             x_range=[0.1, 5, 0.5],
@@ -79,7 +89,7 @@ class ExpPi(MovingCameraScene):
             y_axis_config={
                 "color": BLACK
             }
-        ).scale(0.5)
+        ).scale(0.5).move_to([0, -0.5, 0])
 
         graph = ax.plot(
             lambda x: np.log(x) / x,
