@@ -7,7 +7,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
 from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Line, Polygon
-from manim import Text, Tex
+from manim import Text, Tex, Transform
 
 from manim import config
 from manim import LEFT, RIGHT, DOWN, LIGHT, UP
@@ -95,6 +95,32 @@ class ExpPi(MovingCameraScene):
         )
         self.play(
             Create(graph)
+        )
+
+        ax_zoom = Axes(
+            x_range=[2, 4, 0.1],
+            y_range=[0.3, 0.4, 0.05],
+            x_length=7,
+            y_length=7,
+            tips=False,
+            x_axis_config={
+                "color": BLACK,
+            },
+            y_axis_config={
+                "color": BLACK
+            }
+        ).scale(0.5)
+
+        graph_zoom = ax.plot(
+            lambda x: np.log(x) / x,
+            x_range=[2, 4],
+            use_smoothing=False,
+            color=BLACK
+        )
+
+        self.play(
+            Transform(ax, ax_zoom),
+            Transform(graph, graph_zoom)
         )
 
         # Finish
