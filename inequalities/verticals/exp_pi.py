@@ -11,13 +11,13 @@ from manim import Text, Tex, Transform, ValueTracker, ApplyMethod
 from manim import NumberPlane, always_redraw
 
 from manim import config
-from manim import LEFT, RIGHT, DOWN, LIGHT, UP
+from manim import LEFT, RIGHT, DOWN, LIGHT, UP, BLUE, GREEN
 
 # COLORS
-BLUE = "#B0E1FA"
+# BLUE = "#B0E1FA"
 VIOLET = "#E8C9FA"
 RED = "#F79BC5"
-GREEN = "#DBF9E7"
+# GREEN = "#DBF9E7"
 YELLOW = "#EFE9B7"
 ORANGE = "#F6CCB0"
 BLACK = "#000000"
@@ -69,10 +69,20 @@ class ExpPi(MovingCameraScene):
         )
 
         # Equation
+        eq = [
+            Tex(r"$e^\pi$", font_size=32, color=BLACK),
+            Tex(r"$>$", font_size=32, color=BLACK),
+            Tex(r"$\pi^e$", font_size=32, color=BLACK)
+        ]
+        eq_2 = [
+            Tex(r"$\frac{\log e}{e}$", font_size=32, color=BLACK),
+            Tex(r"$>$", font_size=32, color=BLACK),
+            Tex(r"$\frac{\log \pi}{\pi}$", font_size=32, color=BLACK)
+        ]
         txt_eq = [
-            Tex(r"$e^\pi > \pi^e$", font_size=32, color=BLACK),
+            VGroup(*eq).arrange(RIGHT),
             Tex(r"$\Longleftrightarrow$", font_size=32, color=BLACK),
-            Tex(r"$\frac{\log e}{e} > \frac{\log \pi}{\pi}$", font_size=32, color=BLACK),
+            VGroup(*eq_2).arrange(RIGHT),
         ]
         txt_eq = VGroup(*txt_eq).arrange(DOWN).move_to([0, 2.5, 0])
         self.play(Write(txt_eq))
@@ -171,7 +181,9 @@ class ExpPi(MovingCameraScene):
 
         point_pi = ax_2.c2p(3.141592653589793, 0.36)
         txt_pi = Tex(r"$\pi$", font_size=28, color=BLACK).next_to(point_pi, DOWN)  
-        point = ax_2.c2p(3.141592653589793, np.log(3.141592653589793) / 3.141592653589793)
+        point = ax_2.c2p(
+            3.141592653589793, np.log(3.141592653589793) / 3.141592653589793
+        )
         line_pi = ax_2.get_vertical_line(point, line_func=Line, color=BLACK)
 
         point_fpi = ax_2.c2p(2.5, np.log(3.141592653589793) / 3.141592653589793)
@@ -183,6 +195,15 @@ class ExpPi(MovingCameraScene):
             Write(txt_fpi),
             Create(line_pi),
             Create(line_fpi)
+        )
+
+        self.play(
+            txt_fe.animate.set_color(GREEN),
+            txt_fpi.animate.set_color(BLUE),
+            eq[0].animate.set_color(GREEN),
+            eq[2].animate.set_color(BLUE),
+            eq_2[0].animate.set_color(GREEN),
+            eq_2[2].animate.set_color(BLUE)
         )
 
         # Finish
