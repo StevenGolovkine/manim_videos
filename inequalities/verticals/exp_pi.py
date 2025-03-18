@@ -7,7 +7,8 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
 from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Line, Polygon
-from manim import Text, Tex, Transform
+from manim import Text, Tex, Transform, ValueTracker, ApplyMethod
+from manim import NumberPlane, always_redraw
 
 from manim import config
 from manim import LEFT, RIGHT, DOWN, LIGHT, UP
@@ -20,6 +21,7 @@ GREEN = "#DBF9E7"
 YELLOW = "#EFE9B7"
 ORANGE = "#F6CCB0"
 BLACK = "#000000"
+GREY = "#D0D0D0"
 WHITE = "#F4EDDE"
 
 # Make it vertical
@@ -77,60 +79,110 @@ class ExpPi(MovingCameraScene):
 
 
         # Create the graph
-        ax = Axes(
-            x_range=[0.1, 5, 0.5],
-            y_range=[-0.5, 0.5, 0.1],
-            x_length=7,
-            y_length=7,
-            tips=False,
-            x_axis_config={
+        
+        ax = NumberPlane(
+            x_range = (1, 5),
+            y_range = (-0.6, 0.6, 0.2),
+            x_length = 7,
+            y_length = 5,
+            axis_config={
+                "include_numbers": True,
                 "color": BLACK,
             },
-            y_axis_config={
-                "color": BLACK
+            background_line_style={
+                "stroke_color": GREY,
+                "stroke_width": 1,
+                "stroke_opacity": 0.6
             }
         ).scale(0.5).move_to([0, -0.5, 0])
 
+        ax_x = ax.get_x_axis()
+        ax_x.numbers.set_color(BLACK)
+        ax_y = ax.get_y_axis()
+        ax_y.numbers.set_color(BLACK)
+
         graph = ax.plot(
             lambda x: np.log(x) / x,
-            x_range=[0.75, 5],
-            use_smoothing=False,
-            color=BLACK
+            x_range=[1, 5],
+            color=BLACK,
+            stroke_width = 4,
         )
+
         txt_f = Tex(r"$f(x) = \frac{\log x}{x}$", font_size=28, color=BLACK)\
             .next_to(ax.c2p(4, 0.4), UP)
+        
         self.play(
             Create(ax),
-            Write(txt_f)
-        )
-        self.play(
+            Create(txt_f),
             Create(graph)
         )
 
-        ax_zoom = Axes(
-            x_range=[2, 4, 0.1],
-            y_range=[0.3, 0.4, 0.05],
-            x_length=7,
-            y_length=7,
-            tips=False,
-            x_axis_config={
+        
+        ax_2 = NumberPlane(
+            x_range = (2.5, 3.5, 0.1),
+            y_range = (0.36, 0.37, 0.001),
+            x_length = 7,
+            y_length = 5,
+            axis_config={
+                "include_numbers": True,
                 "color": BLACK,
             },
-            y_axis_config={
-                "color": BLACK
+            background_line_style={
+                "stroke_color": GREY,
+                "stroke_width": 1,
+                "stroke_opacity": 0.6
             }
-        ).scale(0.5)
+        ).scale(0.5).move_to([0, -0.5, 0])
 
-        graph_zoom = ax.plot(
+        ax_x = ax_2.get_x_axis()
+        ax_x.numbers.set_color(BLACK)
+        ax_y = ax_2.get_y_axis()
+        ax_y.numbers.set_color(BLACK)
+
+        
+        graph_2 = ax_2.plot(
             lambda x: np.log(x) / x,
-            x_range=[2, 4],
-            use_smoothing=False,
-            color=BLACK
+            x_range=[2.5, 3.5],
+            color=BLACK,
+            stroke_width = 4,
         )
 
         self.play(
-            Transform(ax, ax_zoom),
-            Transform(graph, graph_zoom)
+            Transform(ax, ax_2),
+            Transform(graph, graph_2)
+        )
+
+        # Add points
+        point_e = ax_2.c2p(2.718281828459045, 0.36)
+        txt_e = Tex(r"$e$", font_size=28, color=BLACK).next_to(point_e, DOWN)  
+        point = ax_2.c2p(2.718281828459045, 1 / 2.718281828459045)
+        line_e = ax_2.get_vertical_line(point, line_func=Line, color=BLACK)
+
+        point_fe = ax_2.c2p(2.5, 1 / 2.718281828459045)
+        txt_fe = Tex(r"$\frac{\log e}{e}$", font_size=18, color=BLACK).\
+            next_to(point_fe, 0.1 * LEFT)  
+        line_fe = ax_2.get_horizontal_line(point, line_func=Line, color=BLACK)
+        self.play(
+            Write(txt_e),
+            Write(txt_fe),
+            Write(line_e),
+            Create(line_fe)
+        )
+
+        point_pi = ax_2.c2p(3.141592653589793, 0.36)
+        txt_pi = Tex(r"$\pi$", font_size=28, color=BLACK).next_to(point_pi, DOWN)  
+        point = ax_2.c2p(3.141592653589793, np.log(3.141592653589793) / 3.141592653589793)
+        line_pi = ax_2.get_vertical_line(point, line_func=Line, color=BLACK)
+
+        point_fpi = ax_2.c2p(2.5, np.log(3.141592653589793) / 3.141592653589793)
+        txt_fpi = Tex(r"$\frac{\log \pi}{\pi}$", font_size=18, color=BLACK).\
+            next_to(point_fpi, 0.1 * LEFT)  
+        line_fpi = ax_2.get_horizontal_line(point, line_func=Line, color=BLACK)
+        self.play(
+            Write(txt_pi),
+            Write(txt_fpi),
+            Create(line_pi),
+            Create(line_fpi)
         )
 
         # Finish
