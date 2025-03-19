@@ -6,7 +6,7 @@ import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
-from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Line, Polygon
+from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Graph
 from manim import Text, Tex
 
 from manim import config
@@ -33,7 +33,7 @@ config.frame_height = config.frame_height / SCALE_FACTOR
 config.frame_width = config.frame_height * 9 / 16
 
 
-class Graph(MovingCameraScene):
+class Graphe(MovingCameraScene):
     def construct(self):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
@@ -67,6 +67,21 @@ class Graph(MovingCameraScene):
             Uncreate(txt)
         )
 
+        # Create graph
+        vertices = np.arange(8)
+        edges = [(i, j) for i in vertices for j in vertices]
+        g = Graph(
+            vertices,
+            edges,
+            layout='circular',
+            vertex_config={
+                idx: {"fill_color": BLACK} for idx in vertices
+            },
+            edge_config={
+                (i, j): {"color": BLACK} for i in vertices for j in vertices
+            }
+        )
+        self.play(Create(g))
 
         # Finish
         self.wait(2)
