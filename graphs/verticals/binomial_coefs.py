@@ -7,7 +7,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
 from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Graph
-from manim import Text, Tex
+from manim import Text, Tex, MathTex
 
 from manim import config
 from manim import LEFT, RIGHT, DOWN, LIGHT, UP
@@ -20,6 +20,7 @@ GREEN = "#DBF9E7"
 YELLOW = "#EFE9B7"
 ORANGE = "#F6CCB0"
 BLACK = "#000000"
+GREY = "#D3D3D3"
 WHITE = "#F4EDDE"
 
 # Make it vertical
@@ -57,31 +58,109 @@ class Graphe(MovingCameraScene):
         ]
         txt = VGroup(*txt).arrange(DOWN)
 
+        formula = Tex(
+            r"$\binom{n + m}{2} = \binom{n}{2} + \binom{m}{2} + nm$",
+            font_size=36, color=BLACK
+        ).move_to([0, -2, 0])
+
         self.add(
             txt_title,
-            txt
+            txt,
+            formula
         )
         self.wait(1)
         self.play(
             Uncreate(txt_title),
-            Uncreate(txt)
+            Uncreate(txt),
+            Uncreate(formula)
         )
 
         # Create graph
-        vertices = np.arange(8)
+        txt_ex = Tex(r"Pour $n = 5$ et $m = 3$", font_size=28, color=BLACK).\
+            move_to([-0.5, 3, 0])
+        self.play(Write(txt_ex))
+
+        # k = 8
+        vertices = ["1", "2", "3", "4", "5", "A", "B", "C"]
         edges = [(i, j) for i in vertices for j in vertices]
         g = Graph(
             vertices,
             edges,
             layout='circular',
+            labels={
+                    v: MathTex(v, color=BLACK, font_size=14) for v in vertices
+                },
             vertex_config={
-                idx: {"fill_color": BLACK} for idx in vertices
+                idx: {"fill_color": GREY} for idx in vertices
             },
             edge_config={
-                (i, j): {"color": BLACK} for i in vertices for j in vertices
+                (i, j): {"color": BLACK, "stroke_width": 1}
+                for i in vertices for j in vertices
             }
         )
         self.play(Create(g))
+        self.remove(g)
+
+        # k = 5
+        vertices_5 = ["1", "2", "3", "4", "5"]
+        edges_5 = [(i, j) for i in vertices_5 for j in vertices_5]
+        g_5 = Graph(
+            vertices_5,
+            edges_5,
+            layout='circular',
+            labels={
+                    v: MathTex(v, color=BLACK, font_size=14) for v in vertices_5
+                },
+            vertex_config={
+                idx: {"fill_color": GREY} for idx in vertices_5
+            },
+            edge_config={
+                (i, j): {"color": BLACK, "stroke_width": 1}
+                for i in vertices_5 for j in vertices_5
+            }
+        )
+        self.play(Create(g_5))
+        self.remove(g_5)
+
+        # k = 3
+        vertices_3 = ["A", "B", "C"]
+        edges_3 = [(i, j) for i in vertices_3 for j in vertices_3]
+        g_3 = Graph(
+            vertices_3,
+            edges_3,
+            layout='circular',
+            labels={
+                    v: MathTex(v, color=BLACK, font_size=14) for v in vertices_3
+                },
+            vertex_config={
+                idx: {"fill_color": GREY} for idx in vertices_3
+            },
+            edge_config={
+                (i, j): {"color": BLACK, "stroke_width": 1}
+                for i in vertices_3 for j in vertices_3
+            }
+        )
+        self.play(Create(g_3))
+        self.remove(g_3)
+
+        # k = 3*5
+        vertices_35 = ["1", "2", "3", "4", "5", "A", "B", "C"]
+        edges_35 = [(i, j) for i in vertices_35[:5] for j in vertices_35[5:]]
+        g_35 = Graph(
+            vertices_35,
+            edges_35,
+            labels={
+                    v: MathTex(v, color=BLACK, font_size=14) for v in vertices_35
+                },
+            vertex_config={
+                idx: {"fill_color": GREY} for idx in vertices_35
+            },
+            edge_config={
+                (i, j): {"color": BLACK, "stroke_width": 1}
+                for i in vertices_35[:5] for j in vertices_35[5:]
+            }
+        )
+        self.play(Create(g_35))
 
         # Finish
         self.wait(2)
