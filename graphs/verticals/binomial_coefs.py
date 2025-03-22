@@ -99,7 +99,8 @@ class Graphe(MovingCameraScene):
             }
         )
         self.play(Create(g))
-        self.remove(g)
+        
+        self.play(g.animate.scale(0.5).move_to([0, 1.5, 0]))
 
         # k = 5
         vertices_5 = ["1", "2", "3", "4", "5"]
@@ -120,7 +121,7 @@ class Graphe(MovingCameraScene):
             }
         )
         self.play(Create(g_5))
-        self.remove(g_5)
+        self.play(g_5.animate.scale(0.5).move_to([-1, -0.75, 0]))
 
         # k = 3
         vertices_3 = ["A", "B", "C"]
@@ -141,7 +142,7 @@ class Graphe(MovingCameraScene):
             }
         )
         self.play(Create(g_3))
-        self.remove(g_3)
+        self.play(g_3.animate.scale(0.5).move_to([1, -0.75, 0]))
 
         # k = 3*5
         vertices_35 = ["1", "2", "3", "4", "5", "A", "B", "C"]
@@ -161,6 +162,7 @@ class Graphe(MovingCameraScene):
             }
         )
         self.play(Create(g_35))
+        self.play(g_35.animate.scale(0.5).move_to([0, -2.5, 0]))
 
         # Finish
         self.wait(2)
