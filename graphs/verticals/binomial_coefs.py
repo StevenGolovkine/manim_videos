@@ -7,10 +7,10 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
 from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Graph
-from manim import Text, Tex, MathTex
+from manim import Text, Tex, MathTex, Transform
 
 from manim import config
-from manim import LEFT, RIGHT, DOWN, LIGHT, UP
+from manim import LEFT, RIGHT, DOWN, LIGHT, UP, PI
 
 # COLORS
 BLUE = "#B0E1FA"
@@ -119,7 +119,7 @@ class Graphe(MovingCameraScene):
                 (i, j): {"color": BLACK, "stroke_width": 1}
                 for i in vertices_5 for j in vertices_5
             }
-        )
+        ).move_to([0, -1.5, 0])
         self.play(Create(g_5))
         self.play(g_5.animate.scale(0.5).move_to([-1, -0.75, 0]))
 
@@ -140,19 +140,23 @@ class Graphe(MovingCameraScene):
                 (i, j): {"color": BLACK, "stroke_width": 1}
                 for i in vertices_3 for j in vertices_3
             }
-        )
+        ).move_to([0, -1.5, 0])
         self.play(Create(g_3))
         self.play(g_3.animate.scale(0.5).move_to([1, -0.75, 0]))
+
 
         # k = 3*5
         vertices_35 = ["1", "2", "3", "4", "5", "A", "B", "C"]
         edges_35 = [(i, j) for i in vertices_35[:5] for j in vertices_35[5:]]
+        label_35 = {
+            v: MathTex(v, color=BLACK, font_size=14).rotate(-PI/2) for v in vertices_35
+        }
         g_35 = Graph(
             vertices_35,
             edges_35,
-            labels={
-                    v: MathTex(v, color=BLACK, font_size=14) for v in vertices_35
-                },
+            layout="partite",
+            partitions=[["1", "2", "4", "3", "5"], ["C", "A", "B"]],
+            labels=label_35,
             vertex_config={
                 idx: {"fill_color": GREY} for idx in vertices_35
             },
@@ -160,9 +164,52 @@ class Graphe(MovingCameraScene):
                 (i, j): {"color": BLACK, "stroke_width": 1}
                 for i in vertices_35[:5] for j in vertices_35[5:]
             }
-        )
-        self.play(Create(g_35))
+        ).move_to([0, -1.5, 0])
+        self.play(Create(g_35.rotate(PI/2)))
         self.play(g_35.animate.scale(0.5).move_to([0, -2.5, 0]))
+
+        # Color edges
+        g_5_c = g_5.copy()
+        g_c = g.copy()
+        for idx, line in g_5_c.edges.items():
+            line.set_color(BLUE)
+        for idx, line in g_c.edges.items():
+            if (
+                idx[0] in ["1", "2", "3", "4", "5"] and
+                idx[1] in ["1", "2", "3", "4", "5"]
+            ):
+                line.set_color(BLUE)
+        self.play(
+            Transform(g, g_c),
+            Transform(g_5, g_5_c)
+        )
+
+        g_3_c = g_3.copy()
+        g_cc = g_c.copy()
+        for idx, line in g_3_c.edges.items():
+            line.set_color(RED)
+        for idx, line in g_cc.edges.items():
+            if idx[0] in ["A", "B", "C"] and idx[1] in ["A", "B", "C"]:
+                line.set_color(RED)
+        self.play(
+            Transform(g_c, g_cc),
+            Transform(g_3, g_3_c)
+        )
+
+        g_35_c = g_35.copy()
+        g_ccc = g_cc.copy()
+        for idx, line in g_35_c.edges.items():
+            line.set_color(VIOLET)
+        for idx, line in g_ccc.edges.items():
+            if (
+                (idx[0] in ["A", "B", "C"] and idx[1] in ["1", "2", "3", "4", "5"]) or
+                (idx[0] in ["1", "2", "3", "4", "5"] and idx[1] in ["A", "B", "C"])
+            ):
+                line.set_color(VIOLET)
+        self.play(
+            Transform(g_cc, g_ccc),
+            Transform(g_35, g_35_c)
+        )
 
         # Finish
         self.wait(2)
