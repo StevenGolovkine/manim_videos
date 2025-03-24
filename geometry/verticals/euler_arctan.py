@@ -60,7 +60,7 @@ class Euler(MovingCameraScene):
 
         formula = Tex(
             r"$\arctan \frac{1}{x} = \arctan \frac{1}{x + y}+ \arctan \frac{y}{x^2 + xy + 1}$",
-            font_size=36, color=BLACK
+            font_size=20, color=BLACK
         ).move_to([0, -2, 0])
 
         self.add(
