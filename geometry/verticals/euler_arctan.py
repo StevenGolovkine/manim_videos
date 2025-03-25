@@ -7,7 +7,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
 from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Graph
-from manim import Text, Tex, MathTex, Transform
+from manim import Text, Tex, MathTex, Transform, Rectangle, Line
 
 from manim import config
 from manim import LEFT, RIGHT, DOWN, LIGHT, UP, PI
@@ -73,6 +73,45 @@ class Euler(MovingCameraScene):
             Uncreate(txt_title),
             Uncreate(txt),
             Uncreate(formula)
+        )
+
+        # Create rectangle
+        rect = Rectangle(
+            width=3, height=7, color=BLACK, stroke_width=1
+        ).scale(0.8)
+        txt_xy = Tex(r"$x + y$", font_size=24, color=BLACK).next_to(rect, UP, buff=0.1)
+        txt_xy1 = Tex(r"$x^2 + xy +1$", font_size=24, color=BLACK).\
+            rotate(-PI/2).\
+            next_to(rect, RIGHT, buff=0.1)
+
+        self.play(
+            Create(rect),
+            Write(txt_xy),
+            Write(txt_xy1)
+        )
+
+        # Create triangle
+        print(rect.get_boundary_point(DOWN))
+        l = Line(
+            rect.get_boundary_point(UP),
+            rect.get_boundary_point(DOWN) + [1.6, 0, 0],
+            color=BLACK, stroke_width=1
+        )
+        l2 = Line(
+            rect.get_boundary_point(DOWN) + [1.6, 0, 0],
+            rect.get_boundary_point(DOWN) + [0, 0.8, 0],
+            color=BLACK, stroke_width=1
+        )
+        l3 = Line(
+            rect.get_boundary_point(DOWN) + [0, 0.8, 0],
+            rect.get_boundary_point(UP),
+            color=BLACK, stroke_width=1
+        )
+        
+        self.play(
+            Create(l),
+            Create(l2),
+            Create(l3)
         )
 
         # Finish
