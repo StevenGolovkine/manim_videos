@@ -107,11 +107,24 @@ class Euler(MovingCameraScene):
             rect.get_boundary_point(UP),
             color=BLACK, stroke_width=1
         )
+        txt_x = Tex(r"$x$", font_size=24, color=BLACK).\
+            move_to(rect.get_boundary_point(DOWN) + [0.8, -0.1, 0])
+        txt_y = Tex(r"$y$", font_size=24, color=BLACK).\
+            move_to(rect.get_boundary_point(DOWN) + [2, -0.1, 0])
+        txt_1 = Tex(r"$1$", font_size=24, color=BLACK).\
+            move_to(rect.get_boundary_point(DOWN) + [-0.1, 0.4, 0])
+        txt_xxy = Tex(r"$x(x + y)$", font_size=24, color=BLACK).\
+            move_to(rect.get_boundary_point(DOWN) + [-0.2, 2.8, 0]).\
+            rotate(PI/2)
         
         self.play(
             Create(l),
             Create(l2),
-            Create(l3)
+            Create(l3),
+            Write(txt_x),
+            Write(txt_y),
+            Write(txt_1),
+            Write(txt_xxy)
         )
 
         # Finish
