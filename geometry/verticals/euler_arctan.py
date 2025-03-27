@@ -7,7 +7,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
 from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Graph
-from manim import Text, Tex, MathTex, Transform, Rectangle, Line
+from manim import Text, Tex, MathTex, Transform, Rectangle, Line, RightAngle
 
 from manim import config
 from manim import LEFT, RIGHT, DOWN, LIGHT, UP, PI
@@ -116,6 +116,7 @@ class Euler(MovingCameraScene):
         txt_xxy = Tex(r"$x(x + y)$", font_size=24, color=BLACK).\
             move_to(rect.get_boundary_point(DOWN) + [-0.2, 2.8, 0]).\
             rotate(PI/2)
+        r_angle = RightAngle(l2, l3, length=0.2, quadrant=(-1, 1), color=BLACK)
         
         self.play(
             Create(l),
@@ -124,7 +125,8 @@ class Euler(MovingCameraScene):
             Write(txt_x),
             Write(txt_y),
             Write(txt_1),
-            Write(txt_xxy)
+            Write(txt_xxy),
+            Create(r_angle),
         )
 
         # Finish
