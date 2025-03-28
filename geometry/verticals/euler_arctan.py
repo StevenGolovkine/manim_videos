@@ -6,8 +6,9 @@ import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
-from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Graph
-from manim import Text, Tex, MathTex, Transform, Rectangle, Line, RightAngle
+from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Angle
+from manim import Text, Tex, RoundedRectangle, Rectangle, Line, RightAngle
+from manim import TransformFromCopy, Transform
 
 from manim import config
 from manim import LEFT, RIGHT, DOWN, LIGHT, UP, PI
@@ -128,6 +129,105 @@ class Euler(MovingCameraScene):
             Write(txt_xxy),
             Create(r_angle),
         )
+
+        # Pythagorean theorem
+        txt_sqrt1x2 = Tex(
+            r"$\sqrt{1 + x^2}$", font_size=18, color=BLACK
+        ).rotate_about_origin(l2.get_angle() + PI).\
+            move_to(l2.get_center_of_mass() + [0.15, 0.15, 0])
+
+        txt_xysqrt = Tex(
+            r"$(x + y)\sqrt{1 + x^2}$", font_size=18, color=BLACK
+        ).rotate_about_origin(l3.get_angle()).\
+            move_to(l3.get_center_of_mass() + [-0.4, -0.4, 0])
+        
+        self.play(
+            Write(txt_sqrt1x2),
+            Write(txt_xysqrt)
+        )
+
+
+        # Angles
+        l_rect = Line(
+            rect.get_boundary_point(LEFT),
+            rect.get_boundary_point(DOWN),
+        )
+        l_rect2 = Line(
+            rect.get_boundary_point(RIGHT),
+            rect.get_corner(DOWN + RIGHT)
+        )
+        angle1 = Angle(
+            l3, l_rect, radius=0.5,
+            quadrant=(1, -1),
+            color=RED, stroke_width=6
+        )
+        alpha = Tex(
+            r"$\alpha$", font_size=24, color=BLACK
+        ).next_to(angle1, UP, buff=0.2)
+
+        angle2 = Angle(
+            l, l3, radius=1,
+            quadrant=(1, -1), other_angle=True,
+            color=BLUE, stroke_width=6
+        )
+        beta = Tex(
+            r"$\beta$", font_size=24, color=BLACK
+        ).next_to(angle2, DOWN, buff=0.2)
+
+        angle3 = Angle(
+            l, l_rect2, radius=1.5,
+            quadrant=(1, 1),
+            color=GREEN, stroke_width=6
+        )
+        gamma = Tex(
+            r"$\gamma$", font_size=24, color=BLACK
+        ).next_to(angle3, DOWN, buff=0.2)
+
+        self.play(
+            Create(angle1),
+            Write(alpha),
+            Create(angle2),
+            Write(beta),
+            Write(angle3),
+            Write(gamma),
+        )
+
+        # Write equation
+        rect = RoundedRectangle(
+            height=1, width=4,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        )
+        txt = Tex(
+            r"$\alpha$", r" $ = $ ", r"$\beta$", r" $ + $ ", r"$\gamma$",
+            font_size=28, color=BLACK
+        )
+
+        rect.z_index = 0
+        txt.z_index = 1
+        self.play(
+            Create(rect),
+            run_time=0.1
+        )
+        self.play(
+            TransformFromCopy(alpha[0], txt[0]),
+            Write(txt[1]),
+            TransformFromCopy(beta[0], txt[2]),
+            Write(txt[3]),
+            TransformFromCopy(gamma[0], txt[4])
+        )
+
+        formula = Tex(
+            r"$\arctan \frac{1}{x} = \arctan \frac{1}{x + y}$",
+            r"$+ \arctan \frac{y}{x^2 + xy + 1}$",
+            font_size=20, color=BLACK
+        )
+        
+        self.play(
+            Transform(txt, formula)
+        )
+
 
         # Finish
         self.wait(2)
