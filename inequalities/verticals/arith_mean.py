@@ -7,7 +7,7 @@ import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
-from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Line, Polygon
+from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Rectangle
 from manim import Text, Tex
 
 from manim import config
@@ -69,6 +69,20 @@ class Mean(MovingCameraScene):
             Uncreate(txt)
         )
 
+        # Rectanles
+        rect_a = Rectangle(width=2, height=2, color=BLUE, fill_opacity=0.5)
+        rect_b = Rectangle(width=1, height=1, color=VIOLET, fill_opacity=0.5).\
+            next_to(rect_a, DOWN, buff=0).\
+            align_to(rect_a, LEFT)
+        rect_c = Rectangle(width=0.5, height=0.5, color=RED, fill_opacity=0.5).\
+            next_to(rect_b, DOWN, buff=0).\
+            align_to(rect_a, LEFT)
+                
+        self.play(
+            FadeIn(rect_a),
+            FadeIn(rect_b),
+            FadeIn(rect_c)
+        )
 
         # Finish
         self.wait(2)
