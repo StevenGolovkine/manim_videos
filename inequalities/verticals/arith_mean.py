@@ -69,7 +69,7 @@ class Mean(MovingCameraScene):
             Uncreate(txt)
         )
 
-        # Rectanles
+        # Square
         rect_a = Rectangle(width=2, height=2, color=BLUE, fill_opacity=0.5)
         rect_b = Rectangle(width=1, height=1, color=VIOLET, fill_opacity=0.5).\
             next_to(rect_a, DOWN, buff=0).\
@@ -82,6 +82,22 @@ class Mean(MovingCameraScene):
             FadeIn(rect_a),
             FadeIn(rect_b),
             FadeIn(rect_c)
+        )
+
+        # Rectangles
+        rect_ab = Rectangle(width=2, height=1, color=GREEN, fill_opacity=0.5).\
+            align_to(rect_a, UP)
+        rect_bc = Rectangle(width=1, height=0.5, color=YELLOW, fill_opacity=0.5).\
+            next_to(rect_ab, DOWN, buff=0).\
+            align_to(rect_a, LEFT)
+        rect_ac = Rectangle(width=0.5, height=2, color=ORANGE, fill_opacity=0.5).\
+            next_to(rect_bc, DOWN, buff=0).\
+            align_to(rect_a, LEFT)
+
+        self.play(
+            FadeIn(rect_ab),
+            FadeIn(rect_bc),
+            FadeIn(rect_ac)
         )
 
         # Finish
