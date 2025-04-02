@@ -100,6 +100,20 @@ class Mean(MovingCameraScene):
             FadeIn(rect_ac)
         )
 
+        # Write the inequalities
+        inequalities = [
+            Tex(r"$ab + bc + ac$", font_size=36, color=BLACK),
+            Tex(r"$ \leq $", font_size=36, color=BLACK),
+            Tex(r"$a^2 + b^2 + c^2$", font_size=36, color=BLACK)
+        ]
+        inequalities = VGroup(*inequalities).arrange(RIGHT).move_to([0, 2, 0])
+
+        self.play(
+            Write(inequalities[0]),
+            Write(inequalities[1]),
+            Write(inequalities[2])
+        )
+
         # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
