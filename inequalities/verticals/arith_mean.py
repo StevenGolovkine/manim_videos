@@ -6,8 +6,8 @@ Proofs without Words II. Roger B. Nelsen. p. 74.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Create, Uncreate, Write
-from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Rectangle
+from manim import Create, Uncreate, Write, Transform, TransformFromCopy
+from manim import VGroup, FadeIn, FadeOut, FunctionGraph, Rectangle, RoundedRectangle
 from manim import Text, Tex
 
 from manim import config
@@ -49,7 +49,8 @@ class Mean(MovingCameraScene):
         txt_title = [
             Tex(r"Une inégalité", font_size=48, color=BLACK),
             Tex(r"de moyennes", font_size=48, color=BLACK),
-            Tex(r"pour 3 nombres", font_size=48, color=BLACK)
+            Tex(r"pour 3 nombres", font_size=48, color=BLACK),
+            Tex(r"Partie I", font_size=24, color=BLACK),
         ]
         txt_title = VGroup(*txt_title).arrange(DOWN).move_to([0, 2, 0])
 
@@ -77,11 +78,57 @@ class Mean(MovingCameraScene):
         rect_c = Rectangle(width=0.5, height=0.5, color=RED, fill_opacity=0.5).\
             next_to(rect_b, DOWN, buff=0).\
             align_to(rect_a, LEFT)
-                
+
+        txt_a = Tex(r"$a$", font_size=36, color=BLACK).\
+            next_to(rect_a, UP, buff=0.1)
+        txt_aa = Tex(r"$a$", font_size=36, color=BLACK).\
+            next_to(rect_a, LEFT, buff=0.1)
+        txt_b = Tex(r"$b$", font_size=36, color=BLACK).\
+            next_to(rect_b, UP, buff=0.1)
+        txt_bb = Tex(r"$b$", font_size=36, color=BLACK).\
+            next_to(rect_b, LEFT, buff=0.1)
+        txt_c = Tex(r"$c$", font_size=36, color=BLACK).\
+            next_to(rect_c, UP, buff=0.1)
+        txt_cc = Tex(r"$c$", font_size=36, color=BLACK).\
+            next_to(rect_c, LEFT, buff=0.1)
+
         self.play(
             FadeIn(rect_a),
+            Write(txt_a),
+            Write(txt_aa)
+        )
+
+        txt_a2 = Tex(r"$a^2$", font_size=36, color=BLACK).\
+            move_to(rect_a.get_center_of_mass())
+        self.play(
+            Transform(txt_a, txt_a2),
+            Transform(txt_aa, txt_a2)
+        )
+
+        self.play(
             FadeIn(rect_b),
-            FadeIn(rect_c)
+            Write(txt_b),
+            Write(txt_bb)
+        )
+
+        txt_b2 = Tex(r"$b^2$", font_size=36, color=BLACK).\
+            move_to(rect_b.get_center_of_mass())
+        self.play(
+            Transform(txt_b, txt_b2),
+            Transform(txt_bb, txt_b2)
+        )
+
+        self.play(
+            FadeIn(rect_c),
+            Write(txt_c),
+            Write(txt_cc)
+        )
+
+        txt_c2 = Tex(r"$c^2$", font_size=36, color=BLACK).\
+            move_to(rect_c.get_center_of_mass())
+        self.play(
+            Transform(txt_c, txt_c2),
+            Transform(txt_cc, txt_c2)
         )
 
         # Rectangles
@@ -93,25 +140,98 @@ class Mean(MovingCameraScene):
         rect_ac = Rectangle(width=0.5, height=2, color=ORANGE, fill_opacity=0.5).\
             next_to(rect_bc, DOWN, buff=0).\
             align_to(rect_a, LEFT)
+        
+        txt_a = Tex(r"$a$", font_size=36, color=BLACK).\
+            next_to(rect_ab, UP, buff=0.1)
+        txt_b = Tex(r"$b$", font_size=36, color=BLACK).\
+            next_to(rect_ab, LEFT, buff=0.1)
+        txt_bb = Tex(r"$b$", font_size=36, color=BLACK).\
+            next_to(rect_bc, UP, buff=0.1)
+        txt_c = Tex(r"$c$", font_size=36, color=BLACK).\
+            next_to(rect_bc, LEFT, buff=0.1)
+        txt_cc = Tex(r"$c$", font_size=36, color=BLACK).\
+            next_to(rect_ac, UP, buff=0.1)
+        txt_aa = Tex(r"$a$", font_size=36, color=BLACK).\
+            next_to(rect_ac, LEFT, buff=0.1)
 
         self.play(
             FadeIn(rect_ab),
+            Write(txt_a),
+            Write(txt_b)
+        )
+
+        txt_ab = Tex(r"$ab$", font_size=36, color=BLACK).\
+            move_to(rect_ab.get_center_of_mass())
+        self.play(
+            Transform(txt_a, txt_ab),
+            Transform(txt_b, txt_ab)
+        )
+
+        self.play(
             FadeIn(rect_bc),
-            FadeIn(rect_ac)
+            Write(txt_bb),
+            Write(txt_c)
+        )
+
+        txt_bc = Tex(r"$bc$", font_size=36, color=BLACK).\
+            move_to(rect_bc.get_center_of_mass())
+        self.play(
+            Transform(txt_bb, txt_bc),
+            Transform(txt_c, txt_bc)
+        )
+
+        self.play(
+            FadeIn(rect_ac),
+            Write(txt_cc),
+            Write(txt_aa)
+        )
+
+        txt_ac = Tex(r"$ac$", font_size=36, color=BLACK).\
+            move_to(rect_ac.get_center_of_mass())
+        self.play(
+            Transform(txt_cc, txt_ac),
+            Transform(txt_aa, txt_ac)
         )
 
         # Write the inequalities
         inequalities = [
-            Tex(r"$ab + bc + ac$", font_size=36, color=BLACK),
-            Tex(r"$ \leq $", font_size=36, color=BLACK),
-            Tex(r"$a^2 + b^2 + c^2$", font_size=36, color=BLACK)
+            Tex(r"$ab + bc + ac$", font_size=30, color=BLACK),
+            Tex(r"$ \leq $", font_size=30, color=BLACK),
+            Tex(r"$a^2 + b^2 + c^2$", font_size=30, color=BLACK)
         ]
         inequalities = VGroup(*inequalities).arrange(RIGHT).move_to([0, 2, 0])
 
+        rect = RoundedRectangle(
+            height=1, width=4,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to([0, 2, 0])
+        txt = txt = Tex(
+            r"$ab$", r"$~+~$", r"$bc$", r"$~+~$", r"$ac$",
+            r" $ \leq $ ",
+            r"$a^2$", r"$~+~$", r"$b^2$", r"$~+~$", r"$c^2$",
+            font_size=28, color=BLACK
+         ).move_to([0, 2, 0])
+
+        rect.z_index = 0
+        txt.z_index = 1
         self.play(
-            Write(inequalities[0]),
-            Write(inequalities[1]),
-            Write(inequalities[2])
+            Create(rect),
+            run_time=0.5
+        )
+        self.play(
+            TransformFromCopy(txt_ab[0], txt[0]),
+            Write(txt[1]),
+            TransformFromCopy(txt_bc[0], txt[2]),
+            Write(txt[3]),
+            TransformFromCopy(txt_ac[0], txt[4]),
+            Write(txt[5]),
+            TransformFromCopy(txt_a2[0], txt[6]),
+            Write(txt[7]),
+            TransformFromCopy(txt_b2[0], txt[8]),
+            Write(txt[9]),
+            TransformFromCopy(txt_c2[0], txt[10]),
         )
 
         # Finish
