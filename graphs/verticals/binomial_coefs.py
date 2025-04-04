@@ -6,8 +6,8 @@ import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
-from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Graph
-from manim import Text, Tex, MathTex, Transform
+from manim import VGroup, FadeIn, FadeOut, FunctionGraph, Graph
+from manim import Text, Tex, MathTex, Transform, RoundedRectangle
 
 from manim import config
 from manim import LEFT, RIGHT, DOWN, LIGHT, UP, PI
@@ -98,9 +98,27 @@ class Graphe(MovingCameraScene):
                 for i in vertices for j in vertices
             }
         )
-        self.play(Create(g))
+        txt_g = Tex(
+            r"$\binom{n + m}{2}$", font_size=36, color=BLACK
+        ).move_to(g.get_center_of_mass())
+        rect_g = RoundedRectangle(
+            height=1, width=2,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to(g.get_center_of_mass())
+
+        self.play(
+            Create(g),
+            FadeIn(rect_g),
+            Write(txt_g)
+        )
         
-        self.play(g.animate.scale(0.5).move_to([0, 1.5, 0]))
+        self.play(
+            g.animate.scale(0.5).move_to([0, 1.5, 0]),
+            rect_g.animate.scale(0.7).move_to([0, 1.5, 0]),
+            txt_g.animate.scale(0.7).move_to([0, 1.5, 0])
+        )
 
         # k = 5
         vertices_5 = ["1", "2", "3", "4", "5"]
@@ -120,8 +138,26 @@ class Graphe(MovingCameraScene):
                 for i in vertices_5 for j in vertices_5
             }
         ).move_to([0, -1.5, 0])
-        self.play(Create(g_5))
-        self.play(g_5.animate.scale(0.5).move_to([-1, -0.75, 0]))
+        txt_g5 = Tex(
+            r"$\binom{n}{2}$", font_size=36, color=BLACK
+        ).move_to(g_5.get_center_of_mass())
+        rect_g5 = RoundedRectangle(
+            height=1, width=2,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to(g_5.get_center_of_mass())
+
+        self.play(
+            Create(g_5),
+            FadeIn(rect_g5),
+            Write(txt_g5)
+        )
+        self.play(
+            g_5.animate.scale(0.5).move_to([-1, -0.75, 0]),
+            rect_g5.animate.scale(0.5).move_to([-1, -0.75, 0]),
+            txt_g5.animate.scale(0.7).move_to([-1, -0.75, 0])
+        )
 
         # k = 3
         vertices_3 = ["A", "B", "C"]
@@ -141,8 +177,26 @@ class Graphe(MovingCameraScene):
                 for i in vertices_3 for j in vertices_3
             }
         ).move_to([0, -1.5, 0])
-        self.play(Create(g_3))
-        self.play(g_3.animate.scale(0.5).move_to([1, -0.75, 0]))
+        txt_g3 = Tex(
+            r"$\binom{m}{2}$", font_size=36, color=BLACK
+        ).move_to(g_3.get_center_of_mass())
+        rect_g3 = RoundedRectangle(
+            height=1, width=2,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to(g_3.get_center_of_mass())
+
+        self.play(
+            Create(g_3),
+            FadeIn(rect_g3),
+            Write(txt_g3)
+        )
+        self.play(
+            g_3.animate.scale(0.5).move_to([1, -0.75, 0]),
+            rect_g3.animate.scale(0.5).move_to([1, -0.75, 0]),
+            txt_g3.animate.scale(0.7).move_to([1, -0.75, 0])
+        )
 
 
         # k = 3*5
@@ -165,8 +219,25 @@ class Graphe(MovingCameraScene):
                 for i in vertices_35[:5] for j in vertices_35[5:]
             }
         ).move_to([0, -1.5, 0])
-        self.play(Create(g_35.rotate(PI/2)))
-        self.play(g_35.animate.scale(0.5).move_to([0, -2.5, 0]))
+        txt_g35 = Tex(
+            r"$nm$", font_size=36, color=BLACK
+        ).move_to(g_35.get_center_of_mass())
+        rect_g35 = RoundedRectangle(
+            height=1, width=2,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to(g_35.get_center_of_mass())
+        self.play(
+            Create(g_35.rotate(PI/2)),
+            FadeIn(rect_g35),
+            Write(txt_g35)
+        )
+        self.play(
+            g_35.animate.scale(0.5).move_to([0, -3, 0]),
+            rect_g35.animate.scale(0.5).move_to([0, -2.25, 0]),
+            txt_g35.animate.scale(0.7).move_to([0, -2.25, 0])
+        )
 
         # Color edges
         g_5_c = g_5.copy()
