@@ -6,7 +6,8 @@ import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write, Transform, TransformFromCopy
-from manim import VGroup, FadeIn, FadeOut, FunctionGraph, Rectangle, RoundedRectangle
+from manim import VGroup, FadeIn, FadeOut, FunctionGraph, RoundedRectangle
+from manim import RegularPolygon, Line
 from manim import Text, Tex
 
 from manim import config
@@ -67,6 +68,181 @@ class Series(MovingCameraScene):
             Uncreate(txt)
         )
 
+        # Create octogones
+        base_radius = 2
+        octo = RegularPolygon(
+            n=8,
+            radius=base_radius,
+            stroke_width=2,
+            stroke_color=BLACK,
+        )
+        line = Line(
+            octo.get_vertices()[2],
+            octo.get_vertices()[3],
+            stroke_color = BLUE
+        )
+        txt_1 = Tex(
+            r"$1$", font_size=32, color=BLACK
+        ).next_to(line.get_center(), UP + LEFT, buff=0.2)
+        self.play(
+            Create(octo),
+            run_time=0.5
+        )
+        self.play(
+            Create(line),
+            Write(txt_1)
+        )
+
+        group = VGroup(octo, line, txt_1)
+
+        octo_2 = RegularPolygon(
+            n=8,
+            radius=base_radius / 3,
+            stroke_width=2,
+            stroke_color=BLACK,
+        )
+        line_2 = Line(
+            octo_2.get_vertices()[2],
+            octo_2.get_vertices()[3],
+            stroke_color = BLUE
+        )
+        txt_2 = Tex(
+            r"$1 / 3$", font_size=24, color=BLACK
+        ).next_to(line_2.get_center(), UP, buff=0.05)
+        self.play(
+            Create(octo_2),
+        )
+        self.play(
+            Create(line_2),
+            Write(txt_2)
+        )
+
+        # Lines
+        lines = [
+            Line(
+                octo.get_vertices()[i],
+                octo_2.get_vertices()[i],
+                stroke_color=BLACK,
+                stroke_width=1
+            ) for i in range(8)
+        ]
+        self.play(
+            *[Create(line) for line in lines]
+        )
+
+        # Text area
+        txt_area = [
+            Tex(r"$1/ 9$", font_size=16, color=BLACK).\
+                move_to(lines[0].get_center() + [0, 0.5, 0]),
+            Tex(r"$1/ 9$", font_size=16, color=BLACK).\
+                move_to(lines[1].get_center() + [-0.4, 0.25, 0]),
+            Tex(r"$1/ 9$", font_size=16, color=BLACK).\
+                move_to(lines[2].get_center() + [-0.5, 0, 0]),
+            Tex(r"$1/ 9$", font_size=16, color=BLACK).\
+                move_to(lines[3].get_center() + [-0.25, -0.5, 0]),
+            Tex(r"$1/ 9$", font_size=16, color=BLACK).\
+                move_to(lines[4].get_center() + [0, -0.5, 0]),
+            Tex(r"$1/ 9$", font_size=16, color=BLACK).\
+                move_to(lines[5].get_center() + [0.34, -0.25, 0]),
+            Tex(r"$1/ 9$", font_size=16, color=BLACK).\
+                move_to(lines[6].get_center() + [0.5, 0, 0]),
+            Tex(r"$1/ 9$", font_size=16, color=BLACK).\
+                move_to(lines[7].get_center() + [0.25, 0.4, 0]),    
+            Tex(r"$1/ 9$", font_size=16, color=BLACK).\
+                move_to(octo_2.get_center_of_mass())
+        ]
+        self.play(
+            *[Write(txt) for txt in txt_area]
+        )
+
+        self.wait(1)
+
+        group_2 = VGroup(octo_2, line_2, txt_2, txt_area[2], lines[2:4])
+        vgroup = VGroup(group, group_2)
+
+
+        # Zoom in
+        
+        self.play(
+            *[FadeOut(txt) for txt in txt_area[:2]],
+            *[FadeOut(txt) for txt in txt_area[3:]],
+            *[FadeOut(line)for line in lines[:2]],
+            *[FadeOut(line)for line in lines[4:]],
+            vgroup.animate.scale(3)
+        )
+
+        octo_3 = RegularPolygon(
+            n=8,
+            radius=base_radius / 9,
+            stroke_width=2,
+            stroke_color=BLACK,
+        )
+        line_3 = Line(
+            octo_3.get_vertices()[2],
+            octo_3.get_vertices()[3],
+            stroke_color = BLUE
+        )
+        txt_3 = Tex(
+            r"$1 / 9$", font_size=24, color=BLACK
+        ).next_to(line_3.get_center(), UP, buff=0.05)
+        self.play(
+            Create(octo_3),
+        )
+        self.play(
+            Create(line_3),
+            Write(txt_3)
+        )
+
+        # Lines
+        lines_2 = [
+            Line(
+                octo_2.get_vertices()[i],
+                octo_3.get_vertices()[i],
+                stroke_color=BLACK,
+                stroke_width=1
+            ) for i in range(8)
+        ]
+        self.play(
+            *[Create(line) for line in lines_2]
+        )
+
+        # Text area
+        txt_area_2 = [
+            Tex(r"$1/ 9^2$", font_size=16, color=BLACK).\
+                move_to(lines_2[0].get_center() + [0, 0.5, 0]),
+            Tex(r"$1/ 9^2$", font_size=16, color=BLACK).\
+                move_to(lines_2[1].get_center() + [-0.4, 0.25, 0]),
+            Tex(r"$1/ 9^2$", font_size=16, color=BLACK).\
+                move_to(lines_2[2].get_center() + [-0.5, 0, 0]),
+            Tex(r"$1/ 9^2$", font_size=16, color=BLACK).\
+                move_to(lines_2[3].get_center() + [-0.25, -0.5, 0]),
+            Tex(r"$1/ 9^2$", font_size=16, color=BLACK).\
+                move_to(lines_2[4].get_center() + [0, -0.5, 0]),
+            Tex(r"$1/ 9^2$", font_size=16, color=BLACK).\
+                move_to(lines_2[5].get_center() + [0.34, -0.25, 0]),
+            Tex(r"$1/ 9^2$", font_size=16, color=BLACK).\
+                move_to(lines_2[6].get_center() + [0.5, 0, 0]),
+            Tex(r"$1/ 9^2$", font_size=16, color=BLACK).\
+                move_to(lines_2[7].get_center() + [0.25, 0.4, 0]),    
+            Tex(r"$1/ 9^2$", font_size=16, color=BLACK).\
+                move_to(octo_2.get_center_of_mass() + [0, 0.1, 0])
+        ]
+        self.play(
+            *[Write(txt) for txt in txt_area_2]
+        )
+
+        self.wait(1)
+
+        group_3 = VGroup(octo_3, line_3, txt_3, txt_area_2[2], lines_2[2:4])
+        vgroup_2 = VGroup(group, group_2, group_3)
+
+        self.play(
+            *[FadeOut(txt) for txt in txt_area_2[:2]],
+            *[FadeOut(txt) for txt in txt_area_2[3:]],
+            *[FadeOut(line)for line in lines_2[:2]],
+            *[FadeOut(line)for line in lines_2[4:]],
+            vgroup_2.animate.scale(1/3)
+        )
 
 
         # Finish
