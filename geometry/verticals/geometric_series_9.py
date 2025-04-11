@@ -7,7 +7,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write, Transform, TransformFromCopy
 from manim import VGroup, FadeIn, FadeOut, FunctionGraph, RoundedRectangle
-from manim import RegularPolygon, Line
+from manim import RegularPolygon, Line, Polygon
 from manim import Text, Tex
 
 from manim import config
@@ -245,14 +245,110 @@ class Series(MovingCameraScene):
         )
 
 
+        # Write the equality
+        rect = RoundedRectangle(
+            height=1, width=4,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to([0, 2.5, 0])
+        txt = txt = Tex(
+            r"$\frac{1}{9}$",
+            r"$ + $",
+            r"$\frac{1}{9^2}$",
+            r"$ + \dots = $",
+            r"$\frac{1}{8}$",
+            font_size=32, color=BLACK
+         ).move_to([0, 2.5, 0])
+
+        rect.z_index = 0
+        txt.z_index = 1
+        self.play(
+            Create(rect),
+            run_time=0.5
+        )
+        self.play(
+            TransformFromCopy(txt_area[2], txt[0]),
+            Write(txt[1]),
+            TransformFromCopy(txt_area_2[2], txt[2]),
+            Write(txt[3]),
+            #TransformFromCopy(txt_b3[0], txt[4]),
+        )
+
+        # Triangle
+        triangles = [
+            Polygon(
+                [0, 0, 0],
+                octo.get_vertices()[0],
+                octo.get_vertices()[1],
+                color = BLUE, stroke_width=1
+            ),
+            Polygon(
+                [0, 0, 0],
+                octo.get_vertices()[1],
+                octo.get_vertices()[2],
+                color = BLUE, stroke_width=1
+            ),
+            Polygon(
+                [0, 0, 0],
+                octo.get_vertices()[2],
+                octo.get_vertices()[3],
+                color = BLUE, stroke_width=1, fill_color=BLUE, fill_opacity=1
+            ),
+            Polygon(
+                [0, 0, 0],
+                octo.get_vertices()[3],
+                octo.get_vertices()[4],
+                color = BLUE, stroke_width=1
+            ),
+            Polygon(
+                [0, 0, 0],
+                octo.get_vertices()[4],
+                octo.get_vertices()[5],
+                color = BLUE, stroke_width=1
+            ),
+            Polygon(
+                [0, 0, 0],
+                octo.get_vertices()[5],
+                octo.get_vertices()[6],
+                color = BLUE, stroke_width=1
+            ),
+            Polygon(
+                [0, 0, 0],
+                octo.get_vertices()[6],
+                octo.get_vertices()[7],
+                color = BLUE, stroke_width=1
+            ),
+            Polygon(
+                [0, 0, 0],
+                octo.get_vertices()[7],
+                octo.get_vertices()[0],
+                color = BLUE, stroke_width=1
+            ),
+        ]
+        
+        self.play(
+            *[Create(triangle) for triangle in triangles],
+        )
+
+        txt_8 = Tex(r"$1 / 8$", font_size=36, color=BLACK).\
+            move_to(triangles[2].get_center()+ [0.25, 0.25, 0])
+        self.play(
+            Write(txt_8)
+        )
+
+        self.play(
+            TransformFromCopy(txt_8[0], txt[4]),
+        )
+
         # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
 
         # Logo
         ref = [
-            Tex(r"College Mathematics Journal, vol. 39,", font_size=26, color=BLACK),
-            Tex(r"no. 2(March 2008), p.106.", font_size=26, color=BLACK)
+            Tex(r"College Mathematics Journal,", font_size=26, color=BLACK),
+            Tex(r"vol. 39, no. 2(March 2008), p.106.", font_size=26, color=BLACK)
         ]
         ref = VGroup(*ref)\
             .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
