@@ -67,6 +67,114 @@ class Part(MovingCameraScene):
             Uncreate(txt)
         )
 
+        # Graphs
+        ax = Axes(
+            x_range=[0, 1, 0.1],
+            y_range=[-0.1, 1, 0.1],
+            x_length=7,
+            y_length=7,
+            tips=False,
+            x_axis_config={
+                "color": BLACK,
+            },
+            y_axis_config={
+                "color": BLACK
+            }
+        ).scale(0.5).move_to([0, -1.25, 0])
+
+        graph = ax.plot(
+            lambda x: x**2 + 0.15,
+            x_range=[0.1, 0.9],
+            use_smoothing=False,
+            color=BLACK
+        )
+        # Write u
+        txt_u = Tex(
+            r"$u$",
+            font_size=20, color=BLACK
+        ).next_to(ax.c2p(1, 0), UP, buff=0.1)
+        # Write v
+        txt_v = Tex(
+            r"$v$",
+            font_size=20, color=BLACK
+        ).next_to(ax.c2p(0, 1), LEFT, buff=0.1)
+
+        txt_curve = Tex(
+            r"$\begin{cases} u = f(x) \\ v = g(x) \end{cases}$",
+            font_size=16, color=BLACK
+        ).next_to(ax.c2p(0.9, 1), LEFT)
+        self.play(
+            Create(ax),
+            Create(graph),
+            Create(txt_u),
+            Create(txt_v),
+            Create(txt_curve)
+        )
+
+        # For f(x)
+        txt_a = Tex(r"$p = f(a)$", font_size=16, color=BLACK)\
+            .next_to(ax.c2p(0.2, 0), DOWN)
+        txt_b = Tex(r"$q = f(b)$", font_size=16, color=BLACK)\
+            .next_to(ax.c2p(0.8, 0), DOWN)
+
+        self.play(
+            Write(txt_a),
+            Write(txt_b),
+        )
+
+        point_a = ax.c2p(0.2, 0.2**2 + 0.15)
+        line_a = ax.get_vertical_line(point_a, line_func=Line, color=BLACK)
+        point_b = ax.c2p(0.8, 0.8**2 + 0.15)
+        line_b = ax.get_vertical_line(point_b, line_func=Line, color=BLACK)
+
+        x_vals = np.arange(0.2, 0.8, 0.01)
+        points = [
+            graph.get_point_from_function(x) for x in x_vals
+        ]
+        region_under = Polygon(
+            *[ax.c2p(0.2, 0), *points, ax.c2p(0.8, 0)],
+            stroke_width=0,
+            fill_color=RED,
+            fill_opacity=0.5
+        )
+        self.play(
+            Create(line_a),
+            Create(line_b),
+            Create(region_under)
+        )
+
+        # For g(x)
+        txt_r = Tex(r"$r = g(a)$", font_size=16, color=BLACK)\
+            .next_to(ax.c2p(0, 0.2**2 + 0.15), RIGHT + UP, buff=0.1)
+        txt_s = Tex(r"$s = g(b)$", font_size=16, color=BLACK)\
+            .next_to(ax.c2p(0, 0.8**2 + 0.15), RIGHT + UP, buff=0.1)
+
+        self.play(
+            Write(txt_r),
+            Write(txt_s),
+        )
+
+        point_a = ax.c2p(0.2, 0.2**2 + 0.15)
+        line_a = ax.get_horizontal_line(point_a, line_func=Line, color=BLACK)
+        point_b = ax.c2p(0.8, 0.8**2 + 0.15)
+        line_b = ax.get_horizontal_line(point_b, line_func=Line, color=BLACK)
+
+        x_vals = np.arange(0.2, 0.8, 0.01)
+        points = [
+            graph.get_point_from_function(x) for x in x_vals
+        ]
+        region_above = Polygon(
+            *[ax.c2p(0, 0.2**2 + 0.15), *points, ax.c2p(0, 0.8**2 + 0.15)],
+            stroke_width=0,
+            fill_color=BLUE,
+            fill_opacity=0.5
+        )
+        self.play(
+            Create(line_a),
+            Create(line_b),
+            Create(region_above)
+        )
+
         # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
