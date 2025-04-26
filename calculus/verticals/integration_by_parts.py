@@ -175,6 +175,9 @@ class Part(MovingCameraScene):
             Create(region_above)
         )
 
+        # Add text on top
+        
+
         # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
