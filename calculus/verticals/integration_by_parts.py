@@ -176,7 +176,19 @@ class Part(MovingCameraScene):
         )
 
         # Add text on top
-        
+        txt_area = Tex(
+            r"Aire + Aire = sq - rp",
+            font_size=28, color=BLACK
+        ).move_to([0, 2.5, 0])
+        txt_area2 = Tex(
+            r"$\int_{a}^{b} f(x)dx + \int_{r}^{s} g(x)dx = (b-a)(q-r)$",
+            font_size=28, color=BLACK
+        ).move_to([0, 1.5, 0])
+        self.play(
+            Write(txt_area),
+            Write(txt_area2)
+        )
+
 
         # Finish
         self.wait(2)
