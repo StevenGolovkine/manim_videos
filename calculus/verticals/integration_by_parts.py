@@ -177,18 +177,36 @@ class Part(MovingCameraScene):
 
         # Add text on top
         txt_area = Tex(
-            r"Aire + Aire = sq - rp",
-            font_size=28, color=BLACK
-        ).move_to([0, 2.5, 0])
-        txt_area2 = Tex(
-            r"$\int_{a}^{b} f(x)dx + \int_{r}^{s} g(x)dx = (b-a)(q-r)$",
-            font_size=28, color=BLACK
-        ).move_to([0, 1.5, 0])
+            r"Aire ", r"$\blacksquare$", r" $+$ ",
+            r"Aire ", r"$\blacksquare$", r" $= qs- pr$ ",
+            font_size=30, color=BLACK,
+        ).move_to([0, 3, 0])
+        txt_area[1].set_color(RED).set_opacity(0.5)
+        txt_area[4].set_color(BLUE).set_opacity(0.5)
+
         self.play(
             Write(txt_area),
-            Write(txt_area2)
         )
 
+        txt_area2 = Tex(
+            r"$\int_{p}^{q} vdu + \int_{r}^{s} udv$",
+            r"$ = \left[uv\right]_{(p, r)}^{(q, s)}$",
+            font_size=28, color=BLACK
+        ).move_to([0, 2.25, 0])
+
+        self.play(
+            Write(txt_area2),
+        )
+
+        txt_area3 = Tex(
+            r"$\int_{a}^{b} f(x)g^\prime(x)dx + \int_{r}^{s} g(x)f^\prime(x)dx$",
+            r"$ = \left[f(x)g(x)\right]_{a}^{b}$",
+            font_size=20, color=BLACK
+        ).move_to([0, 1.5, 0])
+
+        self.play(
+            Write(txt_area3),
+        )
 
         # Finish
         self.wait(2)
