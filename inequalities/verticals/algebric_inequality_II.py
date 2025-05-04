@@ -74,12 +74,48 @@ class Proof(MovingCameraScene):
             Tex(r"et soit $a + b + c \leq 1$,", font_size=30, color=BLACK),
             Tex(r"alors $a^2 + 3b^2 + 5c^2 \leq 1$.", font_size=30, color=BLACK),
         ]
-        txt = VGroup(*txt).arrange(DOWN, aligned_edge=LEFT).move_to([0, 2.5, 0])
+        txt = VGroup(*txt).arrange(DOWN, aligned_edge=LEFT).move_to([0, 3, 0])
 
         self.play(
             Write(txt),
         )
 
+        # Rectangles
+        rect = Rectangle(width=4, height=4, color=BLACK)
+
+        self.play(
+            Create(rect)
+        )
+
+        rect_a = Rectangle(width=2, height=2, color=BLUE, fill_opacity=0.5).\
+            align_to(rect, UP + LEFT)
+        self.play(
+            Create(rect_a)
+        )
+
+        rect_b = Rectangle(width=1.25, height=1.25, color=VIOLET, fill_opacity=0.5)
+        rect_b_c = rect_b.copy()
+        rect_b_cc = rect_b.copy()
+
+        self.play(
+            Create(rect_b.next_to(rect_a, RIGHT, aligned_edge=UP, buff=0)),
+            Create(rect_b_c.next_to(rect_a, DOWN, aligned_edge=LEFT, buff=0)),
+            Create(rect_b_cc.next_to(rect_a, DOWN + RIGHT, buff=0))
+        )
+
+        rect_c = Rectangle(width=0.75, height=0.755, color=RED, fill_opacity=0.5)
+        rect_c_c = rect_c.copy()
+        rect_c_cc = rect_c.copy()
+        rect_c_ccc = rect_c.copy()
+        rect_c_cccc = rect_c.copy()
+
+        self.play(
+            Create(rect_c.next_to(rect_b, RIGHT, aligned_edge=UP, buff=0)),
+            Create(rect_c_c.next_to(rect_b_cc, RIGHT, aligned_edge=UP, buff=0)),
+            Create(rect_c_cc.next_to(rect_b_c, DOWN, aligned_edge=LEFT, buff=0)),
+            Create(rect_c_ccc.next_to(rect_b_cc, DOWN, aligned_edge=LEFT, buff=0)),
+            Create(rect_c_cccc.next_to(rect_b_cc, DOWN + RIGHT, buff=0))
+        )
 
         # Finish
         self.wait(2)
