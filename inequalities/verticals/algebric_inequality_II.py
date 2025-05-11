@@ -1,7 +1,6 @@
 """
-Visual proof of the arithmetic mean - geometric mean inequality for three positive
-numbers.
-Proofs without Words II. Roger B. Nelsen. p. 74.
+Visual proof of an algebraic inequality.
+Proofs without Words III. Roger B. Nelsen. p. 103.
 """
 import numpy as np
 
