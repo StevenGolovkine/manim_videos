@@ -80,7 +80,7 @@ class Proof(MovingCameraScene):
         )
 
         # Rectangles
-        rect = Rectangle(width=4, height=4, color=BLACK)
+        rect = Rectangle(width=4, height=4, color=BLACK).move_to([0, -0.5, 0])
 
         self.play(
             Create(rect)
@@ -88,32 +88,119 @@ class Proof(MovingCameraScene):
 
         rect_a = Rectangle(width=2, height=2, color=BLUE, fill_opacity=0.5).\
             align_to(rect, UP + LEFT)
+        txt_a = Tex(r"$a$", font_size=30, color=BLACK).\
+            next_to(rect_a, UP)
+        txt_a2 = Tex(r"$a^2$", font_size=30, color=BLACK).\
+            move_to(rect_a.get_center())
         self.play(
-            Create(rect_a)
+            Create(rect_a),
+            Create(txt_a),
+            Create(txt_a2)
         )
 
-        rect_b = Rectangle(width=1.25, height=1.25, color=VIOLET, fill_opacity=0.5)
-        rect_b_c = rect_b.copy()
-        rect_b_cc = rect_b.copy()
+        rect_b = Rectangle(width=1.25, height=1.25, color=VIOLET, fill_opacity=0.5).\
+            next_to(rect_a, RIGHT, aligned_edge=UP, buff=0)
+        txt_b = Tex(r"$b$", font_size=30, color=BLACK).\
+            next_to(rect_b, UP)
+        txt_b2 = Tex(r"$b^2$", font_size=30, color=BLACK).\
+            move_to(rect_b.get_center())
+        rect_b_c = rect_b.copy().\
+            next_to(rect_a, DOWN, aligned_edge=LEFT, buff=0)
+        txt_b2_c = Tex(r"$b^2$", font_size=30, color=BLACK).\
+            move_to(rect_b_c.get_center())
+        rect_b_cc = rect_b.copy().\
+            next_to(rect_a, DOWN + RIGHT, buff=0)
+        txt_b2_cc = Tex(r"$b^2$", font_size=30, color=BLACK).\
+            move_to(rect_b_cc.get_center())
 
         self.play(
-            Create(rect_b.next_to(rect_a, RIGHT, aligned_edge=UP, buff=0)),
-            Create(rect_b_c.next_to(rect_a, DOWN, aligned_edge=LEFT, buff=0)),
-            Create(rect_b_cc.next_to(rect_a, DOWN + RIGHT, buff=0))
+            Create(rect_b),
+            Create(rect_b_c),
+            Create(rect_b_cc),
+            Create(txt_b),
+            Create(txt_b2),
+            Create(txt_b2_c),
+            Create(txt_b2_cc)
         )
 
-        rect_c = Rectangle(width=0.75, height=0.755, color=RED, fill_opacity=0.5)
-        rect_c_c = rect_c.copy()
-        rect_c_cc = rect_c.copy()
-        rect_c_ccc = rect_c.copy()
-        rect_c_cccc = rect_c.copy()
+        rect_c = Rectangle(width=0.75, height=0.755, color=RED, fill_opacity=0.5).\
+            next_to(rect_b, RIGHT, aligned_edge=UP, buff=0)
+        txt_c = Tex(r"$c$", font_size=30, color=BLACK).\
+            next_to(rect_c, UP)
+        txt_c2 = Tex(r"$c^2$", font_size=30, color=BLACK).\
+            move_to(rect_c.get_center())
+        rect_c_c = rect_c.copy().\
+            next_to(rect_b_cc, RIGHT, aligned_edge=UP, buff=0)
+        txt_c2_c = Tex(r"$c^2$", font_size=30, color=BLACK).\
+            move_to(rect_c_c.get_center())
+        rect_c_cc = rect_c.copy().\
+            next_to(rect_b_c, DOWN, aligned_edge=LEFT, buff=0)
+        txt_c2_cc = Tex(r"$c^2$", font_size=30, color=BLACK).\
+            move_to(rect_c_cc.get_center())
+        rect_c_ccc = rect_c.copy().\
+            next_to(rect_b_cc, DOWN, aligned_edge=LEFT, buff=0)
+        txt_c2_ccc = Tex(r"$c^2$", font_size=30, color=BLACK).\
+            move_to(rect_c_ccc.get_center())
+        rect_c_cccc = rect_c.copy().\
+            next_to(rect_b_cc, DOWN + RIGHT, buff=0)
+        txt_c2_cccc = Tex(r"$c^2$", font_size=30, color=BLACK).\
+            move_to(rect_c_cccc.get_center())
 
         self.play(
-            Create(rect_c.next_to(rect_b, RIGHT, aligned_edge=UP, buff=0)),
-            Create(rect_c_c.next_to(rect_b_cc, RIGHT, aligned_edge=UP, buff=0)),
-            Create(rect_c_cc.next_to(rect_b_c, DOWN, aligned_edge=LEFT, buff=0)),
-            Create(rect_c_ccc.next_to(rect_b_cc, DOWN, aligned_edge=LEFT, buff=0)),
-            Create(rect_c_cccc.next_to(rect_b_cc, DOWN + RIGHT, buff=0))
+            Create(rect_c),
+            Create(rect_c_c),
+            Create(rect_c_cc),
+            Create(rect_c_ccc),
+            Create(rect_c_cccc),
+            Create(txt_c),
+            Create(txt_c2),
+            Create(txt_c2_c),
+            Create(txt_c2_cc),
+            Create(txt_c2_ccc),
+            Create(txt_c2_cccc)
+        )
+        self.wait(1)
+
+        # Write the inequalities
+        rect = RoundedRectangle(
+            height=1, width=4,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to([0, -2, 0])
+        txt = txt = Tex(
+            r"$a^2 + 3b^2 + 5c^2$",
+            r" $ \leq $ ",
+            r"$(a + b + c)^2$",
+            font_size=28, color=BLACK
+         ).move_to([0, -2, 0])
+
+        rect.z_index = 0
+        txt.z_index = 1
+        self.play(
+            Create(rect),
+            Create(txt),
+        )
+        self.wait(1)
+
+        txt_1 = Tex(
+            r"$a^2 + 3b^2 + 5c^2$",
+            r" $ \leq $ ",
+            r"$1^2$",
+            font_size=28, color=BLACK
+         ).move_to([0, -2, 0])
+        self.play(
+            Transform(txt, txt_1),
+        )
+
+        txt_12 = Tex(
+            r"$a^2 + 3b^2 + 5c^2$",
+            r" $ \leq $ ",
+            r"$1$",
+            font_size=28, color=BLACK
+         ).move_to([0, -2, 0])
+        self.play(
+            Transform(txt, txt_12),
         )
 
         # Finish
