@@ -5,7 +5,7 @@ Proofs without Words I. Roger B. Nelsen. p. 87.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Dot, BraceBetweenPoints, RoundedRectangle
+from manim import Dot, BraceBetweenPoints, RoundedRectangle, Square
 from manim import Create, Uncreate, Write
 from manim import VGroup, TransformFromCopy, FadeIn, FadeOut, FunctionGraph
 from manim import Text, Tex
@@ -75,6 +75,18 @@ class Sums(MovingCameraScene):
         )
         self.wait(0.5)
 
+        # Create small squares
+        s1 = Square(side_length=0.5, color=BLUE, fill_opacity=1)
+        s2 = Square(side_length=0.5, color=VIOLET, fill_opacity=1)
+        s3 = Square(side_length=0.5, color=RED, fill_opacity=1)
+        s4 = Square(side_length=0.5, color=GREEN, fill_opacity=1)
+
+        self.play(
+            FadeIn(s1),
+            FadeIn(s2),
+            FadeIn(s3),
+            FadeIn(s4),
+        )
 
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
