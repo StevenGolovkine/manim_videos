@@ -76,7 +76,14 @@ class Sums(MovingCameraScene):
         self.wait(0.5)
 
         # Create small squares
-        s1 = Square(side_length=0.5, color=BLUE, fill_opacity=1)
+        
+        s_25 = 25 * [Square(side_length=0.1, color=BLUE, fill_opacity=1)]
+        s_16 = 16 * [Square(side_length=0.1, color=VIOLET, fill_opacity=1)]
+        s_9 = 9 * [Square(side_length=0.1, color=RED, fill_opacity=1)]
+        s_4 = 4 * [Square(side_length=0.1, color=GREEN, fill_opacity=1)]
+        s_1 = [Square(side_length=0.1, color=YELLOW, fill_opacity=1)]
+
+        s1 = Square(side_length=0.1, color=BLUE, fill_opacity=1)
         s2 = Square(side_length=0.5, color=VIOLET, fill_opacity=1)
         s3 = Square(side_length=0.5, color=RED, fill_opacity=1)
         s4 = Square(side_length=0.5, color=GREEN, fill_opacity=1)
