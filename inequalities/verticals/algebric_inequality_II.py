@@ -167,13 +167,13 @@ class Proof(MovingCameraScene):
             stroke_width=2,
             color=BLACK,
             fill_color=WHITE, fill_opacity=1
-        ).move_to([0, -2, 0])
+        ).move_to([0, -3, 0])
         txt = txt = Tex(
             r"$a^2 + 3b^2 + 5c^2$",
             r" $ \leq $ ",
             r"$(a + b + c)^2$",
             font_size=28, color=BLACK
-         ).move_to([0, -2, 0])
+         ).move_to([0, -3, 0])
 
         rect.z_index = 0
         txt.z_index = 1
@@ -188,7 +188,7 @@ class Proof(MovingCameraScene):
             r" $ \leq $ ",
             r"$1^2$",
             font_size=28, color=BLACK
-         ).move_to([0, -2, 0])
+         ).move_to([0, -3, 0])
         self.play(
             Transform(txt, txt_1),
         )
@@ -198,7 +198,7 @@ class Proof(MovingCameraScene):
             r" $ \leq $ ",
             r"$1$",
             font_size=28, color=BLACK
-         ).move_to([0, -2, 0])
+         ).move_to([0, -3, 0])
         self.play(
             Transform(txt, txt_12),
         )
