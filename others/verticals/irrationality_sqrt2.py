@@ -106,9 +106,22 @@ class Proof(MovingCameraScene):
             Line(triangle_b.get_vertices()[1], triangle_b.get_vertices()[2]),
             length=0.2, quadrant=(-1,1), color=BLACK, stroke_width=2
         )
+
+        txt_1 = [
+            Tex(
+                r"si ceci est un triangle isocèle et rectangle",
+                font_size=20, color=BLACK
+            ),
+            Tex(r"de longueurs entières,", font_size=20, color=BLACK),
+        ]
+        txt_1 = VGroup(*txt_1)\
+            .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)
+        txt_1.next_to(txt, DOWN, aligned_edge=LEFT, buff=0.2)
+
         self.play(
             Create(triangle_b),
             Create(r_angle),
+            Write(txt_1),
         )
 
         arc = Arc(
@@ -127,8 +140,34 @@ class Proof(MovingCameraScene):
             stroke_width=2,
             color=BLACK, fill_color=RED, fill_opacity=1
         )
+        r_angle = RightAngle(
+            Line(triangle_r.get_vertices()[1], triangle_r.get_vertices()[2]),
+            Line(triangle_r.get_vertices()[2], triangle_r.get_vertices()[0]),
+            length=0.2, quadrant=(-1,1), color=BLACK, stroke_width=2
+        )
+
+        txt_2 = [
+            Tex(
+                r"alors, il en existe un plus petit",
+                font_size=20, color=BLACK
+            ),
+            Tex(r"avec les mêmes propriétés.", font_size=20, color=BLACK),
+        ]
+        txt_2 = VGroup(*txt_2)\
+            .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)
+        txt_2.next_to(txt_1, DOWN, aligned_edge=LEFT, buff=0.2)
+
         self.play(
             Create(triangle_r),
+            Create(r_angle),
+            Write(txt_2),
+        )
+
+        txt_conclusion = Tex(
+            r"Donc $\sqrt{2}$ ne peut pas être rationnel.", font_size=20, color=BLACK
+        ).move_to([0, -2.5, 0])
+        self.play(
+            Write(txt_conclusion),
         )
 
         self.wait(2)
