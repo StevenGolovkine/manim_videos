@@ -81,7 +81,7 @@ class Proof(MovingCameraScene):
                 font_size=20, color=BLACK),
             Tex(r"de ce triangle avec $3$ longueurs entières.",
                 font_size=20, color=BLACK),
-            Tex(r"Donc, il doit exister le plus petit triangle",
+            Tex(r"Donc, il doit exister un plus petit triangle",
                 font_size=20, color=BLACK),
             Tex(r"avec ces propriétés. Mais ...",
                 font_size=20, color=BLACK),
