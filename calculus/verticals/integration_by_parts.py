@@ -46,8 +46,8 @@ class Part(MovingCameraScene):
 
         # Introduction text
         txt_title = [
-            Tex(r"L'intégration", font_size=40, color=BLACK),
-            Tex(r"par parties", font_size=40, color=BLACK)
+            Tex(r"L'intégration", font_size=48, color=BLACK),
+            Tex(r"par parties", font_size=48, color=BLACK)
         ]
         txt_title = VGroup(*txt_title).arrange(DOWN).move_to([0, 2, 0])
 

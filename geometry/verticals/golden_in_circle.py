@@ -46,8 +46,8 @@ class Golden(MovingCameraScene):
 
         # Introduction text
         txt_title = [
-            Tex(r"Une construction", font_size=40, color=BLACK),
-            Tex(r"du nombre d'or $\varphi$", font_size=40, color=BLACK),
+            Tex(r"Une construction", font_size=48, color=BLACK),
+            Tex(r"du nombre d'or $\varphi$", font_size=48, color=BLACK),
         ]
         txt_title = VGroup(*txt_title).arrange(DOWN).move_to([0, 2, 0])
 

@@ -48,10 +48,10 @@ class Triangle(MovingCameraScene):
 
         # Introduction text
         txt_title = [
-            Tex(r"L'aire du triangle", font_size=40, color=BLACK),
-            Tex(r"des médianes est égale", font_size=40, color=BLACK),
-            Tex(r"aux trois-quarts", font_size=40, color=BLACK),
-            Tex(r"du triangle original", font_size=40, color=BLACK)
+            Tex(r"L'aire du triangle", font_size=48, color=BLACK),
+            Tex(r"des médianes est égale", font_size=48, color=BLACK),
+            Tex(r"aux trois-quarts", font_size=48, color=BLACK),
+            Tex(r"du triangle original", font_size=48, color=BLACK)
         ]
         txt_title = VGroup(*txt_title).arrange(DOWN).move_to([0, 2, 0])
 

@@ -63,11 +63,11 @@ class Triangle(MovingCameraScene):
         # La bissectrice de l'angle droit d'un triangle rectangle coupe le carré 
         # construit sur l'hypothénuse en deux moitiés identiques.
         txt_title = [
-            Tex(r"La bissectrice de", font_size=32, color=BLACK),
-            Tex(r"l'angle droit d'un triangle", font_size=32, color=BLACK),
-            Tex(r"rectangle coupe le carré", font_size=32, color=BLACK),
-            Tex(r"construit sur l'hypothénuse",font_size=32, color=BLACK),
-            Tex(r"en deux moitiés identiques.",font_size=32, color=BLACK),
+            Tex(r"La bissectrice de", font_size=48, color=BLACK),
+            Tex(r"l'angle droit d'un triangle", font_size=48, color=BLACK),
+            Tex(r"rectangle coupe le carré", font_size=48, color=BLACK),
+            Tex(r"construit sur l'hypothénuse",font_size=48, color=BLACK),
+            Tex(r"en deux moitiés identiques.",font_size=48, color=BLACK),
         ]
         txt_title = VGroup(*txt_title).arrange(DOWN).move_to([0, 2, 0])
 

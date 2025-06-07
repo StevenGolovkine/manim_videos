@@ -60,8 +60,8 @@ class Sum(MovingCameraScene):
 
         # Introduction text
         txt_title = [
-            Tex(r"Le sinus de la somme", font_size=32, color=BLACK),
-            Tex(r"de deux angles", font_size=32, color=BLACK),
+            Tex(r"Le sinus de la somme", font_size=48, color=BLACK),
+            Tex(r"de deux angles", font_size=48, color=BLACK),
         ]
         txt_title = VGroup(*txt_title).arrange(DOWN).move_to([0, 2, 0])
 

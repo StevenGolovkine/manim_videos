@@ -74,7 +74,7 @@ class Pythagorean(MovingCameraScene):
         # Introduction text
         txt_title = [
             Tex(r"Théorème de", font_size=48, color=BLACK),
-            Tex(r"Pythagore", font_size=72, color=BLACK)
+            Tex(r"Pythagore", font_size=48, color=BLACK)
         ]
         txt_title = VGroup(*txt_title).arrange(DOWN).move_to([0, 2, 0])
 
