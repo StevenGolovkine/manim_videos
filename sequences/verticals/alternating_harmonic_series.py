@@ -7,7 +7,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
 from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Line, Polygon
-from manim import Text, Tex, Transform, ValueTracker, ApplyMethod
+from manim import Text, Tex, RoundedRectangle
 from manim import NumberPlane, always_redraw
 
 from manim import config
@@ -188,6 +188,24 @@ class Series(MovingCameraScene):
             Write(txt),
             Write(txt_5)
         )
+
+        # Write equation
+        rect = RoundedRectangle(
+            height=1, width=4,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to([0, -2, 0])
+        txt = Tex(
+            r"$1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \cdots = \ln{2}$",
+            font_size=26, color=BLACK
+        ).move_to([0, -2, 0])
+
+        self.play(
+            Create(rect),
+            Write(txt)
+        )
+
 
         # Finish
         self.wait(2)
