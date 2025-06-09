@@ -195,11 +195,11 @@ class Series(MovingCameraScene):
             stroke_width=2,
             color=BLACK,
             fill_color=WHITE, fill_opacity=1
-        ).move_to([0, -2, 0])
+        ).move_to([0, -3, 0])
         txt = Tex(
             r"$1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \cdots = \ln{2}$",
             font_size=26, color=BLACK
-        ).move_to([0, -2, 0])
+        ).move_to([0, -3, 0])
 
         self.play(
             Create(rect),
