@@ -84,7 +84,7 @@ class Series(MovingCameraScene):
                 "stroke_width": 1,
                 "stroke_opacity": 0.6
             }
-        ).scale(0.5).move_to([0, 1, 0])
+        ).scale(0.5).move_to([0, 2, 0])
 
         graph = ax.plot(
             lambda x: 1 / x,
@@ -107,14 +107,26 @@ class Series(MovingCameraScene):
         line_a = ax.get_vertical_line(point_a, line_func=Line, color=BLACK)
         point_b = ax.c2p(2, 1 / 2)
         line_b = ax.get_vertical_line(point_b, line_func=Line, color=BLACK)
+        txt_1 = Tex(r"$1$", font_size=18, color=BLACK)\
+            .next_to(ax.c2p(1, 0), DOWN, buff=0.1)
+        txt_11 = Tex(r"$1$", font_size=18, color=BLACK)\
+            .next_to(ax.c2p(1, 1), UP, buff=0.1)
+        txt_2 = Tex(r"$2$", font_size=18, color=BLACK)\
+            .next_to(ax.c2p(2, 0), DOWN, buff=0.1)
+        txt_12 = Tex(r"$\frac{1}{2}$", font_size=18, color=BLACK)\
+            .next_to(ax.c2p(2, 1 / 2), UP, buff=0.1)
         self.play(
             Create(line_a),
-            Create(line_b)
+            Create(line_b),
+            Create(txt_1),
+            Create(txt_11),
+            Create(txt_2),
+            Create(txt_12)
         )
 
         txt_ln2 = Tex(
             r"$\ln(2)$", font_size=24, color=BLACK
-        ).move_to([-1.5, -1, 0])
+        ).move_to([-1.5, 0, 0])
         txt_int = Tex(
             r"$= \int_1^2 \frac{1}{x} \, dx$", font_size=24, color=BLACK
         ).next_to(txt_ln2, RIGHT, buff=0.1)
@@ -134,7 +146,7 @@ class Series(MovingCameraScene):
         self.play(
             Create(line_h),
             Write(txt),
-            Write(txt_2)
+            Write(txt_2),
         )
 
         # 1/3 - 1/4
@@ -147,11 +159,19 @@ class Series(MovingCameraScene):
             move_to(ax.c2p(1.25, 7 / 12))
         txt_3 = Tex(r"$+ \frac{1}{3} - \frac{1}{4}$", font_size=24, color=BLACK).\
             next_to(txt_2, RIGHT, buff=0.1)
+        txt_32 = Tex(
+            r"$\frac{3}{2}$", font_size=18, color=BLACK
+        ).next_to(ax.c2p(3 / 2, 0), DOWN, buff=0.1)
+        txt_23 = Tex(
+            r"$\frac{2}{3}$", font_size=18, color=BLACK
+        ).next_to(ax.c2p(3 / 2, 2 / 3), UP, buff=0.1)
         self.play(
             Create(line_v),
             Create(line_h),
             Write(txt),
-            Write(txt_3)
+            Write(txt_3),
+            Create(txt_32),
+            Create(txt_23),
         )
 
         # 1/5 - 1/6
@@ -164,11 +184,19 @@ class Series(MovingCameraScene):
             move_to(ax.c2p(9 / 8, 22 / 30))
         txt_4 = Tex(r"$+ \frac{1}{5} - \frac{1}{6}$", font_size=24, color=BLACK).\
             next_to(txt_2, DOWN, aligned_edge=RIGHT)
+        txt_54 = Tex(
+            r"$\frac{5}{4}$", font_size=18, color=BLACK
+        ).next_to(ax.c2p(5 / 4, 0), DOWN, buff=0.1)
+        txt_45 = Tex(
+            r"$\frac{4}{5}$", font_size=18, color=BLACK
+        ).next_to(ax.c2p(5 / 4, 4 / 5), UP, buff=0.1)
         self.play(
             Create(line_v),
             Create(line_h),
             Write(txt),
-            Write(txt_4)
+            Write(txt_4),
+            Create(txt_54),
+            Create(txt_45),
         )
 
         # 1 / 7 - 1 / 8
@@ -182,11 +210,19 @@ class Series(MovingCameraScene):
         txt_5 = Tex(
             r"$+ \frac{1}{7} - \frac{1}{8} + \cdots$", font_size=24, color=BLACK
         ).next_to(txt_4, RIGHT, buff=0.1)
+        txt_74 = Tex(
+            r"$\frac{7}{4}$", font_size=18, color=BLACK
+        ).next_to(ax.c2p(7 / 4, 0), DOWN, buff=0.1)
+        txt_47 = Tex(
+            r"$\frac{4}{7}$", font_size=18, color=BLACK
+        ).next_to(ax.c2p(7 / 4, 4 / 7), UP, buff=0.1)
         self.play(
             Create(line_v),
             Create(line_h),
             Write(txt),
-            Write(txt_5)
+            Write(txt_5),
+            Create(txt_74),
+            Create(txt_47),
         )
 
         # Write equation
@@ -195,11 +231,11 @@ class Series(MovingCameraScene):
             stroke_width=2,
             color=BLACK,
             fill_color=WHITE, fill_opacity=1
-        ).move_to([0, -3, 0])
+        ).move_to([0, -2.5, 0])
         txt = Tex(
             r"$1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \cdots = \ln{2}$",
             font_size=26, color=BLACK
-        ).move_to([0, -3, 0])
+        ).move_to([0, -2.5, 0])
 
         self.play(
             Create(rect),
