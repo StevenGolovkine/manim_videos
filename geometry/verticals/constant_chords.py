@@ -136,32 +136,38 @@ class Chords(MovingCameraScene):
         )
 
         # Circles
+        txt_1 = Tex(r"Considérons deux cercles", font_size=25, color=BLACK).\
+            move_to([0, 3.5, 0])
         big_circle = Circle(
             radius=1.5, color=BLACK, fill_color=WHITE, fill_opacity=0, stroke_width=2
-        ).move_to([0, -0.5, 0])
+        ).move_to([-0.15, -0.25, 0])
         small_circle = Circle(
             radius=1.4, color=BLACK, fill_color=WHITE, fill_opacity=0, stroke_width=2
-        ).move_to([0, 1, 0])
+        ).move_to([0.15, 1.25, 0])
 
         self.play(
             Create(big_circle),
-            Create(small_circle)
+            Create(small_circle),
+            Write(txt_1)
         )
 
 
-        A = Dot([-1.24, 0.35, 0], color=BLACK, radius=0.05, stroke_width=2)
-        B = Dot([1.24, 0.35, 0], color=BLACK, radius=0.05, stroke_width=2)
+        A = Dot([-1.19, 0.58 + 0.25, 0], color=BLACK, radius=0.05, stroke_width=2)
+        B = Dot([1.22, 0.1 + 0.25, 0], color=BLACK, radius=0.05, stroke_width=2)
         txt_A = Tex(r"$A$", font_size=28, color=BLACK).next_to(
             A, LEFT, buff=0.2
         )
         txt_B = Tex(r"$B$", font_size=28, color=BLACK).next_to(
             B, RIGHT, buff=0.2
         )
+        txt_2 = Tex(r"intersectant en $A$ et $B$,", font_size=25, color=BLACK).\
+            next_to(txt_1, DOWN, buff=0.1)
         self.play(
             Create(A),
             Create(B),
             Write(txt_A),
-            Write(txt_B)
+            Write(txt_B),
+            Write(txt_2)
         )
 
         # Points
@@ -171,9 +177,12 @@ class Chords(MovingCameraScene):
             radius=0.05, stroke_width=2
         )
         txt_P = Tex(r"$P$", font_size=28, color=BLACK).next_to(P, UP + RIGHT, buff=0.1)
+        txt_3 = Tex(r"et un point $P$ sur un cercle.", font_size=25, color=BLACK).\
+            next_to(txt_2, DOWN, buff=0.1)
         self.play(
             Create(P),
-            Write(txt_P)
+            Write(txt_P),
+            Write(txt_3)
         )
  
         # Lines
@@ -189,17 +198,37 @@ class Chords(MovingCameraScene):
         D = get_intersection(line_BP, big_circle, B)
         txt_C = Tex(r"$C$", font_size=20, color=BLACK).next_to(C, UP + LEFT, buff=0.1)
         txt_D = Tex(r"$D$", font_size=20, color=BLACK).next_to(D, UP + RIGHT, buff=0.1)
+        txt_4 = Tex(r"Les points $C$ et $D$ sont les", font_size=25, color=BLACK).\
+            move_to([0, -1.9, 0])
+        txt_5 = Tex(
+            r"intersections des lignes $AP$ et $BP$", font_size=25, color=BLACK
+        ).next_to(txt_4, DOWN, buff=0.1)
+        txt_6 = Tex(r"avec le deuxième cercle.", font_size=25, color=BLACK).\
+            next_to(txt_5, DOWN, buff=0.1)
         self.play(
             Create(C),
             Create(D),
             Write(txt_C),
-            Write(txt_D)
+            Write(txt_D),
+            Write(txt_4),
+            Write(txt_5),
+            Write(txt_6)
         )
 
         # Chord
         chord_CD = Line(C.get_center(), D.get_center(), color=RED, stroke_width=2)
         self.play(
             Create(chord_CD)
+        )
+
+        # Text
+        txt_final = Tex(r"Peu importe la position de $P$,", font_size=25, color=BLACK).\
+            next_to(txt_6, DOWN, buff=0.1)
+        txt_final_2 = Tex(r"la corde $CD$ est constante.", font_size=25, color=BLACK).\
+            next_to(txt_final, DOWN, buff=0.1)
+        self.play(
+            Write(txt_final),
+            Write(txt_final_2)
         )
 
         # Update
@@ -252,10 +281,6 @@ class Chords(MovingCameraScene):
             run_time=2
         )
 
-        # C = get_intersection(line_AP, big_circle, A)
-        # D = get_intersection(line_BP, big_circle, B)
-        # self.play(Create(C), Create(D))
-        
 
         # Finish
         self.wait(2)
