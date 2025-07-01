@@ -8,7 +8,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write, FadeTransform, TransformFromCopy
 from manim import VGroup, FadeIn, FadeOut , FunctionGraph, Rotate
-from manim import Line, Point, Polygon, RoundedRectangle, Square, Angle
+from manim import Line, Circle, Polygon, RoundedRectangle, Square, Angle
 from manim import Text, Tex, Intersection
 
 from manim import config
@@ -85,14 +85,60 @@ class Triangle(MovingCameraScene):
         )
 
         # Triangle
+        A = [-1, -0.75 + 1.5, 0]
+        B = [1, -0.75 + 1.5, 0]
+        C = [1, 0.75 + 1.5, 0]
         triangle_b = Polygon(
-            [-1, -0.75, 0], [1, -0.75, 0], [1, 0.75, 0],
+            A, B, C,
             stroke_width=2,
             color=BLACK, fill_color=BLUE, fill_opacity=1
-        ).move_to([0, 1.5, 0])
+        )
+        txt_a = Tex(r"$a$", font_size=28, color=BLACK).\
+            next_to(triangle_b, DOWN, buff=0.1)
+        txt_b = Tex(r"$b$", font_size=28, color=BLACK).\
+            next_to(triangle_b, RIGHT, buff=0.1)
 
         self.play(
-            Create(triangle_b)
+            Create(triangle_b),
+            Write(txt_a),
+            Write(txt_b)
+        )
+
+        # Inside circle
+        a = 2
+        b = 1.5
+        c = np.sqrt(a**2 + b**2)
+        xr = (b * -1 + c * 1 + a * 1) / (a + b + c) 
+        yr = (b * -0.75 + c * -0.75 + a * 0.75) / (a + b + c) + 1.5
+        R = [xr, yr, 0]
+        r = (a * b) / (a + b + c)
+        circle = Circle(
+            radius=r, color=BLACK, fill_color=VIOLET, fill_opacity=1, stroke_width=2
+        ).move_to(R)
+        self.play(
+            Create(circle),
+        )
+
+        # Inside triangle
+        line_a = Line(
+            A, R, color=BLACK, stroke_width=2
+        )
+        line_c = Line(
+            C, R, color=BLACK, stroke_width=2
+        )
+        line_d = Line(
+            R, [xr, A[1], 0], color=BLACK, stroke_width=2
+        )
+        line_e = Line(
+            R, [B[0], yr, 0], color=BLACK, stroke_width=2
+        )
+
+
+        self.play(
+            Create(line_a),
+            Create(line_c),
+            Create(line_d),
+            Create(line_e)
         )
 
         # Finish
