@@ -88,6 +88,15 @@ class Triangle(MovingCameraScene):
         A = [-1, -0.75 + 1.5, 0]
         B = [1, -0.75 + 1.5, 0]
         C = [1, 0.75 + 1.5, 0]
+        line_AB = Line(
+            A, B, color=BLACK, stroke_width=2
+        )
+        line_BC = Line(
+            B, C, color=BLACK, stroke_width=2
+        )
+        line_AC = Line(
+            A, C, color=BLACK, stroke_width=2
+        )
         triangle_b = Polygon(
             A, B, C,
             stroke_width=2,
@@ -97,11 +106,14 @@ class Triangle(MovingCameraScene):
             next_to(triangle_b, DOWN, buff=0.1)
         txt_b = Tex(r"$b$", font_size=28, color=BLACK).\
             next_to(triangle_b, RIGHT, buff=0.1)
+        txt_c = Tex(r"$c$", font_size=28, color=BLACK).\
+            next_to(triangle_b.get_center(), UP + LEFT, buff=0.1)
 
         self.play(
             Create(triangle_b),
             Write(txt_a),
-            Write(txt_b)
+            Write(txt_b),
+            Write(txt_c)
         )
 
         # Inside circle
@@ -120,26 +132,89 @@ class Triangle(MovingCameraScene):
         )
 
         # Inside triangle
-        line_a = Line(
+        D = [xr, A[1], 0]
+        E = [B[0], yr, 0]
+        F = line_AC.point_from_proportion((a - r) / c)
+
+        line_AR = Line(
             A, R, color=BLACK, stroke_width=2
         )
-        line_c = Line(
+        line_CR = Line(
             C, R, color=BLACK, stroke_width=2
         )
-        line_d = Line(
-            R, [xr, A[1], 0], color=BLACK, stroke_width=2
+        line_RD = Line(
+            R, D, color=BLACK, stroke_width=2
         )
-        line_e = Line(
-            R, [B[0], yr, 0], color=BLACK, stroke_width=2
+        line_RE = Line(
+            R, E, color=BLACK, stroke_width=2
         )
+        line_RF = Line(
+            R, F, color=BLACK, stroke_width=2
+        )
+        txt_r = Tex(r"$r$", font_size=18, color=BLACK).\
+            next_to(line_RE, DOWN, buff=0.1)
 
 
         self.play(
-            Create(line_a),
-            Create(line_c),
-            Create(line_d),
-            Create(line_e)
+            Create(line_AR),
+            Create(line_CR),
+            Create(line_RD),
+            Create(line_RE),
+            Create(line_RF),
+            Write(txt_r)
         )
+
+        # Lots of triangles and one square
+        triangle_AFR = Polygon(
+            A, F, R,
+            stroke_width=2,
+            color=BLACK, fill_color=YELLOW, fill_opacity=0.75
+        )
+        triangle_ADR = Polygon(
+            A, D, R,
+            stroke_width=2,
+            color=BLACK, fill_color=YELLOW, fill_opacity=0.75
+        )
+        triangle_CFR = Polygon(
+            C, F, R,
+            stroke_width=2,
+            color=BLACK, fill_color=ORANGE, fill_opacity=0.75
+        )
+        triangle_CER = Polygon(
+            C, E, R,
+            stroke_width=2,
+            color=BLACK, fill_color=ORANGE, fill_opacity=0.75
+        )
+        square_BERD = Polygon(
+            B, E, R, D,
+            stroke_width=2,
+            color=BLACK, fill_color=GREEN, fill_opacity=0.75
+        )
+
+        self.play(
+            Create(triangle_AFR),
+            Create(triangle_ADR),
+            Create(triangle_CFR),
+            Create(triangle_CER),
+            Create(square_BERD)
+        )
+
+        # Rotate triangles
+        triangle_group = VGroup(
+            triangle_AFR.copy(), triangle_ADR.copy(),
+            triangle_CFR.copy(), triangle_CER.copy(),
+            square_BERD.copy()
+        )
+        self.play(
+            triangle_group.animate.rotate(PI, about_point=txt_c.get_center())
+        )
+
+        # Move the triangles and square
+        self.play(
+            square_BERD.copy().animate.move_to([0, 0, 0]),
+        )
+
+
 
         # Finish
         self.wait(2)
