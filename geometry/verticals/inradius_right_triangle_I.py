@@ -6,7 +6,7 @@ Proofs without Words II. Roger B. Nelsen. p. 13.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Create, Uncreate, Write, FadeTransform, TransformFromCopy
+from manim import Create, Uncreate, Write, TransformFromCopy
 from manim import VGroup, FadeIn, FadeOut , FunctionGraph, Rotate
 from manim import Line, Circle, Polygon, RoundedRectangle, Square, Angle
 from manim import Text, Tex, Intersection
@@ -210,8 +210,70 @@ class Triangle(MovingCameraScene):
         )
 
         # Move the triangles and square
+
+        # For a
+        square_BERD_c = square_BERD.copy().move_to([-1, -0.75, 0])
+        triangle_ADR_c = triangle_ADR.copy().next_to(
+            square_BERD_c, RIGHT, buff=0
+        )
+        triangle_group_ADR_c = triangle_group[1].copy().next_to(
+            square_BERD_c, RIGHT, buff=0
+        )
         self.play(
-            square_BERD.copy().animate.move_to([0, 0, 0]),
+            TransformFromCopy(square_BERD, square_BERD_c),
+            TransformFromCopy(triangle_ADR, triangle_ADR_c),
+            TransformFromCopy(triangle_group[1], triangle_group_ADR_c),
+        )
+
+        group_a = VGroup(
+            square_BERD_c, triangle_ADR_c, triangle_group_ADR_c
+        )
+
+        txt_r = Tex(r"$r$", font_size=28, color=BLACK).\
+            next_to(group_a, LEFT, buff=0.1)
+        txt_a = Tex(r"$a$", font_size=28, color=BLACK).\
+            next_to(group_a, DOWN, buff=0.1)
+        self.play(
+            Write(txt_r),
+            Write(txt_a)
+        )
+
+        # For b
+        square_BERD_c_b = triangle_group[4].copy().next_to(
+            group_a, DOWN, buff=0.5, aligned_edge=LEFT
+        )
+        triangle_CER_c_b = triangle_CER.copy().rotate(PI / 2).next_to(
+            square_BERD_c_b, RIGHT, buff=0
+        )
+        triangle_group_CER_c_b = triangle_group[3].copy().rotate(PI / 2).next_to(
+            square_BERD_c_b, RIGHT, buff=0
+        )
+        self.play(
+            TransformFromCopy(triangle_group[4], square_BERD_c_b),
+            TransformFromCopy(triangle_CER, triangle_CER_c_b),
+            TransformFromCopy(triangle_group[3], triangle_group_CER_c_b),
+        )
+
+        group_b = VGroup(
+            square_BERD_c_b, triangle_CER_c_b, triangle_group_CER_c_b
+        )
+        
+        txt_r = Tex(r"$r$", font_size=28, color=BLACK).\
+            next_to(group_b, LEFT, buff=0.1)
+        txt_b = Tex(r"$b$", font_size=28, color=BLACK).\
+            next_to(group_b, DOWN, buff=0.1)
+        self.play(
+            Write(txt_r),
+            Write(txt_b)
+        )
+
+        # For c
+        triangle_AFR_c = triangle_AFR.copy().rotate(-PI / 6).next_to(
+            group_b, DOWN, buff=0.5, aligned_edge=LEFT
+        )
+    
+        self.play(
+            TransformFromCopy(triangle_AFR, triangle_AFR_c),
         )
 
 
