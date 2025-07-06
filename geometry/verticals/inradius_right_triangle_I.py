@@ -6,7 +6,7 @@ Proofs without Words II. Roger B. Nelsen. p. 13.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Create, Uncreate, Write, TransformFromCopy
+from manim import Create, Uncreate, Write, TransformFromCopy, FadeTransform
 from manim import VGroup, FadeIn, FadeOut , FunctionGraph, Rotate
 from manim import Line, Circle, Polygon, RoundedRectangle, Square, Angle
 from manim import Text, Tex, Intersection
@@ -229,13 +229,13 @@ class Triangle(MovingCameraScene):
             square_BERD_c, triangle_ADR_c, triangle_group_ADR_c
         )
 
-        txt_r = Tex(r"$r$", font_size=28, color=BLACK).\
+        txt_r1 = Tex(r"$r$", font_size=28, color=BLACK).\
             next_to(group_a, LEFT, buff=0.1)
-        txt_a = Tex(r"$a$", font_size=28, color=BLACK).\
+        txt_a2 = Tex(r"$a$", font_size=28, color=BLACK).\
             next_to(group_a, DOWN, buff=0.1)
         self.play(
-            Write(txt_r),
-            Write(txt_a)
+            Write(txt_r1),
+            Write(txt_a2)
         )
 
         # For b
@@ -258,25 +258,88 @@ class Triangle(MovingCameraScene):
             square_BERD_c_b, triangle_CER_c_b, triangle_group_CER_c_b
         )
         
-        txt_r = Tex(r"$r$", font_size=28, color=BLACK).\
+        txt_r2 = Tex(r"$r$", font_size=28, color=BLACK).\
             next_to(group_b, LEFT, buff=0.1)
-        txt_b = Tex(r"$b$", font_size=28, color=BLACK).\
+        txt_b2 = Tex(r"$b$", font_size=28, color=BLACK).\
             next_to(group_b, DOWN, buff=0.1)
         self.play(
-            Write(txt_r),
-            Write(txt_b)
+            Write(txt_r2),
+            Write(txt_b2)
         )
 
         # For c
-        triangle_AFR_c = triangle_AFR.copy().rotate(-PI / 6).next_to(
-            group_b, DOWN, buff=0.5, aligned_edge=LEFT
-        )
-    
+        triangle_AFR_c = triangle_AFR.copy().\
+            rotate(-np.arccos(a / c)).\
+            next_to(group_b, DOWN, buff=0.5, aligned_edge=LEFT)
+        triangle_group_AFR_c = triangle_group[0].copy().\
+            rotate(-np.arccos(a / c)).\
+            next_to(group_b, DOWN, buff=0.5, aligned_edge=LEFT)
+        triangle_CFR_c = triangle_CFR.copy().\
+            rotate(PI / 2 + np.arccos(b / c)).\
+            next_to(triangle_AFR_c, RIGHT, buff=0)
+        triangle_group_CFR_c = triangle_group[2].copy().\
+            rotate(PI / 2 + np.arccos(b / c)).\
+            next_to(triangle_AFR_c, RIGHT, buff=0)
         self.play(
             TransformFromCopy(triangle_AFR, triangle_AFR_c),
+            TransformFromCopy(triangle_group[0], triangle_group_AFR_c),
+            TransformFromCopy(triangle_CFR, triangle_CFR_c),
+            TransformFromCopy(triangle_group[2], triangle_group_CFR_c),
         )
 
+        group_c = VGroup(
+            triangle_AFR_c, triangle_group_AFR_c,
+            triangle_CFR_c, triangle_group_CFR_c
+        )
 
+        txt_r3 = Tex(r"$r$", font_size=28, color=BLACK).\
+            next_to(group_c, LEFT, buff=0.1)
+        txt_c2 = Tex(r"$c$", font_size=28, color=BLACK).\
+            next_to(group_c, DOWN, buff=0.1)
+        self.play(
+            Write(txt_r3),
+            Write(txt_c2)
+        )
+
+        rect = RoundedRectangle(
+            height=1, width=4,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to([0, 0, 0])
+        txt = Tex(
+            r"$a$", r"$b$", r"$~=~$", r"$r$", r"$a$",
+            r"$~+~$", r"$r$", r"$b$", r"$~+~$", r"$r$", r"$c$",
+            font_size=28, color=BLACK
+         ).move_to([0, 0, 0])
+
+        rect.z_index = 0
+        txt.z_index = 1
+        self.play(
+            Create(rect),
+            run_time=0.5
+        )
+        self.play(
+            TransformFromCopy(txt_a[0], txt[0]),
+            TransformFromCopy(txt_b[0], txt[1]),
+            Write(txt[2]),
+            TransformFromCopy(txt_r1[0], txt[3]),
+            TransformFromCopy(txt_a2[0], txt[4]),
+            Write(txt[5]),
+            TransformFromCopy(txt_r2[0], txt[6]),
+            TransformFromCopy(txt_b2[0], txt[7]),
+            Write(txt[8]),
+            TransformFromCopy(txt_r3[0], txt[9]),
+            TransformFromCopy(txt_c2[0], txt[10]),
+        )
+
+        txt_2 = Tex(
+            r"$ab = r(a + b +c)$",
+            font_size=28, color=BLACK
+         ).move_to([0, 0, 0])
+        self.play(
+            FadeTransform(txt, txt_2),
+        )
 
         # Finish
         self.wait(2)
