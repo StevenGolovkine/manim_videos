@@ -1,6 +1,6 @@
 """
 Visual proof of a relation between the inradius of a right triangle and the
-side of the triangle (part I).
+side of the triangle (part II).
 Proofs without Words II. Roger B. Nelsen. p. 13.
 """
 import numpy as np
@@ -8,7 +8,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write, TransformFromCopy, FadeTransform
 from manim import VGroup, FadeIn, FadeOut , FunctionGraph, Rotate
-from manim import Line, Circle, Polygon, RoundedRectangle, Square, Angle
+from manim import Line, Circle, Polygon, RoundedRectangle, Brace, BraceBetweenPoints
 from manim import Text, Tex, Intersection
 
 from manim import config
@@ -64,13 +64,13 @@ class Triangle(MovingCameraScene):
             Tex(r"La rayon du cercle", font_size=48, color=BLACK),
             Tex(r"inscrit dans un", font_size=48, color=BLACK),
             Tex(r"triangle rectangle", font_size=48, color=BLACK),
-            Tex(r"Partie I", font_size=24, color=BLACK),
+            Tex(r"Partie II", font_size=24, color=BLACK),
         ]
         txt_title = VGroup(*txt_title).arrange(DOWN).move_to([0, 2, 0])
 
         txt = [
             Tex(r"Démonstration", font_size=36, color=BLACK),
-            Tex(r"Liu Hui", font_size=28, color=BLACK)
+            Tex(r"Ross Honsberger", font_size=28, color=BLACK)
         ]
         txt = VGroup(*txt).arrange(DOWN)
 
@@ -164,182 +164,93 @@ class Triangle(MovingCameraScene):
             Write(txt_r)
         )
 
-        # Lots of triangles and one square
-        triangle_AFR = Polygon(
-            A, F, R,
-            stroke_width=2,
-            color=BLACK, fill_color=YELLOW, fill_opacity=0.75
+        # Brace
+        line_AD = Line(
+            A, D, color=BLACK, stroke_width=2
         )
-        triangle_ADR = Polygon(
-            A, D, R,
-            stroke_width=2,
-            color=BLACK, fill_color=YELLOW, fill_opacity=0.75
+        brace_AD = Brace(
+            line_AD, DOWN, color=BLACK, sharpness=0.1, buff=0.5
         )
-        triangle_CFR = Polygon(
-            C, F, R,
-            stroke_width=2,
-            color=BLACK, fill_color=ORANGE, fill_opacity=0.75
-        )
-        triangle_CER = Polygon(
-            C, E, R,
-            stroke_width=2,
-            color=BLACK, fill_color=ORANGE, fill_opacity=0.75
-        )
-        square_BERD = Polygon(
-            B, E, R, D,
-            stroke_width=2,
-            color=BLACK, fill_color=GREEN, fill_opacity=0.75
-        )
-
-        self.play(
-            Create(triangle_AFR),
-            Create(triangle_ADR),
-            Create(triangle_CFR),
-            Create(triangle_CER),
-            Create(square_BERD)
-        )
-
-        # Rotate triangles
-        triangle_group = VGroup(
-            triangle_AFR.copy(), triangle_ADR.copy(),
-            triangle_CFR.copy(), triangle_CER.copy(),
-            square_BERD.copy()
-        )
-        self.play(
-            triangle_group.animate.rotate(PI, about_point=txt_c.get_center())
-        )
-
-        # Move the triangles and square
-
-        # For a
-        square_BERD_c = square_BERD.copy().move_to([-1, -0.75, 0])
-        triangle_ADR_c = triangle_ADR.copy().next_to(
-            square_BERD_c, RIGHT, buff=0
-        )
-        triangle_group_ADR_c = triangle_group[1].copy().next_to(
-            square_BERD_c, RIGHT, buff=0
-        )
-        self.play(
-            TransformFromCopy(square_BERD, square_BERD_c),
-            TransformFromCopy(triangle_ADR, triangle_ADR_c),
-            TransformFromCopy(triangle_group[1], triangle_group_ADR_c),
-        )
-
-        group_a = VGroup(
-            square_BERD_c, triangle_ADR_c, triangle_group_ADR_c
-        )
-
-        txt_r1 = Tex(r"$r$", font_size=28, color=BLACK).\
-            next_to(group_a, LEFT, buff=0.1)
-        txt_a2 = Tex(r"$a$", font_size=28, color=BLACK).\
-            next_to(group_a, DOWN, buff=0.1)
-        self.play(
-            Write(txt_r1),
-            Write(txt_a2)
-        )
-
-        # For b
-        square_BERD_c_b = triangle_group[4].copy().next_to(
-            group_a, DOWN, buff=0.5, aligned_edge=LEFT
-        )
-        triangle_CER_c_b = triangle_CER.copy().rotate(PI / 2).next_to(
-            square_BERD_c_b, RIGHT, buff=0
-        )
-        triangle_group_CER_c_b = triangle_group[3].copy().rotate(PI / 2).next_to(
-            square_BERD_c_b, RIGHT, buff=0
-        )
-        self.play(
-            TransformFromCopy(triangle_group[4], square_BERD_c_b),
-            TransformFromCopy(triangle_CER, triangle_CER_c_b),
-            TransformFromCopy(triangle_group[3], triangle_group_CER_c_b),
-        )
-
-        group_b = VGroup(
-            square_BERD_c_b, triangle_CER_c_b, triangle_group_CER_c_b
-        )
+        txt_ar = Tex(r"$a - r$", font_size=28, color=BLACK).\
+            next_to(brace_AD, DOWN, buff=0.1)
         
-        txt_r2 = Tex(r"$r$", font_size=28, color=BLACK).\
-            next_to(group_b, LEFT, buff=0.1)
-        txt_b2 = Tex(r"$b$", font_size=28, color=BLACK).\
-            next_to(group_b, DOWN, buff=0.1)
+        line_DB = Line(
+            D, B, color=BLACK, stroke_width=2
+        )
+        brace_DB = Brace(
+            line_DB, DOWN, color=BLACK, sharpness=0.1, buff=0.5
+        )
+        txt_br = Tex(r"$r$", font_size=28, color=BLACK).\
+            next_to(brace_DB, DOWN, buff=0.1)
         self.play(
-            Write(txt_r2),
-            Write(txt_b2)
+            Create(brace_AD),
+            Write(txt_ar),
+            Create(brace_DB),
+            Write(txt_br)
         )
 
-        # For c
-        triangle_AFR_c = triangle_AFR.copy().\
-            rotate(-np.arccos(a / c)).\
-            next_to(group_b, DOWN, buff=0.5, aligned_edge=LEFT)
-        triangle_group_AFR_c = triangle_group[0].copy().\
-            rotate(-np.arccos(a / c)).\
-            next_to(group_b, DOWN, buff=0.5, aligned_edge=LEFT)
-        triangle_CFR_c = triangle_CFR.copy().\
-            rotate(PI / 2 + np.arccos(b / c)).\
-            next_to(triangle_AFR_c, RIGHT, buff=0)
-        triangle_group_CFR_c = triangle_group[2].copy().\
-            rotate(PI / 2 + np.arccos(b / c)).\
-            next_to(triangle_AFR_c, RIGHT, buff=0)
+        line_BE = Line(
+            B, E, color=BLACK, stroke_width=2
+        )
+        brace_BE = Brace(
+            line_BE, RIGHT, color=BLACK, sharpness=0.1, buff=0.2
+        )
+        txt_br2 = Tex(r"$r$", font_size=28, color=BLACK).\
+            rotate(-PI/2).next_to(brace_BE, RIGHT, buff=0.1)
+        line_CE = Line(
+            C, E, color=BLACK, stroke_width=2
+        )
+        brace_CE = Brace(       
+            line_CE, RIGHT, color=BLACK, sharpness=0.1, buff=0.2
+        )
+        txt_cr = Tex(r"$b - r$", font_size=28, color=BLACK).\
+            rotate(-PI/2).next_to(brace_CE, RIGHT, buff=0.1)
         self.play(
-            TransformFromCopy(triangle_AFR, triangle_AFR_c),
-            TransformFromCopy(triangle_group[0], triangle_group_AFR_c),
-            TransformFromCopy(triangle_CFR, triangle_CFR_c),
-            TransformFromCopy(triangle_group[2], triangle_group_CFR_c),
+            Create(brace_BE),
+            Write(txt_br2),
+            Create(brace_CE),
+            Write(txt_cr)
         )
 
-        group_c = VGroup(
-            triangle_AFR_c, triangle_group_AFR_c,
-            triangle_CFR_c, triangle_group_CFR_c
+        brace_AF = BraceBetweenPoints(
+            A, F, direction=[-1, 1, 0], color=BLACK, sharpness=0.1, buff=0.2
         )
-
-        txt_r3 = Tex(r"$r$", font_size=28, color=BLACK).\
-            next_to(group_c, LEFT, buff=0.1)
-        txt_c2 = Tex(r"$c$", font_size=28, color=BLACK).\
-            next_to(group_c, DOWN, buff=0.1)
+        txt_ar2 = Tex(r"$a - r$", font_size=28, color=BLACK).\
+            next_to(brace_AF, LEFT + UP, buff=0.1).\
+            shift([0.5, -0.25, 0])
+        brace_CF = BraceBetweenPoints(
+            F, C, direction=[-1, 1, 0], color=BLACK, sharpness=0.1, buff=0.2
+        )
+        txt_cr2 = Tex(r"$b - r$", font_size=28, color=BLACK).\
+            next_to(brace_CF, LEFT + UP, buff=0.1).\
+            shift([0.5, 0, 0])
         self.play(
-            Write(txt_r3),
-            Write(txt_c2)
+            Create(brace_AF),
+            Write(txt_ar2),
+            Create(brace_CF),
+            Write(txt_cr2)
         )
 
+        # Write the results
         rect = RoundedRectangle(
             height=1, width=4,
             stroke_width=2,
             color=BLACK,
             fill_color=WHITE, fill_opacity=1
-        ).move_to([0, 0, 0])
+        ).move_to([0, -1, 0])
         txt = Tex(
-            r"$a$", r"$b$", r"$~=~$", r"$r$", r"$a$",
-            r"$~+~$", r"$r$", r"$b$", r"$~+~$", r"$r$", r"$c$",
+            r"$c = a + b - 2 r$",
             font_size=28, color=BLACK
-         ).move_to([0, 0, 0])
+         ).move_to([0, -1, 0])
 
         rect.z_index = 0
         txt.z_index = 1
         self.play(
             Create(rect),
+            Write(txt),
             run_time=0.5
         )
-        self.play(
-            TransformFromCopy(txt_a[0], txt[0]),
-            TransformFromCopy(txt_b[0], txt[1]),
-            Write(txt[2]),
-            TransformFromCopy(txt_r1[0], txt[3]),
-            TransformFromCopy(txt_a2[0], txt[4]),
-            Write(txt[5]),
-            TransformFromCopy(txt_r2[0], txt[6]),
-            TransformFromCopy(txt_b2[0], txt[7]),
-            Write(txt[8]),
-            TransformFromCopy(txt_r3[0], txt[9]),
-            TransformFromCopy(txt_c2[0], txt[10]),
-        )
 
-        txt_2 = Tex(
-            r"$ab = r(a + b +c)$",
-            font_size=28, color=BLACK
-         ).move_to([0, 0, 0])
-        self.play(
-            FadeTransform(txt, txt_2),
-        )
 
         # Finish
         self.wait(2)
@@ -347,9 +258,10 @@ class Triangle(MovingCameraScene):
 
         # Logo
         ref = [
-            Tex(r"Mathematics Magazine, vol. 71,", font_size=30, color=BLACK),
-            Tex(r"no. 3 (June 1998)", font_size=30, color=BLACK),
-            Tex(r"p. 196", font_size=30, color=BLACK),
+            Tex(r"Mathematical Morsels, The,", font_size=30, color=BLACK),
+            Tex(r"Mathematical Association of", font_size=30, color=BLACK),
+            Tex(r"America, Washington,", font_size=30, color=BLACK),
+            Tex(r"1978, pp. 27-28.", font_size=30, color=BLACK),
         ]
         ref = VGroup(*ref)\
             .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
