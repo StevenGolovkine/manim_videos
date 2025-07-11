@@ -54,7 +54,7 @@ class Sums(MovingCameraScene):
 
         txt = [
             Tex(r"Démonstration", font_size=36, color=BLACK),
-            Tex(r"James O. Chilaka", font_size=36, color=BLACK),
+            Tex(r"James O. Chilaka", font_size=28, color=BLACK),
         ]
         txt = VGroup(*txt).arrange(DOWN)
 
