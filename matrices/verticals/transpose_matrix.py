@@ -7,7 +7,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write, TransformFromCopy, FadeTransform
 from manim import VGroup, FadeIn, FadeOut , FunctionGraph, Rotate
-from manim import Line, Circle, Polygon, RoundedRectangle, Brace, BraceBetweenPoints
+from manim import RoundedRectangle, Rectangle, Line
 from manim import Text, Tex, Intersection
 
 from manim import config
@@ -68,6 +68,91 @@ class Matrix(MovingCameraScene):
             Uncreate(txt)
         )
 
+        # Matrix A and B
+        A = Rectangle(
+            width=1.25, height=0.75, color=BLUE, fill_color=BLUE, fill_opacity=0.5
+        ).move_to([0.6, 1.5, 0])
+        A_label = Tex(r"$A$", font_size=20, color=BLACK).move_to(A.get_center())
+
+        B = Rectangle(
+            width=0.75, height=1.25, color=RED, fill_color=RED, fill_opacity=0.5
+        ).next_to(A, RIGHT + UP, buff=0)
+        B_label = Tex(r"$B$", font_size=20, color=BLACK).move_to(B.get_center())
+
+        self.play(
+            Create(A),
+            Write(A_label),
+            Create(B),
+            Write(B_label)
+        )
+
+        # Product AB
+        AB = Rectangle(
+            width=0.75, height=0.75, color=GREEN, fill_color=GREEN, fill_opacity=0.5
+        ).next_to(A, RIGHT, buff=0)
+        AB_label = Tex(r"$AB$", font_size=20, color=BLACK).move_to(AB.get_center())
+        self.play(
+            Create(AB),
+            Write(AB_label)
+        )
+
+        # Diagonal line
+        diagonal_line = Line(
+            [-5 + 1.1, 5, 0],
+            [5 + 1.1, -5, 0],
+            color=BLACK, stroke_width=2
+        )
+        self.play(
+            Create(diagonal_line)
+        )
+
+        # Transpose of A and B
+        AT = Rectangle(
+            width=0.75, height=1.25, color=BLUE, fill_color=BLUE, fill_opacity=0.5
+        ).next_to(A, DOWN + LEFT, buff=0)
+        AT_label = Tex(r"$A^T$", font_size=20, color=BLACK).move_to(AT.get_center())
+        self.play(
+            TransformFromCopy(A, AT),
+            Write(AT_label)
+        )
+
+        BT = Rectangle(
+            width=1.25, height=0.75, color=RED, fill_color=RED, fill_opacity=0.5
+        ).next_to(AT, DOWN + LEFT, buff=0)
+        BT_label = Tex(r"$B^T$", font_size=20, color=BLACK).move_to(BT.get_center())
+        self.play(
+            TransformFromCopy(B, BT),
+            Write(BT_label)
+        )
+
+        # Transpose of AB
+        ABT = Rectangle(    
+            width=0.75, height=0.75, color=GREEN, fill_color=GREEN, fill_opacity=0.5
+        ).next_to(BT, RIGHT, buff=0)
+        ABT_label = Tex(r"$(AB)^T$", font_size=20, color=BLACK).\
+            move_to(ABT.get_center())
+        self.play(
+            TransformFromCopy(AB, ABT),
+            Write(ABT_label)
+        )
+
+        # Write equation
+        rect = RoundedRectangle(
+            height=1, width=4,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to([0, -2, 0])
+        txt = Tex(
+            r"$(AB)^T = B^T A^T$", font_size=36, color=BLACK
+        ).move_to(rect.get_center())
+
+        rect.z_index = 0
+        txt.z_index = 1
+        self.play(
+            Create(rect),
+            Write(txt),
+        )
 
         # Finish
         self.wait(2)
