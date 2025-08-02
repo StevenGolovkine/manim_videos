@@ -7,7 +7,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write, FadeTransform, TransformFromCopy
 from manim import VGroup, FadeIn, FadeOut , FunctionGraph, Rotate
-from manim import Line, Point, Polygon, RoundedRectangle, Square, Angle
+from manim import Line, Point, Polygon, RoundedRectangle, Circle, Angle
 from manim import Text, Tex, Intersection
 
 from manim import config
@@ -81,6 +81,12 @@ class Sum(MovingCameraScene):
             Uncreate(txt_title),
             Uncreate(txt)
         )
+
+        # Circle
+        circle = Circle(radius=1.5, color=BLACK, stroke_width=2)
+        circle.move_to([0, 2, 0])
+        self.play(Create(circle))
+
 
         rect = RoundedRectangle(
             height=1, width=4,
