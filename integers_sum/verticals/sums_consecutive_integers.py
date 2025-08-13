@@ -64,6 +64,8 @@ class Sums(MovingCameraScene):
         ]
         results = VGroup(*results).arrange(DOWN).move_to([0, -1, 0])
 
+
+
         self.add(
             txt_title,
             txt,
