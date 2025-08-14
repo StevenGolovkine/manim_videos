@@ -65,7 +65,6 @@ class Sums(MovingCameraScene):
         results = VGroup(*results).arrange(DOWN).move_to([0, -1, 0])
 
 
-
         self.add(
             txt_title,
             txt,
@@ -80,7 +79,21 @@ class Sums(MovingCameraScene):
         )
         self.wait(0.5)
 
-
+        # Text 
+        txt_1 = Tex(
+            r"Tout entier positif $N$ peut s'écrire comme",
+            font_size=18, color=BLACK
+        )
+        txt_2 = Tex(
+            r"la somme de $2$ entiers consécutifs (ou plus).",
+            font_size=18, color=BLACK
+        )
+        txt = VGroup(txt_1, txt_2).\
+            arrange(DOWN, center=True, buff=0.1).\
+            move_to([0, 3.5, 0])
+        self.play(
+            Write(txt)
+        )
 
         # Finish
         self.wait(2)
