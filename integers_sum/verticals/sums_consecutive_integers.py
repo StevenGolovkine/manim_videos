@@ -95,6 +95,8 @@ class Sums(MovingCameraScene):
             Write(txt)
         )
 
+        
+
         # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
