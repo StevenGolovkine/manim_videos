@@ -5,8 +5,8 @@ Proofs without Words II. Roger B. Nelsen. p. 84.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Create, Uncreate, Write
-from manim import Brace, VGroup, FadeIn, FadeOut, FunctionGraph, Rotate
+from manim import Create, Uncreate, Write, DoubleArrow
+from manim import Brace, VGroup, FadeIn, FadeOut, FunctionGraph, Circle, Line
 from manim import Text, Tex, Rectangle, RoundedRectangle, Transform
 
 from manim import config
@@ -95,7 +95,80 @@ class Sums(MovingCameraScene):
             Write(txt)
         )
 
+                # Parameters
+        rows = 4
+        cols = 9
+        circle_radius = 0.15
+        spacing = 0.4
         
+        # Create circles grid
+        circles = VGroup()
+        
+        # Define the diagonal line boundary (approximately)
+        # The line seems to go from around (3.5, 1.5) to (6.5, -1.5) in grid coordinates
+        
+        for i in range(rows):
+            for j in range(cols):
+                # Position of each circle
+                x = j * spacing - (cols - 1) * spacing / 2
+                y = -(i * spacing - (rows - 1) * spacing / 2)
+                
+                # Determine if circle should be filled based on diagonal
+                # Approximate diagonal boundary: if j > i + 3.5, then empty
+                if j <= i + 3:
+                    # Filled circle (dark)
+                    circle = Circle(radius=circle_radius, fill_opacity=1, fill_color=BLACK, stroke_width=1)
+                else:
+                    # Empty circle (light)
+                    circle = Circle(radius=circle_radius, fill_opacity=0, stroke_color=YELLOW, stroke_width=1)
+                
+                circle.move_to([x, y, 0])
+                circles.add(circle)
+        
+        # Create the diagonal line
+        # Line goes from top-left of empty region to bottom-right of filled region
+        line_start = [-0.6, 0.8, 0]  # Approximate position
+        line_end = [1.0, -0.8, 0]    # Approximate position
+        diagonal_line = Line(line_start, line_end, stroke_width=2, color=BLACK)
+        
+        # Create dimension arrows and labels
+        
+        # Top horizontal dimension (M-m+1)/2
+        top_left = circles[0].get_center() + UP * 0.4
+        top_right = circles[3].get_center() + UP * 0.4
+        top_arrow = DoubleArrow(top_left, top_right, buff=0.1, stroke_width=2, max_tip_length_to_length_ratio=0.1)
+        top_label = Tex(r"$\frac{M-m+1}{2}$").next_to(top_arrow, UP, buff=0.1).scale(0.8)
+        
+        # Right horizontal dimension (M+m-1)/2
+        right_start = circles[4].get_center() + UP * 0.4
+        right_end = circles[8].get_center() + UP * 0.4
+        right_arrow = DoubleArrow(right_start, right_end, buff=0.1, stroke_width=2, max_tip_length_to_length_ratio=0.1)
+        right_label = Tex(r"$\frac{M+m-1}{2}$").next_to(right_arrow, UP, buff=0.1).scale(0.8)
+        
+        # Left vertical dimension m
+        left_top = circles[0].get_center() + LEFT * 0.4
+        left_bottom = circles[27].get_center() + LEFT * 0.4  # Last row, first column
+        left_arrow = DoubleArrow(left_top, left_bottom, buff=0.1, stroke_width=2, max_tip_length_to_length_ratio=0.1)
+        left_label = Tex(r"$m$").next_to(left_arrow, LEFT, buff=0.1).scale(0.8)
+        
+        # Bottom horizontal dimension M
+        bottom_left = circles[27].get_center() + DOWN * 0.4
+        bottom_right = circles[35].get_center() + DOWN * 0.4  # Last row, last column
+        bottom_arrow = DoubleArrow(bottom_left, bottom_right, buff=0.1, stroke_width=2, max_tip_length_to_length_ratio=0.1)
+        bottom_label = Tex(r"$M$").next_to(bottom_arrow, DOWN, buff=0.1).scale(0.8)
+        
+        # Add all elements to the scene
+        self.add(circles)
+        self.add(diagonal_line)
+        self.add(top_arrow, top_label)
+        self.add(right_arrow, right_label)
+        self.add(left_arrow, left_label)
+        self.add(bottom_arrow, bottom_label)
+        
+        # Center everything
+        everything = VGroup(circles, diagonal_line, top_arrow, top_label, 
+                           right_arrow, right_label, left_arrow, left_label,
+                           bottom_arrow, bottom_label)
 
         # Finish
         self.wait(2)
