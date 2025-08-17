@@ -115,20 +115,28 @@ class Sums(MovingCameraScene):
                 
                 # Determine if circle should be filled based on diagonal
                 # Approximate diagonal boundary: if j > i + 3.5, then empty
-                if j <= i + 3:
+                if j <= i + 2:
                     # Filled circle (dark)
-                    circle = Circle(radius=circle_radius, fill_opacity=1, fill_color=BLACK, stroke_width=1)
+                    circle = Circle(
+                        radius=circle_radius,
+                        fill_opacity=1, fill_color=RED,
+                        stroke_width=1, stroke_color=BLACK
+                    )
                 else:
                     # Empty circle (light)
-                    circle = Circle(radius=circle_radius, fill_opacity=0, stroke_color=YELLOW, stroke_width=1)
+                    circle = Circle(
+                        radius=circle_radius,
+                        fill_opacity=1, fill_color=BLUE,
+                        stroke_width=1, stroke_color=BLACK
+                    )
                 
                 circle.move_to([x, y, 0])
                 circles.add(circle)
         
         # Create the diagonal line
         # Line goes from top-left of empty region to bottom-right of filled region
-        line_start = [-0.6, 0.8, 0]  # Approximate position
-        line_end = [1.0, -0.8, 0]    # Approximate position
+        line_start = [-0.8, 0.8, 0]  # Approximate position
+        line_end = [0.8, -0.8, 0]    # Approximate position
         diagonal_line = Line(line_start, line_end, stroke_width=2, color=BLACK)
         
         # Create dimension arrows and labels
@@ -136,26 +144,42 @@ class Sums(MovingCameraScene):
         # Top horizontal dimension (M-m+1)/2
         top_left = circles[0].get_center() + UP * 0.4
         top_right = circles[3].get_center() + UP * 0.4
-        top_arrow = DoubleArrow(top_left, top_right, buff=0.1, stroke_width=2, max_tip_length_to_length_ratio=0.1)
-        top_label = Tex(r"$\frac{M-m+1}{2}$").next_to(top_arrow, UP, buff=0.1).scale(0.8)
+        top_arrow = DoubleArrow(
+            top_left, top_right, buff=0.1, stroke_width=2,
+            max_tip_length_to_length_ratio=0.1, color=BLACK
+        )
+        top_label = Tex(r"$\frac{M-m+1}{2}$", color=BLACK).\
+            next_to(top_arrow, UP, buff=0.1).scale(0.8)
         
         # Right horizontal dimension (M+m-1)/2
         right_start = circles[4].get_center() + UP * 0.4
         right_end = circles[8].get_center() + UP * 0.4
-        right_arrow = DoubleArrow(right_start, right_end, buff=0.1, stroke_width=2, max_tip_length_to_length_ratio=0.1)
-        right_label = Tex(r"$\frac{M+m-1}{2}$").next_to(right_arrow, UP, buff=0.1).scale(0.8)
+        right_arrow = DoubleArrow(
+            right_start, right_end, buff=0.1, stroke_width=2,
+            max_tip_length_to_length_ratio=0.1, color=BLACK
+        )
+        right_label = Tex(r"$\frac{M+m-1}{2}$", color=BLACK).\
+            next_to(right_arrow, UP, buff=0.1).scale(0.8)
         
         # Left vertical dimension m
         left_top = circles[0].get_center() + LEFT * 0.4
         left_bottom = circles[27].get_center() + LEFT * 0.4  # Last row, first column
-        left_arrow = DoubleArrow(left_top, left_bottom, buff=0.1, stroke_width=2, max_tip_length_to_length_ratio=0.1)
-        left_label = Tex(r"$m$").next_to(left_arrow, LEFT, buff=0.1).scale(0.8)
+        left_arrow = DoubleArrow(
+            left_top, left_bottom, buff=0.1, stroke_width=2,
+            max_tip_length_to_length_ratio=0.1, color=BLACK
+        )
+        left_label = Tex(r"$m$", color=BLACK).\
+            next_to(left_arrow, LEFT, buff=0.1).scale(0.8)
         
         # Bottom horizontal dimension M
         bottom_left = circles[27].get_center() + DOWN * 0.4
         bottom_right = circles[35].get_center() + DOWN * 0.4  # Last row, last column
-        bottom_arrow = DoubleArrow(bottom_left, bottom_right, buff=0.1, stroke_width=2, max_tip_length_to_length_ratio=0.1)
-        bottom_label = Tex(r"$M$").next_to(bottom_arrow, DOWN, buff=0.1).scale(0.8)
+        bottom_arrow = DoubleArrow(
+            bottom_left, bottom_right, buff=0.1, stroke_width=2,
+            max_tip_length_to_length_ratio=0.1, color=BLACK
+        )
+        bottom_label = Tex(r"$M$", color=BLACK).\
+            next_to(bottom_arrow, DOWN, buff=0.1).scale(0.8)
         
         # Add all elements to the scene
         self.add(circles)
@@ -166,9 +190,11 @@ class Sums(MovingCameraScene):
         self.add(bottom_arrow, bottom_label)
         
         # Center everything
-        everything = VGroup(circles, diagonal_line, top_arrow, top_label, 
-                           right_arrow, right_label, left_arrow, left_label,
-                           bottom_arrow, bottom_label)
+        everything = VGroup(
+            circles, diagonal_line, top_arrow, top_label, 
+            right_arrow, right_label, left_arrow, left_label,
+            bottom_arrow, bottom_label
+        )
 
         # Finish
         self.wait(2)
