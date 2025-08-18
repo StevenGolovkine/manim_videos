@@ -161,6 +161,7 @@ class Sums(MovingCameraScene):
         right_label = Tex(r"$\frac{M+m-1}{2}$", color=BLACK).\
             next_to(right_arrow, UP, buff=0.1).scale(0.8)
         
+        
         # Left vertical dimension m
         left_top = circles[0].get_center() + LEFT * 0.4
         left_bottom = circles[27].get_center() + LEFT * 0.4  # Last row, first column
