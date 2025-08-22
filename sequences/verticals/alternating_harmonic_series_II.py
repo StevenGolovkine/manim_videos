@@ -55,7 +55,7 @@ class Series(MovingCameraScene):
 
         txt = [
             Tex(r"Démonstration", font_size=36, color=BLACK),
-            Tex(r"Mark Finkelstein", font_size=28, color=BLACK)
+            Tex(r"Matt Hudelson", font_size=28, color=BLACK)
         ]
         txt = VGroup(*txt).arrange(DOWN)
 
@@ -76,9 +76,8 @@ class Series(MovingCameraScene):
 
         # Logo
         ref = [
-            Tex(r"American Mathematical Monthly,", font_size=26, color=BLACK),
-            Tex(r"vol. 94, no. 6 (June-July 1988)", font_size=26, color=BLACK),
-            Tex(r"pp. 541-542.", font_size=26, color=BLACK)
+            Tex(r"Mathematics Magazine, vol. 83,", font_size=26, color=BLACK),
+            Tex(r"no. 4 (Oct. 2010), p. 294.", font_size=26, color=BLACK),
         ]
         ref = VGroup(*ref)\
             .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
