@@ -1,6 +1,6 @@
 """
 Visual proof of the alternating harmonic series.
-Proofs without Words I. Roger B. Nelsen. p. 128.
+Proofs without Words III. Roger B. Nelsen. p. 163.
 """
 import numpy as np
 
@@ -69,6 +69,77 @@ class Series(MovingCameraScene):
             Uncreate(txt)
         )
 
+        # Create the graph
+        ax = NumberPlane(
+            x_range = (1, 2, 0.1),
+            y_range = (0, 1, 0.1),
+            x_length = 5,
+            y_length = 5,
+            axis_config={
+                "include_numbers": False,
+                "color": WHITE,
+                "stroke_width": 0,
+            },
+            background_line_style={
+                "stroke_color": WHITE,
+                "stroke_width": 0,
+                "stroke_opacity": 0
+            }
+        ).scale(0.5).move_to([0, 1, 0])
+
+        # Create the square
+        point_a = ax.c2p(1, 1)
+        left = ax.get_vertical_line(
+            point_a, line_func=Line, color=BLACK, stroke_width=2
+        )
+
+        point_b = ax.c2p(2, 1)
+        right = ax.get_vertical_line(
+            point_b, line_func=Line, color=BLACK, stroke_width=2
+        )
+
+        down = ax.plot(lambda x: 0, x_range=[1, 2], color=BLACK, stroke_width=2)
+        up = ax.plot(lambda x: 1, x_range=[1, 2], color=BLACK, stroke_width=2)
+
+        txt_1 = Tex(r"$1$", font_size=18, color=BLACK)\
+            .next_to(ax.c2p(1, 0), DOWN, buff=0.1)
+        txt_2 = Tex(r"$2$", font_size=18, color=BLACK)\
+            .next_to(ax.c2p(2, 0), DOWN, buff=0.1)
+        self.play(
+            Create(left),
+            Create(right),
+            Create(down),
+            Create(up),
+            Write(txt_1),
+            Write(txt_2),
+        )
+
+        square_ab = Polygon(
+            ax.c2p(1, 0), ax.c2p(2, 0),
+            ax.c2p(2, 1), ax.c2p(1, 1),
+            stroke_color=BLACK, stroke_width=0,
+            fill_color=RED, fill_opacity=0.8
+        )
+        txt_1 = Tex(r"$1$", font_size=28, color=BLACK)\
+            .move_to([-1.5, -1, 0])
+        self.play(
+            Create(square_ab),
+            Write(txt_1)
+        )
+
+        graph = ax.plot(
+            lambda x: 1 / x,
+            x_range=[1, 2],
+            color=BLACK,
+            stroke_width = 2,
+        )
+        txt_fx = Tex(r"$f(x) = \frac{1}{x}$", font_size=28, color=BLACK).\
+            next_to(ax.c2p(1.5, 1), UP, buff=0.1)
+
+        self.play(
+            Create(graph),
+            Write(txt_fx)
+        )
 
         # Finish
         self.wait(2)
