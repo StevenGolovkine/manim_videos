@@ -73,6 +73,66 @@ class Proof(MovingCameraScene):
         )
         self.wait(0.5)
 
+        # Write text
+        txt_1 = Tex(
+            r"$-\lambda^n \left| AB - \lambda I \right|$", font_size=28, color=BLACK
+        ).move_to([0, 3, 0])
+        self.play(Write(txt_1))
+
+        txt_2 = Tex(r"$=$", font_size=28, color=BLACK)\
+            .next_to(txt_1, DOWN, buff=0.5)
+        txt_3 = Tex(
+            r"$\left| \begin{pmatrix} A & AB - \lambda I \\ \lambda I & 0\end{pmatrix}\right|$", font_size=28, color=BLACK
+        ).next_to(txt_2, DOWN, buff=0.5)
+        self.play(
+            Write(txt_2),
+            Write(txt_3)
+        )
+
+        txt_4 = Tex(r"$=$", font_size=28, color=BLACK)\
+            .next_to(txt_3, DOWN, buff=0.5)
+        txt_5 = Tex(
+            r"$\left| \begin{pmatrix} A & I \\ \lambda I & B \end{pmatrix} \begin{pmatrix} I & B \\ 0 & -\lambda I \end{pmatrix}\right|$", font_size=28, color=BLACK
+        ).next_to(txt_4, DOWN, buff=0.5)
+
+        self.play(
+            Write(txt_4),
+            Write(txt_5)
+        )
+
+        txt_6 = Tex(r"$=$", font_size=28, color=BLACK)\
+            .next_to(txt_5, DOWN, buff=0.5)
+        txt_7 = Tex(
+            r"$(-\lambda)^n \begin{vmatrix} A & I \\ \lambda I & B \end{vmatrix}$", font_size=28, color=BLACK
+        ).next_to(txt_6, DOWN, buff=0.5)
+
+        self.play(
+            Write(txt_6),
+            Write(txt_7)
+        )
+
+        txt_8 = Tex(
+            r"$\left| \begin{pmatrix} A & I \\ \lambda I & B \end{pmatrix} \begin{pmatrix} -I & 0 \\ \lambda I & B \end{pmatrix}\right|$", font_size=28, color=BLACK
+        ).next_to(txt_4, DOWN, buff=0.5)
+
+        self.play(Transform(txt_5, txt_8))
+
+        txt_9 = Tex(
+            r"$\left| \begin{pmatrix} 0 & \lambda I \\ BA - \lambda I & \lambda B \end{pmatrix}\right|$", font_size=28, color=BLACK
+        ).next_to(txt_2, DOWN, buff=0.5)
+
+        self.play(Transform(txt_3, txt_9))
+
+        self.play(
+            txt_1.animate.scale(0.1),
+            run_time=0.5
+        )
+        self.play(
+            txt_1.animate.scale(10),
+            run_time=0.5
+        )
+
+
 
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
