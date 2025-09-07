@@ -7,7 +7,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write, Transform, TransformFromCopy
 from manim import VGroup, FadeIn, FadeOut , FunctionGraph
-from manim import DashedVMobject, Line, Point, Polygon, RoundedRectangle
+from manim import DashedVMobject, Line, Dot, Polygon, RoundedRectangle
 from manim import Text, Tex
 
 from manim import line_intersection
@@ -113,7 +113,7 @@ class Triangle(MovingCameraScene):
         f_x = lambda x: 2 * x + 3.75
         g_x = lambda x: -1.429 * x + 1.865
 
-        new_E = [1, f_x(1), 0]
+        new_E = [0, f_x(0), 0]
         new_G = [-1, g_x(-1), 0]
 
         line_EE = Line(E, new_E, color=BLACK, stroke_width=2)
@@ -129,6 +129,100 @@ class Triangle(MovingCameraScene):
         self.play(
             Create(line_CH)
         )
+        
+        # Parallels
+        h_x = lambda x: -3.839 * x + 0.54
+        h_x1 = lambda x: -3.839 * x + (A[1] + 3.839 * A[0])
+        h_x2 = lambda x: -3.839 * x + (B[1] + 3.839 * B[0])
+
+        A2 = [-2, h_x1(-2), 0]
+        H2 = line_intersection([D, E], [A, A2])
+        line_AH2 = Line(A, H2, color=BLACK, stroke_width=2)
+        self.play(
+            Create(line_AH2)
+        )
+
+        B2 = [2, h_x2(2), 0]
+        H3 = line_intersection([F, G], [B, B2])
+        line_BH3 = Line(B, H3, color=BLACK, stroke_width=2)
+        self.play(
+            Create(line_BH3)
+        )
+
+        # Parallelograms on each side
+        parallelogram_AH2HHA = Polygon(
+            A, H2, H, C,
+            color=BLACK, stroke_width=2,
+            fill_color=VIOLET, fill_opacity=0.8, 
+        )
+        parallelogram_BH3HHA = Polygon(
+            B, H3, H, C,
+            color=BLACK, stroke_width=2,
+            fill_color=VIOLET, fill_opacity=0.8, 
+        )
+        self.play(
+            parallelogram_ACED.animate.set_fill(color=WHITE),
+            parallelogram_BCGF.animate.set_fill(color=WHITE),
+            Create(parallelogram_AH2HHA),
+            Create(parallelogram_BH3HHA),
+        )
+
+        # Construct L and M
+        X = [-4, h_x(-4), 0]
+        Y = [4, h_x(4), 0]
+        line_XY = Line(X, Y, color=BLACK, stroke_width=2)
+
+        X2 = [-3.5, h_x1(-3.5), 0]
+        Y2 = [3.5, h_x1(3.5), 0]
+        line_X2Y2 = Line(X2, Y2, color=BLACK, stroke_width=2)
+
+        X3 = [-3.5, h_x2(-3.5), 0]
+        Y3 = [3.5, h_x2(3.5), 0]
+        line_X3Y3 = Line(X3, Y3, color=BLACK, stroke_width=2)
+
+        self.play(
+            Create(line_XY),
+            Create(line_X2Y2),
+            Create(line_X3Y3),
+        )
+
+        L = [A[0] - (H2[0] - A[0]), A[1] - (H2[1] - A[1]), 0]
+        M = [B[0] - (H3[0] - B[0]), B[1] - (H3[1] - B[1]), 0]
+        Q = [C[0] - (H[0] - C[0]), C[1] - (H[1] - C[1]), 0]
+
+        parallelogram_LQCA = Polygon(
+            L, Q, C, A,
+            color=BLACK, stroke_width=2,
+            fill_color=VIOLET, fill_opacity=0.5, 
+        )
+        parallelogram_MQCB = Polygon(
+            M, Q, C, B,
+            color=BLACK, stroke_width=2,
+            fill_color=VIOLET, fill_opacity=0.5,
+        )
+
+        self.play(
+            parallelogram_AH2HHA.animate.set_fill(color=WHITE),
+            parallelogram_BH3HHA.animate.set_fill(color=WHITE),
+            Create(parallelogram_LQCA),
+            Create(parallelogram_MQCB),
+        )
+
+        # Parallelogram BLMC
+        parallelogram_ALMB = Polygon(
+            A, L, M, B,
+            color=BLACK, stroke_width=2,
+            fill_color=VIOLET, fill_opacity=1,
+        )
+        self.play(
+            parallelogram_LQCA.animate.set_fill(opacity=0),
+            parallelogram_MQCB.animate.set_fill(opacity=0),
+            Create(parallelogram_ALMB),
+            parallelogram_ACED.animate.set_fill(color=GREEN).set_z_index(2),
+            parallelogram_BCGF.animate.set_fill(color=GREEN).set_z_index(2),
+        )
+
+        # Text
 
         # Finish
         self.wait(2)
