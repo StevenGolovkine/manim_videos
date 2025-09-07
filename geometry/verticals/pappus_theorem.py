@@ -10,6 +10,8 @@ from manim import VGroup, FadeIn, FadeOut , FunctionGraph
 from manim import DashedVMobject, Line, Point, Polygon, RoundedRectangle
 from manim import Text, Tex
 
+from manim import line_intersection
+
 from manim import config
 from manim import ORIGIN, LEFT, RIGHT, DOWN, LIGHT, UP, PI
 
@@ -66,6 +68,66 @@ class Triangle(MovingCameraScene):
         self.play(
             Uncreate(txt_title),
             Uncreate(txt)
+        )
+
+        # Triangle
+        A = np.array([-1.5, -1, 0])
+        B = np.array([1.5, -1, 0])
+        C = np.array([-0.25, 1.5, 0])
+        triangle_ABC = Polygon(
+            A, B, C,
+            color=BLACK, stroke_width=2,
+            fill_color=BLUE, fill_opacity=1, 
+        )
+        
+        self.play(
+            Create(triangle_ABC)
+        )
+
+        # Parallelograms on each side
+        D = A + [-0.75, 0.25, 0]
+        E = C + [-0.75, 0.25, 0]
+        parallelogram_ACED = Polygon(
+            A, C, E, D,
+            color=BLACK, stroke_width=2,
+            fill_color=VIOLET, fill_opacity=1, 
+        )
+
+        self.play(
+            Create(parallelogram_ACED)
+        )
+
+        F = B + [0.4, 0.15, 0]
+        G = C + [0.4, 0.15, 0]
+        parallelogram_BCGF = Polygon(
+            B, C, G, F,
+            color=BLACK, stroke_width=2,
+            fill_color=VIOLET, fill_opacity=1, 
+        )
+
+        self.play(
+            Create(parallelogram_BCGF)
+        )
+        
+        # Extend lines
+        f_x = lambda x: 2 * x + 3.75
+        g_x = lambda x: -1.429 * x + 1.865
+
+        new_E = [1, f_x(1), 0]
+        new_G = [-1, g_x(-1), 0]
+
+        line_EE = Line(E, new_E, color=BLACK, stroke_width=2)
+        line_GG = Line(G, new_G, color=BLACK, stroke_width=2)
+        self.play(
+            Create(line_EE),
+            Create(line_GG),
+        )
+
+        # Intersection of lines
+        H = line_intersection([E, new_E], [G, new_G])
+        line_CH = Line(C, H, color=BLACK, stroke_width=2)
+        self.play(
+            Create(line_CH)
         )
 
         # Finish
