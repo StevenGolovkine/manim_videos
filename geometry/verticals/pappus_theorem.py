@@ -222,6 +222,7 @@ class Triangle(MovingCameraScene):
             parallelogram_BCGF.animate.set_fill(color=GREEN).set_z_index(2),
         )
 
+
         # Text
 
         # Finish
