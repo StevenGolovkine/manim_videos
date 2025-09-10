@@ -224,6 +224,28 @@ class Triangle(MovingCameraScene):
 
 
         # Text
+        rect = RoundedRectangle(
+            height=1, width=4,
+            color=BLACK,
+            stroke_width=2,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to([0, 2.5, 0])
+        txt = Tex(
+            r"Aire ", r"$\blacksquare$", r" $=$ ",
+            r"Aire ", r"$\blacksquare$",
+            font_size=40, color=BLACK,
+        ).move_to([0, 2.5, 0])
+        txt[1].set_color(GREEN).set_opacity(1)
+        txt[4].set_color(VIOLET).set_opacity(1)
+
+        self.play(
+            Create(rect),
+            Write(txt),
+            run_time=0.5
+        )
+
+        self.wait(2)
+        self.play(*[FadeOut(mob)for mob in self.mobjects])
 
         # Finish
         self.wait(2)
