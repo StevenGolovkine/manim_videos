@@ -71,6 +71,13 @@ class Pythagore(MovingCameraScene):
             Uncreate(txt)
         )
 
+        # Triangle
+        triangle = Polygon(
+            [0, 3, 0], [-2, 0, 0], [2, 0, 0],
+            color=BLACK, fill_color=BLUE, fill_opacity=1
+        )
+        self.play(Create(triangle))
+
         # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
