@@ -5,7 +5,7 @@ Proofs without Words III. Roger B. Nelsen. p. 8.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Create, Uncreate, Write, Transform, TransformFromCopy
+from manim import Create, Uncreate, Write, Rotate, RightAngle, Transform
 from manim import VGroup, FadeIn, FadeOut , FunctionGraph
 from manim import DashedVMobject, Line, Dot, Polygon, RoundedRectangle
 from manim import Text, Tex
@@ -13,7 +13,7 @@ from manim import Text, Tex
 from manim import line_intersection
 
 from manim import config
-from manim import ORIGIN, LEFT, RIGHT, DOWN, LIGHT, UP, PI
+from manim import ORIGIN, LEFT, RIGHT, DOWN, LIGHT, UP, PI, DEGREES
 
 # COLORS
 BLUE = "#B0E1FA"
@@ -71,12 +71,116 @@ class Pythagore(MovingCameraScene):
             Uncreate(txt)
         )
 
-        # Triangle
-        triangle = Polygon(
-            [0, 3, 0], [-2, 0, 0], [2, 0, 0],
+        # First triangle and text
+        A = [-1.75, 0, 0]
+        B = [1.75, 0, 0]
+        C = [-0.75, np.sqrt(2.5), 0]
+        H = [-0.75, 0, 0]
+
+        line_AB = Line(A, B, color=BLACK)
+        line_AC = Line(A, C, color=BLACK)
+        line_BC = Line(B, C, color=BLACK)
+        line_CH = DashedVMobject(Line(C, H, color=BLACK), num_dashes=20, color=BLACK)
+
+        triangle_b = Polygon(
+            A, B, C,
+            stroke_width=2,
             color=BLACK, fill_color=BLUE, fill_opacity=1
         )
-        self.play(Create(triangle))
+        txt_a = Tex(r"$a$", font_size=36, color=BLACK)\
+            .next_to(line_AC.get_center(), UP + LEFT, buff=0.1)
+        txt_b = Tex(r"$b$", font_size=36, color=BLACK)\
+            .next_to(line_BC.get_center(), UP + RIGHT, buff=0.1)
+        txt_c = Tex(r"$c$", font_size=36, color=BLACK)\
+            .next_to(triangle_b, DOWN, buff=0.1)
+        angle_ACB = RightAngle(
+            line_AC, line_BC,
+            color=BLACK, quadrant=(-1,-1), length=0.2, stroke_width=1
+        )
+
+        self.play(
+            Create(triangle_b),
+            Write(txt_a),
+            Write(txt_b),
+            Write(txt_c),
+            Create(angle_ACB)
+        )
+
+        txt_h = Tex(r"$h$", font_size=36, color=BLACK)\
+            .next_to(line_CH, LEFT, buff=0.1)
+        angle_CHB = RightAngle(
+            Line(C, H, color=BLACK), line_AB,
+            color=BLACK, length=0.2, stroke_width=1, quadrant=(-1, 1)
+        )
+        self.play(
+            Create(line_CH),
+            Write(txt_h),
+            Create(angle_CHB)
+        )
+
+        # Write formula
+        formula = Tex(
+            r"$\frac{1}{2} ab = \frac{1}{2} ch$",
+            font_size=30, color=BLACK
+        ).move_to([0, 2.5, 0])
+
+        self.play(Write(formula))
+
+        formula2 = Tex(
+            r"$h = \frac{ab}{c}$",
+            font_size=30, color=BLACK
+        ).move_to([0, 2.5, 0])
+
+        self.play(Transform(formula, formula2))
+
+        # Multiply by 1 / ab
+        txt_aab = Tex(r"$a \times \frac{1}{ab}$", font_size=30, color=BLACK)\
+            .next_to(line_AC.get_center(), UP + LEFT, buff=0.1)
+        txt_bab = Tex(r"$b \times \frac{1}{ab}$", font_size=30, color=BLACK)\
+            .next_to(line_BC.get_center(), UP + RIGHT, buff=0.1)
+        txt_cab = Tex(r"$c \times \frac{1}{ab}$", font_size=30, color=BLACK)\
+            .next_to(triangle_b, DOWN, buff=0.1)
+        
+        self.play(
+            Transform(txt_a, txt_aab),
+            Transform(txt_b, txt_bab),
+            Transform(txt_c, txt_cab),
+        )
+
+        # Transform 
+        txt_1b = Tex(r"$\frac{1}{b}$", font_size=30, color=BLACK)\
+            .next_to(line_AC.get_center(), UP + LEFT, buff=0.1)
+        txt_1a = Tex(r"$\frac{1}{a}$", font_size=30, color=BLACK)\
+            .next_to(line_BC.get_center(), UP + RIGHT, buff=0.1)
+        txt_1h = Tex(r"$\frac{1}{h}$", font_size=30, color=BLACK)\
+            .next_to(triangle_b, DOWN, buff=0.1)
+        
+        self.play(
+            Transform(txt_a, txt_1b),
+            Transform(txt_b, txt_1a),
+            Transform(txt_c, txt_1h),
+        )
+
+        # Write resutls
+        rect = RoundedRectangle(
+            height=1, width=4,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to([0, -1.5, 0])
+        txt = Tex(
+            r"$\frac{1}{a^2} + \frac{1}{b^2} = \frac{1}{h^2}$",
+            font_size=52, color=BLACK
+        ).move_to([0, -1.5, 0])
+
+        rect.z_index = 0
+        txt.z_index = 1
+        self.play(
+            Create(rect),
+            Write(txt)
+        )
+
+        
 
         # Finish
         self.wait(2)
