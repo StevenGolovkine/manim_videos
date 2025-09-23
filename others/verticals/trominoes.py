@@ -7,7 +7,7 @@ import numpy as np
 from manim import MovingCameraScene, Scene, ManimColor
 from manim import Create, Uncreate, Write, Transform, TransformFromCopy
 from manim import VGroup, FadeIn, FadeOut , FunctionGraph, Rotate
-from manim import Line, Point, Polygon, RoundedRectangle, Circle, Angle
+from manim import Line, Square, Polygon, RoundedRectangle, Circle, Angle
 from manim import line_intersection, DashedLine, RightAngle
 from manim import Text, Tex, Intersection, LaggedStart
 
@@ -68,6 +68,132 @@ class Trio(MovingCameraScene):
             Uncreate(txt_title),
             Uncreate(txt)
         )
+
+        # Text
+        txt = Tex(
+            r"Si $n$ est une puissance de deux,",
+            font_size=28, color=BLACK
+        ).move_to([0, 3.5, 0])
+        txt_2 = Tex(
+            r"alors un carré de côté $2n$ dont",
+            font_size=28, color=BLACK
+        ).next_to(txt, DOWN, aligned_edge=LEFT, buff=0.1)
+        txt_3 = Tex(
+            r"un carré unité est retiré peut",
+            font_size=28, color=BLACK
+        ).next_to(txt_2, DOWN, aligned_edge=LEFT, buff=0.1)
+        txt_4 = Tex(
+            r"être pavé avec des triominos.",
+            font_size=28, color=BLACK
+        ).next_to(txt_3, DOWN, aligned_edge=LEFT, buff=0.1)
+
+        self.play(
+            Write(txt),
+            Write(txt_2),
+            Write(txt_3),
+            Write(txt_4)
+        )
+
+        # Txt
+        txt_n = Tex(r"$n = 1$", font_size=36, color=BLACK).\
+            next_to(txt_4, DOWN, aligned_edge=LEFT, buff=0.5)
+        
+        self.play(Write(txt_n))
+
+        # Tromino
+        a = Square(
+            side_length=0.5, color=BLACK, fill_color=RED,
+            fill_opacity=0.5, stroke_width=1
+        )
+        b = Square(
+            side_length=0.5, color=BLACK, fill_color=BLUE,
+            fill_opacity=0.5, stroke_width=1
+        ).next_to(a, UP, buff=0)
+        c = Square(
+            side_length=0.5, color=BLACK, fill_color=BLUE,
+            fill_opacity=0.5, stroke_width=1
+        ).next_to(a, LEFT, buff=0)
+
+        tromino = VGroup(a, b, c).move_to([0, 0, 0])
+        self.play(
+            Create(tromino)
+        )
+
+        self.wait(0.5)
+
+        # Square 4x4
+        txt_n4 = Tex(r"$n = 2$", font_size=36, color=BLACK).\
+            next_to(txt_4, DOWN, aligned_edge=LEFT, buff=0.5)
+        self.play(Transform(txt_n, txt_n4))
+
+
+        tromino_1 = tromino.copy().next_to(c, UP, aligned_edge=RIGHT, buff=0)
+        self.play(
+            Create(tromino_1)
+        )
+
+        tromino_2 = tromino.copy().next_to(tromino_1[2], UP, aligned_edge=RIGHT, buff=0)
+        self.play(
+            Create(tromino_2)
+        )
+
+        tromino_3 = tromino.copy().rotate(PI / 2).\
+            next_to(tromino_2, RIGHT, aligned_edge=DOWN, buff=0)
+        self.play(
+            Create(tromino_3)
+        )
+
+        tromino_4 = tromino.copy().rotate(-PI / 2).\
+            next_to(tromino_2, DOWN, aligned_edge=RIGHT, buff=0)
+        self.play(
+            Create(tromino_4)
+        )
+
+        tromino_n4 = VGroup(tromino, tromino_1, tromino_2, tromino_3, tromino_4)
+        self.play(tromino_n4.animate.move_to([0, 0, 0]))
+
+        self.wait(0.5)
+
+        # Next n = 4
+        txt_n8 = Tex(r"$n = 4$", font_size=36, color=BLACK).\
+            next_to(txt_4, DOWN, aligned_edge=LEFT, buff=0.5)
+        self.play(Transform(txt_n, txt_n8))
+
+
+        self.play(
+            tromino_n4.animate.scale(0.75).move_to([0.75, -1, 0])
+        )
+
+        tromino_n4_2 = tromino_n4.copy().\
+            rotate(PI / 2).\
+            next_to(tromino_n4, UP, aligned_edge=LEFT, buff=0)
+        self.play(
+            Create(tromino_n4_2)
+        )
+
+        tromino_n4_3 = tromino_n4.copy().\
+            rotate(-PI / 2).\
+            next_to(tromino_n4, LEFT, aligned_edge=DOWN, buff=0)
+        self.play(
+            Create(tromino_n4_3)
+        )
+
+        tromino_n4_4 = tromino_n4.copy().\
+            rotate(PI).\
+            next_to(tromino_n4_3, UP, aligned_edge=RIGHT, buff=0)
+        self.play(
+            Create(tromino_n4_4)
+        )
+
+        tromino_5 = tromino.copy().\
+            next_to(tromino_n4[2][2], UP, aligned_edge=RIGHT, buff=0)
+        self.play(
+            Create(tromino_5)
+        )
+
+        txt_end = Tex(r"et ainsi de suite...", font_size=36, color=BLACK).\
+            move_to([0, -2, 0])
+        self.play(Write(txt_end))
 
         # Finish
         self.wait(2)
