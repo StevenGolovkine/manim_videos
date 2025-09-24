@@ -159,7 +159,6 @@ class Trio(MovingCameraScene):
             next_to(txt_4, DOWN, aligned_edge=LEFT, buff=0.5)
         self.play(Transform(txt_n, txt_n8))
 
-
         self.play(
             tromino_n4.animate.scale(0.75).move_to([0.75, -1, 0])
         )
