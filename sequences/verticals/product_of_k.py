@@ -5,7 +5,7 @@ Proofs without Words I. Roger B. Nelsen. p. 144.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Create, Uncreate, Write
+from manim import Create, Uncreate, Write, Square, Brace
 from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Line, Polygon
 from manim import Text, Tex, Transform
 from manim import NumberPlane, always_redraw
@@ -72,6 +72,121 @@ class Series(MovingCameraScene):
             Uncreate(txt)
         )
 
+        # Create the table
+        squares = VGroup()
+        squares.add(Square(side_length=0.3, color=BLACK, stroke_width=1))
+        for idx in range(9):
+            new_square = Square(side_length=0.3, color=BLACK, stroke_width=1).\
+                next_to(squares[idx], direction=RIGHT, buff=0.05)
+            squares.add(new_square)
+        for idx in range(90):
+            new_square = Square(side_length=0.3, color=BLACK, stroke_width=1).\
+                next_to(squares[idx], direction=DOWN, buff=0.05)
+            squares.add(new_square)
+        squares.move_to([0, 1, 0])
+        self.play(
+            Create(squares)
+        )
+
+        brace = Brace(squares, direction=[0, -1, 0], sharpness=1, color=BLACK)
+        txt_2n = Tex(r"$n + 1$", font_size=30, color=BLACK).next_to(brace, 0.5 * DOWN)
+
+        self.play(
+            Create(brace),
+            Write(txt_2n)
+        )
+
+        txt_1 = [
+            Tex(r"$1$", font_size=30, color=BLACK).\
+                move_to(squares[0].get_center())
+        ]
+        for i in range(1, 10):
+            if i in [1, 2, 3, 8, 9]:
+                txt_1.append(Tex(r"$1$", font_size=30, color=BLACK).\
+                    move_to(squares[i].get_center()))
+            else:
+                txt_1.append(Tex(r"$\cdot$", font_size=30, color=BLACK).\
+                    move_to(squares[i].get_center()))
+        
+        txt_1 = VGroup(*txt_1)
+        self.play(Write(txt_1))
+
+        txt_2 = [
+            Tex(r"$2$", font_size=30, color=BLACK).\
+                move_to(squares[10].get_center())
+        ]
+        for i in range(11, 20):
+            if i in [11, 12, 13, 18, 19]:
+                txt_2.append(Tex(r"$2$", font_size=30, color=BLACK).\
+                    move_to(squares[i].get_center()))
+            else:
+                txt_2.append(Tex(r"$\cdot$", font_size=30, color=BLACK).\
+                    move_to(squares[i].get_center()))
+        
+        txt_2 = VGroup(*txt_2)
+        self.play(Write(txt_2))
+
+
+        txt_3 = [
+            Tex(r"$3$", font_size=30, color=BLACK).\
+                move_to(squares[20].get_center())
+        ]
+        for i in range(21, 30):
+            if i in [21, 22, 23, 28, 29]:
+                txt_3.append(Tex(r"$3$", font_size=30, color=BLACK).\
+                    move_to(squares[i].get_center()))
+            else:
+                txt_3.append(Tex(r"$\cdot$", font_size=30, color=BLACK).\
+                    move_to(squares[i].get_center()))
+        
+        txt_3 = VGroup(*txt_3)
+        self.play(Write(txt_3))
+
+
+        txt_n2 = [
+            Tex(r"$n-2$", font_size=12, color=BLACK).\
+                move_to(squares[70].get_center())
+        ]
+        for i in range(71, 80):
+            if i in [71, 72, 73, 78, 79]:
+                txt_n2.append(Tex(r"$n-2$", font_size=12, color=BLACK).\
+                    move_to(squares[i].get_center()))
+            else:
+                txt_n2.append(Tex(r"$\cdot$", font_size=30, color=BLACK).\
+                    move_to(squares[i].get_center()))
+        
+        txt_n2 = VGroup(*txt_n2)
+        self.play(Write(txt_n2))
+
+        txt_n1 = [
+            Tex(r"$n-1$", font_size=12, color=BLACK).\
+                move_to(squares[80].get_center())
+        ]
+        for i in range(81, 90):
+            if i in [81, 82, 83, 88, 89]:
+                txt_n1.append(Tex(r"$n-1$", font_size=12, color=BLACK).\
+                    move_to(squares[i].get_center()))
+            else:
+                txt_n1.append(Tex(r"$\cdot$", font_size=30, color=BLACK).\
+                    move_to(squares[i].get_center()))
+        
+        txt_n1 = VGroup(*txt_n1)
+        self.play(Write(txt_n1))
+
+        txt_n = [
+            Tex(r"$n$", font_size=30, color=BLACK).\
+                move_to(squares[90].get_center())
+        ]
+        for i in range(91, 100):
+            if i in [91, 92, 93, 98, 99]:
+                txt_n.append(Tex(r"$n$", font_size=30, color=BLACK).\
+                    move_to(squares[i].get_center()))
+            else:
+                txt_n.append(Tex(r"$\cdot$", font_size=30, color=BLACK).\
+                    move_to(squares[i].get_center()))
+        
+        txt_n = VGroup(*txt_n)
+        self.play(Write(txt_n))
 
         # Finish
         self.wait(2)
