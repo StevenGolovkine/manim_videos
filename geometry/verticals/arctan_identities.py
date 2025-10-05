@@ -7,7 +7,7 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
 from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Angle
-from manim import Text, Tex, RoundedRectangle, Rectangle, Line, RightAngle
+from manim import Text, Tex, Polygon, Rectangle, Line, RightAngle
 from manim import TransformFromCopy, Transform
 
 from manim import config
@@ -68,6 +68,46 @@ class Euler(MovingCameraScene):
         self.play(
             Uncreate(txt_title),
             Uncreate(txt),
+        )
+
+        # Create 6 small squares in one rectangle
+        squares = VGroup()
+        for i in range(6):
+            square = Rectangle(
+                height=1, width=1,
+                fill_color=WHITE, fill_opacity=1,
+                stroke_color=BLACK, stroke_width=1
+            )
+            squares.add(square)
+        squares.arrange_in_grid(rows=2, cols=3, buff=0)
+        squares.move_to([0, 1, 0])
+        self.play(Create(squares, run_time=2))
+
+        # Triangle
+        triangle = Polygon(
+            squares[2].get_corner(UP + RIGHT),
+            squares[0].get_corner(DOWN + LEFT),
+            squares[5].get_corner(DOWN + LEFT),
+            fill_color=GREY, fill_opacity=0.5,
+            stroke_color=BLACK, stroke_width=1
+        )
+        r_angle = RightAngle(
+            Line(
+                squares[2].get_corner(UP + RIGHT),
+                squares[5].get_corner(DOWN + LEFT)
+            ),
+            Line(
+                squares[5].get_corner(DOWN + LEFT),
+                squares[0].get_corner(DOWN + LEFT)
+            ),
+            length=0.2,
+            quadrant=(-1, 1),
+            stroke_color=BLACK,
+            stroke_width=1
+        )
+        self.play(
+            Create(triangle),
+            Create(r_angle)
         )
 
         # Finish
