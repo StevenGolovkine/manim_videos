@@ -166,6 +166,25 @@ class Euler(MovingCameraScene):
         )
         self.play(Create(angle3))
 
+        # Fourth identity
+        self.play(Uncreate(angle3))
+        angle4 = Angle(
+            Line(
+                squares[2].get_corner(UP + RIGHT),
+                squares[0].get_corner(UP + LEFT)
+            ),
+            Line(
+                squares[2].get_corner(UP + RIGHT),
+                squares[5].get_corner(DOWN + RIGHT),
+            ),
+            radius=0.3,
+            quadrant=(1, 1),
+            other_angle=False,
+            stroke_color=BLACK,
+            stroke_width=2
+        )
+        self.play(Create(angle4))
+
         # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
