@@ -6,7 +6,7 @@ import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
-from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Angle
+from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Angle, Arc
 from manim import Text, Tex, Polygon, Rectangle, Line, RightAngle
 from manim import TransformFromCopy, Transform
 
@@ -184,6 +184,14 @@ class Euler(MovingCameraScene):
             stroke_width=2
         )
         self.play(Create(angle4))
+
+        # Fifth identity
+        self.play(Uncreate(angle4))
+        angle5 = Arc(
+            angle=PI, start_angle=-PI / 2,
+            stroke_color=BLACK, stroke_width=2, radius=0.3
+        ).move_arc_center_to(squares[3].get_corner(UP + LEFT))
+        self.play(Create(angle5))
 
         # Finish
         self.wait(2)
