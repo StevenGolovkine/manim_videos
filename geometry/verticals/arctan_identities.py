@@ -126,10 +126,22 @@ class Euler(MovingCameraScene):
             stroke_color=BLACK,
             stroke_width=2
         )
-        self.play(Create(angle1))
+        txt_1 = Tex(
+            r"$\frac{\pi}{4} = \arctan \frac{1}{2} + \arctan \frac{1}{3}$",
+            font_size=32, color=BLACK
+        ).next_to(squares, DOWN, buff=1)
+        self.play(
+            Create(angle1),
+            Write(txt_1)
+        )
+
+        self.wait(1)
 
         # Second identity
-        self.play(Uncreate(angle1))
+        self.play(
+            Uncreate(angle1),
+            Uncreate(txt_1)
+        )
         angle2 = Angle(
             Line(
                 squares[2].get_corner(UP + RIGHT),
@@ -145,10 +157,22 @@ class Euler(MovingCameraScene):
             stroke_color=BLACK,
             stroke_width=2
         )
-        self.play(Create(angle2))
+        txt_2 = Tex(
+            r"$\frac{\pi}{4} = \arctan 3 - \arctan \frac{1}{2}$",
+            font_size=32, color=BLACK
+        ).next_to(squares, DOWN, buff=1)
+        self.play(
+            Create(angle2),
+            Write(txt_2)
+        )
+
+        self.wait(1)
 
         # Third identity
-        self.play(Uncreate(angle2))
+        self.play(
+            Uncreate(angle2),
+            Uncreate(txt_2)
+        )
         angle3 = Angle(
             Line(
                 squares[2].get_corner(UP + RIGHT),
@@ -164,10 +188,22 @@ class Euler(MovingCameraScene):
             stroke_color=BLACK,
             stroke_width=2
         )
-        self.play(Create(angle3))
+        txt_3 = Tex(
+            r"$\frac{\pi}{4} = \arctan 2 - \arctan \frac{1}{3}$",
+            font_size=32, color=BLACK
+        ).next_to(squares, DOWN, buff=1)
+        self.play(
+            Create(angle3),
+            Write(txt_3)
+        )
 
+        self.wait(1)
+        
         # Fourth identity
-        self.play(Uncreate(angle3))
+        self.play(
+            Uncreate(angle3),
+            Uncreate(txt_3)
+        )
         angle4 = Angle(
             Line(
                 squares[2].get_corner(UP + RIGHT),
@@ -183,15 +219,34 @@ class Euler(MovingCameraScene):
             stroke_color=BLACK,
             stroke_width=2
         )
-        self.play(Create(angle4))
+        txt_4 = Tex(
+            r"$\frac{\pi}{2} = \arctan 1 + \arctan \frac{1}{2} + \arctan \frac{1}{3}$",
+            font_size=24, color=BLACK
+        ).next_to(squares, DOWN, buff=1)
+        self.play(
+            Create(angle4),
+            Write(txt_4)
+        )
+
+        self.wait(1)
 
         # Fifth identity
-        self.play(Uncreate(angle4))
+        self.play(
+            Uncreate(angle4),
+            Uncreate(txt_4)
+        )
         angle5 = Arc(
             angle=PI, start_angle=-PI / 2,
             stroke_color=BLACK, stroke_width=2, radius=0.3
         ).move_arc_center_to(squares[3].get_corner(UP + LEFT))
-        self.play(Create(angle5))
+        txt_5 = Tex(
+            r"$\pi = \arctan 1 + \arctan 2 + \arctan 3$",
+            font_size=24, color=BLACK
+        ).next_to(squares, DOWN, buff=1)
+        self.play(
+            Create(angle5),
+            Write(txt_5)
+        )
 
         # Finish
         self.wait(2)
