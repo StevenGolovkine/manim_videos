@@ -68,6 +68,18 @@ class Series(MovingCameraScene):
             Uncreate(txt)
         )
 
+        # Triangles
+        triangle = Polygon(
+            [-4, -2, 0],
+            [4, -2, 0],
+            [0, 6, 0],
+            color=BLACK,
+            fill_color=BLUE,
+            fill_opacity=1,
+            stroke_width=2
+        )
+        self.play(Create(triangle))
+
         # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
