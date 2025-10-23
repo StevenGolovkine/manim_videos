@@ -70,9 +70,9 @@ class Series(MovingCameraScene):
 
         # Triangles
         triangle = Polygon(
-            [-4, -2, 0],
-            [4, -2, 0],
-            [0, 6, 0],
+            [-2, -1, 0],
+            [2, -1, 0],
+            [0, 2, 0],
             color=BLACK,
             fill_color=BLUE,
             fill_opacity=1,
