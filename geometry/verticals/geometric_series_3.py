@@ -80,6 +80,13 @@ class Series(MovingCameraScene):
         )
         self.play(Create(triangle))
 
+        # Write equations
+        equations = Tex(
+            r"$\frac{1}{4} + \frac{1}{4^2} + \frac{1}{4^3} + \cdots = \frac{1}{3}$",
+            font_size=36, color=BLACK
+        ).to_edge(DOWN, buff=1)
+        self.play(Write(equations))
+
         # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
