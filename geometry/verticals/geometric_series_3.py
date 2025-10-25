@@ -87,6 +87,7 @@ class Series(MovingCameraScene):
         ).to_edge(DOWN, buff=1)
         self.play(Write(equations))
 
+
         # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
