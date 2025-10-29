@@ -69,22 +69,88 @@ class Series(MovingCameraScene):
         )
 
         # Triangles
+        AB = Line([-2, -1, 0], [2, -1, 0], color=BLACK)
+        AC = Line([-2, -1, 0], [0, -1 + 2 * np.sqrt(3), 0], color=BLACK)
+        BC = Line([2, -1, 0], [0, -1 + 2 * np.sqrt(3), 0], color=BLACK)
         triangle = Polygon(
             [-2, -1, 0],
             [2, -1, 0],
-            [0, 2, 0],
+            [0, -1 + 2 * np.sqrt(3), 0],
             color=BLACK,
             fill_color=BLUE,
             fill_opacity=1,
             stroke_width=2
         )
-        self.play(Create(triangle))
+        
+        self.play(
+            Create(triangle),
+        )
+
+        # Subtriangles
+        subtriangle_1 = Polygon(
+            AB.get_midpoint(),
+            BC.get_midpoint(),
+            AC.get_midpoint(),
+            color=BLACK,
+            fill_color=RED,
+            fill_opacity=1,
+            stroke_width=2
+        )
+        txt_base = Tex(r"$1 / 4$", font_size=24, color=BLACK).\
+            move_to(subtriangle_1.get_center_of_mass())
+        txt_base.z_index = 1
+        self.play(
+            Create(subtriangle_1),
+            Write(txt_base)
+        )
+
+        DC = Line(BC.get_midpoint(), [0, -1 + 2 * np.sqrt(3), 0], color=BLACK)
+        EC = Line(AC.get_midpoint(), [0, -1 + 2 * np.sqrt(3), 0], color=BLACK)
+        DE = Line(BC.get_midpoint(), AC.get_midpoint(), color=BLACK)
+        subtriangle_2 = Polygon(
+            DC.get_midpoint(),
+            EC.get_midpoint(),
+            DE.get_midpoint(),
+            color=BLACK,
+            fill_color=RED,
+            fill_opacity=1,
+            stroke_width=2
+        )
+        txt_1 = Tex(r"$1 / 4^2$", font_size=21, color=BLACK).\
+            move_to(subtriangle_2.get_center_of_mass())
+        self.play(
+            Create(subtriangle_2),
+            Write(txt_1)
+        )
+
+        FC = Line(DC.get_midpoint(), [0, -1 + 2 * np.sqrt(3), 0], color=BLACK)
+        GC = Line(EC.get_midpoint(), [0, -1 + 2 * np.sqrt(3), 0], color=BLACK)
+        FG = Line(DC.get_midpoint(), EC.get_midpoint(), color=BLACK)
+        subtriangle_3 = Polygon(
+            FC.get_midpoint(),
+            GC.get_midpoint(),
+            FG.get_midpoint(),
+            color=BLACK,
+            fill_color=RED,
+            fill_opacity=1,
+            stroke_width=2
+        )
+        txt_2 = Tex(r"$1 / 4^3$", font_size=18, color=BLACK).\
+            move_to(subtriangle_3.get_center_of_mass())
+        self.play(
+            Create(subtriangle_3),
+            Write(txt_2)
+        )
+
+        txt_top = Tex(r"$\vdots$", font_size=36, color=BLACK).\
+            next_to(subtriangle_3, UP, buff=0.1)
+        self.play(Write(txt_top))
 
         # Write equations
         equations = Tex(
             r"$\frac{1}{4} + \frac{1}{4^2} + \frac{1}{4^3} + \cdots = \frac{1}{3}$",
             font_size=36, color=BLACK
-        ).to_edge(DOWN, buff=1)
+        ).to_edge(DOWN, buff=2)
         self.play(Write(equations))
 
         # Finish
