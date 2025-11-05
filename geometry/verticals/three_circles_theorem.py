@@ -152,7 +152,6 @@ class Circles(MovingCameraScene):
             .move_to([0, 2, 0])
         self.play(Write(theorem, run_time=4))
 
-
         # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
