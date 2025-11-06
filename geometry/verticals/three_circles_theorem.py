@@ -7,7 +7,9 @@ import numpy as np
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write, Transform, Group, ValueTracker
 from manim import Polygon, VGroup, FadeIn, FadeOut, FunctionGraph
-from manim import Text, Tex, RoundedRectangle, Circle, Line, Dot, Angle
+from manim import Text, Tex, RoundedRectangle, Circle, Line, Dot, TangentLine
+
+from manim import line_intersection
 
 from manim import config
 from manim import LEFT, RIGHT, DOWN, LIGHT, UP, SMALL_BUFF, PI
@@ -53,7 +55,7 @@ def get_line(p1, p2):
     new_p2 = np.array([5, 5 * m + p, 0])
     return Line(new_p1, new_p2, color=BLUE, stroke_width=2)
 
-def get_intersection(line, circle, point):
+def get_intersection(line, circle):
     """
     Returns the intersection point of a line and a circle.
 
@@ -85,20 +87,20 @@ def get_intersection(line, circle, point):
     C = h**2 + (b - k)**2 - r**2
 
     discriminant = B**2 - 4 * A * C
-    if discriminant < 0:
-        return point
+    # if discriminant < 0:
+    #     return point
 
-    x1 = (-B + np.sqrt(discriminant)) / (2 * A)
+    x1 = -B / (2 * A)
     y1 = m * x1 + b
-    x2 = (-B - np.sqrt(discriminant)) / (2 * A)
-    y2 = m * x2 + b
-    if (
-        np.abs(point.get_center()[0] - x1) < 0.1 and 
-        np.abs(point.get_center()[1] - y1) < 0.1
-    ):
-        return Dot([x2, y2, 0], color=BLACK, radius=0.05)
-    else:
-        return Dot([x1, y1, 0], color=BLACK, radius=0.05)
+    # x2 = (-B - np.sqrt(discriminant)) / (2 * A)
+    # y2 = m * x2 + b
+    # if (
+    #     np.abs(point.get_center()[0] - x1) < 0.1 and 
+    #     np.abs(point.get_center()[1] - y1) < 0.1
+    # ):
+    return Dot([x1, y1, 0], color=BLACK, radius=0.05)
+    # else:
+    #     return Dot([x1, y1, 0], color=BLACK, radius=0.05)
 
 
 class Circles(MovingCameraScene):
@@ -148,6 +150,120 @@ class Circles(MovingCameraScene):
             .arrange(DOWN, aligned_edge=LEFT, buff=0.1)\
             .to_edge(0.75 * UP + 0.5 * LEFT)
         self.play(Write(theorem, run_time=4))
+
+        # Create three circles
+        circles = VGroup()
+        dots = VGroup()
+        centers = [
+            np.array([-1, -2, 0]),
+            np.array([1, -0.5, 0]),
+            np.array([-0.5, 1, 0])
+        ]
+        radii = [1, 0.75, 0.9]
+        for center, radius in zip(centers, radii):
+            circle = Circle(
+                radius=radius, color=BLACK, stroke_width=2
+            )
+            circle.move_to(center)
+            circles.add(circle)
+            dot = Dot(center, color=BLACK, radius=0.05)
+            dots.add(dot)
+        
+        self.play(
+            Create(circles),
+            Create(dots)
+        )
+
+
+        # Create tangent lines
+        tan_l_1 = TangentLine(circles[0], alpha=0.23, length=10, color=BLUE)
+        A = get_intersection(tan_l_1, circles[0])
+        B = get_intersection(tan_l_1, circles[1])
+        line_AB = Line(A.get_center(), B.get_center(), color=RED, stroke_width=2)
+
+        tan_l_2 = TangentLine(circles[0], alpha=0.9775, length=10, color=BLUE)
+        C = get_intersection(tan_l_2, circles[0])
+        D = get_intersection(tan_l_2, circles[1])
+        line_CD = Line(C.get_center(), D.get_center(), color=RED, stroke_width=2)
+
+        point_A = line_intersection(
+            [A.get_center(), B.get_center()],
+            [C.get_center(), D.get_center()]
+        )
+        dot_A = Dot(point_A, color=RED, radius=0.1)
+
+        self.play(
+            Create(line_AB),
+            Create(line_CD),
+            Create(dot_A)
+        )
+
+        tan_l_3 = TangentLine(circles[1], alpha=0.4825, length=10, color=BLUE)
+        E = get_intersection(tan_l_3, circles[1])
+        F = get_intersection(tan_l_3, circles[2])
+        line_EF = Line(E.get_center(), F.get_center(), color=BLUE, stroke_width=2)
+
+        tan_l_4 = TangentLine(circles[1], alpha=0.2675, length=10, color=BLUE)
+        G = get_intersection(tan_l_4, circles[1])
+        H = get_intersection(tan_l_4, circles[2])
+        line_GH = Line(G.get_center(), H.get_center(), color=BLUE, stroke_width=2)
+
+        point_B = line_intersection(
+            [E.get_center(), F.get_center()],
+            [G.get_center(), H.get_center()]
+        )
+        dot_B = Dot(point_B, color=BLUE, radius=0.1)
+        self.play(
+            Create(line_EF),
+            Create(line_GH),
+            Create(dot_B)
+        )
+
+        tan_l_5 = TangentLine(circles[0], alpha=0.367, length=10, color=BLUE)
+        I = get_intersection(tan_l_5, circles[0])
+        J = get_intersection(tan_l_5, circles[2])
+        line_IJ = Line(I.get_center(), J.get_center(), color=ORANGE, stroke_width=2)
+
+        tan_l_6 = TangentLine(circles[0], alpha=0.0805, length=10, color=BLUE)
+        K = get_intersection(tan_l_6, circles[0])
+        L = get_intersection(tan_l_6, circles[2])
+        line_KL = Line(K.get_center(), L.get_center(), color=ORANGE, stroke_width=2)
+
+        point_C = line_intersection(
+            [I.get_center(), J.get_center()],
+            [K.get_center(), L.get_center()]
+        )
+        dot_C = Dot(point_C, color=ORANGE, radius=0.1)
+        self.play(
+            Create(line_IJ),
+            Create(line_KL),
+            Create(dot_C)
+        )
+
+        # Connect points to centers
+        line_A_center_1 = Line(
+            dot_A.get_center(), dots[2].get_center(), color=RED, stroke_width=2
+        )
+        line_B_center_2 = Line(
+            dot_B.get_center(), dots[0].get_center(), color=BLUE, stroke_width=2
+        )
+        line_C_center_3 = Line(
+            dot_C.get_center(), dots[1].get_center(), color=ORANGE, stroke_width=2
+        )
+        self.play(
+            Create(line_A_center_1),
+            Create(line_B_center_2),
+            Create(line_C_center_3)
+        )
+
+        # Finish with big point
+        big_point = line_intersection(
+            [dot_A.get_center(), dots[2].get_center()],
+            [dot_B.get_center(), dots[0].get_center()],
+        )
+        big_dot = Dot(big_point, color=BLACK, radius=0.15)
+        self.play(Create(big_dot))
+        
 
         # Finish
         self.wait(2)
