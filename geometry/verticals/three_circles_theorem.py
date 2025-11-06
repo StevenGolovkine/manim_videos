@@ -137,19 +137,16 @@ class Circles(MovingCameraScene):
 
 
         # Write theorem
-        theorem = Tex(
-            r"Théorème des trois cercles :",
-            r"Si une droite coupe trois cercles",
-            r"deux à deux tangents en des points",
-            r"alignés, alors les points d'intersection",
-            r"de la droite avec les cercles sont",
-            r"tous situés sur un même segment de droite.",
-            font_size=28,
-            color=BLACK
-        )
+        theorem = [
+            Tex(r"Soit trois cercles, tracer les tangentes", font_size=20, color=BLACK),
+            Tex(r"communes à chaque paire de cercles.", font_size=20, color=BLACK),
+            Tex(r"Connecter leur points d'intersection", font_size=20, color=BLACK),
+            Tex(r"avec le centre des autres cercles.", font_size=20, color=BLACK),
+            Tex(r"Les trois segments obtenus sont concourrents.", font_size=20, color=BLACK),
+        ]
         theorem = VGroup(*theorem)\
-            .arrange(DOWN, aligned_edge=LEFT, center=False)\
-            .move_to([0, 2, 0])
+            .arrange(DOWN, aligned_edge=LEFT, buff=0.1)\
+            .to_edge(0.75 * UP + 0.5 * LEFT)
         self.play(Write(theorem, run_time=4))
 
         # Finish
