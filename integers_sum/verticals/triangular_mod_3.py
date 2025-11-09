@@ -52,6 +52,7 @@ class Tri(MovingCameraScene):
         ]
         txt_title = VGroup(*txt_title).arrange(DOWN).move_to([0, 2, 0])
 
+
         txt = [
             Tex(r"Démonstration", font_size=36, color=BLACK),
             Tex(r"Roger B. Nelsen", font_size=28, color=BLACK),
