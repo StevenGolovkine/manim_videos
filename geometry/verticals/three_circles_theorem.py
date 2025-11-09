@@ -1,6 +1,6 @@
 """
-Visual proof of A Constant Chord
-Proofs without Words II. Roger B. Nelsen. p. 29.
+Visual proof of Three Circles Theorem.
+Proofs without Words II. Roger B. Nelsen. p. 28.
 """
 import numpy as np
 
