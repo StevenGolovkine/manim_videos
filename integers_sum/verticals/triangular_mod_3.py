@@ -234,7 +234,7 @@ class Tri(MovingCameraScene):
             A_x, B_x, D_x, C_x,
             color=BLUE, stroke_width=2, fill_opacity=0.9
         )
-        txt_ijn = Tex(r"$t_{2k} - t_k$", font_size=18, color=BLACK).\
+        txt_ijn = Tex(r"$T_{2k} - T_k$", font_size=18, color=BLACK).\
             move_to(triangle_ijn.get_center())
         
         A_x = circles[9].get_center()
@@ -245,7 +245,7 @@ class Tri(MovingCameraScene):
             A_x, B_x, D_x, C_x,
             color=BLUE, stroke_width=2, fill_opacity=0.9
         )
-        txt_kjl = Tex(r"$t_{2k} - t_k$", font_size=18, color=BLACK).\
+        txt_kjl = Tex(r"$T_{2k} - T_k$", font_size=18, color=BLACK).\
             move_to(triangle_kjl.get_center())
         
         A_x = circles[21].get_center()
@@ -256,7 +256,7 @@ class Tri(MovingCameraScene):
             A_x, B_x, D_x, C_x,
             color=BLUE, stroke_width=2, fill_opacity=0.9
         )
-        txt_nkl = Tex(r"$t_{2k} - t_k$", font_size=18, color=BLACK).\
+        txt_nkl = Tex(r"$T_{2k} - T_k$", font_size=18, color=BLACK).\
             move_to(triangle_nkl.get_center())
 
         self.play(
@@ -268,7 +268,7 @@ class Tri(MovingCameraScene):
             Write(txt_nkl),
         )
 
-        txt_2 = Tex(r"$T_{3k} = 3 (t_{2k} - t_k)$", font_size=28, color=BLACK).\
+        txt_2 = Tex(r"$T_{3k} = 3 (T_{2k} - T_k)$", font_size=28, color=BLACK).\
             next_to(circles, DOWN, buff=0.5)
         self.play(
             Write(txt_2)
@@ -325,7 +325,7 @@ class Tri(MovingCameraScene):
             A_x, B_x, D_x, C_x,
             color=BLUE, stroke_width=2, fill_opacity=0.9
         )
-        txt_ijn = Tex(r"$t_{2k+1} - t_{k+1}$", font_size=18, color=BLACK).\
+        txt_ijn = Tex(r"$T_{2k+1} - T_{k+1}$", font_size=18, color=BLACK).\
             move_to(triangle_ijn.get_center())
         
         A_x = circles[9].get_center()
@@ -336,7 +336,7 @@ class Tri(MovingCameraScene):
             A_x, B_x, D_x, C_x,
             color=BLUE, stroke_width=2, fill_opacity=0.9
         )
-        txt_kjl = Tex(r"$t_{2k+1} - t_{k+1}$", font_size=18, color=BLACK).\
+        txt_kjl = Tex(r"$T_{2k+1} - T_{k+1}$", font_size=18, color=BLACK).\
             move_to(triangle_kjl.get_center())
         
         A_x = circles[28].get_center()
@@ -347,7 +347,7 @@ class Tri(MovingCameraScene):
             A_x, B_x, D_x, C_x,
             color=BLUE, stroke_width=2, fill_opacity=0.9
         )
-        txt_nkl = Tex(r"$t_{2k+1} - t_{k+1}$", font_size=18, color=BLACK).\
+        txt_nkl = Tex(r"$T_{2k+1} - T_{k+1}$", font_size=18, color=BLACK).\
             move_to(triangle_nkl.get_center())
 
         self.play(
@@ -363,7 +363,7 @@ class Tri(MovingCameraScene):
             circles[24].animate.set_fill(RED, opacity=0.9),
         )
 
-        txt_2 = Tex(r"$T_{3k + 1} = 1 + 3 (t_{2k + 1} - t_{k + 1})$", font_size=28, color=BLACK).\
+        txt_2 = Tex(r"$T_{3k + 1} = 1 + 3 (T_{2k + 1} - T_{k + 1})$", font_size=28, color=BLACK).\
             next_to(circles, DOWN, buff=0.5)
         self.play(
             Write(txt_2)
@@ -421,7 +421,7 @@ class Tri(MovingCameraScene):
             A_x, B_x, D_x, C_x,
             color=BLUE, stroke_width=2, fill_opacity=0.9
         )
-        txt_ijn = Tex(r"$t_{2k+1} - t_k$", font_size=18, color=BLACK).\
+        txt_ijn = Tex(r"$T_{2k+1} - T_k$", font_size=18, color=BLACK).\
             move_to(triangle_ijn.get_center())
         
         A_x = circles[14].get_center()
@@ -432,7 +432,7 @@ class Tri(MovingCameraScene):
             A_x, B_x, D_x, C_x,
             color=BLUE, stroke_width=2, fill_opacity=0.9
         )
-        txt_kjl = Tex(r"$t_{2k+1} - t_k$", font_size=18, color=BLACK).\
+        txt_kjl = Tex(r"$T_{2k+1} - T_k$", font_size=18, color=BLACK).\
             move_to(triangle_kjl.get_center())
         
         A_x = circles[28].get_center()
@@ -443,7 +443,7 @@ class Tri(MovingCameraScene):
             A_x, B_x, D_x, C_x,
             color=BLUE, stroke_width=2, fill_opacity=0.9
         )
-        txt_nkl = Tex(r"$t_{2k+1} - t_k$", font_size=18, color=BLACK).\
+        txt_nkl = Tex(r"$T_{2k+1} - T_k$", font_size=18, color=BLACK).\
             move_to(triangle_nkl.get_center())
 
         self.play(
@@ -455,7 +455,7 @@ class Tri(MovingCameraScene):
             Write(txt_nkl),
         )
 
-        txt_2 = Tex(r"$T_{3k + 2} = 3 (t_{2k + 1} - t_{k})$", font_size=28, color=BLACK).\
+        txt_2 = Tex(r"$T_{3k + 2} = 3 (T_{2k + 1} - T_{k})$", font_size=28, color=BLACK).\
             next_to(circles, DOWN, buff=0.5)
         self.play(
             Write(txt_2)
