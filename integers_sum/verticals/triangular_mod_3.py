@@ -370,6 +370,7 @@ class Tri(MovingCameraScene):
         )
         self.wait(2)
 
+
         # Triangle with circles
         self.play(
             Uncreate(circles),
