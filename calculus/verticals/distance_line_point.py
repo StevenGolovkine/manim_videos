@@ -68,7 +68,6 @@ class Distance(MovingCameraScene):
             Uncreate(txt)
         )
 
-
         # Finish
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
