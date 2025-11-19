@@ -5,12 +5,12 @@ Proofs without Words I. Roger B. Nelsen. p. 40.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Create, Uncreate, Write, Transform, Group
+from manim import Create, Uncreate, Write, Transform, Group, RightAngle
 from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Dot, Line, Polygon
 from manim import Text, Tex, DashedVMobject, DashedLine, RoundedRectangle
 
 from manim import config
-from manim import LEFT, RIGHT, DOWN, LIGHT, UP
+from manim import LEFT, RIGHT, DOWN, LIGHT, UP, PI
 
 # COLORS
 BLUE = "#B0E1FA"
@@ -66,6 +66,166 @@ class Distance(MovingCameraScene):
         self.play(
             Uncreate(txt_title),
             Uncreate(txt)
+        )
+
+
+        # Graphs
+        ax = Axes(
+            x_range=[-0.1, 1, 0.1],
+            y_range=[-0.1, 2, 0.1],
+            x_length=7,
+            y_length=10,
+            tips=False,
+            x_axis_config={
+                "color": BLACK,
+            },
+            y_axis_config={
+                "color": BLACK
+            }
+        ).scale(0.5).move_to([0, 0, 0])
+
+        self.play(Create(ax))
+
+        graph = ax.plot(
+            lambda x: 3*x - 0.15,
+            x_range=[-0.1, 0.9],
+            use_smoothing=False,
+            color=BLACK
+        )
+        txt_line = Tex(
+            r"$y = mx + c$",
+            font_size=20, color=BLACK
+        ).next_to(ax.c2p(-0.05, -3*0.05 - 0.15), RIGHT, buff=0.2)
+        self.play(
+            Create(graph),
+            Create(txt_line)
+        )
+
+        # Point
+        point = Dot(ax.c2p(0.8, 0.5), color=RED, stroke_width=3)
+        txt_point = Tex(
+            r"$(a, b)$",
+            font_size=16, color=BLACK
+        ).next_to(point.get_center(), DOWN + RIGHT, buff=0.1)
+        self.play(
+            Create(point),
+            Write(txt_point)
+        )
+
+        # Line point to line
+        line = Line(
+            start=ax.c2p(0.8, 3*0.8 - 0.15),
+            end=ax.c2p(0.2, 3*0.2 - 0.15),
+            color=BLACK
+        )
+        line_perp = Line(
+            start=ax.c2p(0.8, 0.5),
+            end=ax.c2p(0.325, 0.825),
+            color=BLACK
+        )
+        txt_d = Tex(
+            r"$d$",
+            font_size=20, color=BLACK
+        ).next_to(line_perp.get_center(), LEFT + DOWN, buff=0.1)
+        r_angle = RightAngle(
+            line_perp,
+            line,
+            length=0.2,
+            quadrant=(-1, 1),
+            stroke_width=1,
+            color=BLACK
+        )
+        self.play(
+            Create(line_perp),
+            Create(txt_d),
+            Create(r_angle)
+        )
+
+        # Vertical line from point to line
+        line_vert = DashedLine(
+            start=ax.c2p(0.8, 0.5),
+            end=ax.c2p(0.8, 3*0.8 - 0.15),
+            color=BLACK
+        )
+        point_proj = Dot(ax.c2p(0.8, 3*0.8 - 0.15), color=BLACK, stroke_width=1)
+        txt_point_proj = Tex(
+            r"$(a, ma + c)$",
+            font_size=16, color=BLACK
+        ).next_to(point_proj.get_center(), LEFT, buff=0.3)
+        self.play(
+            Create(line_vert),
+            Write(txt_point_proj),
+        )
+
+        # Distance
+        txt_v = Tex(
+            r"$| ma +c - b |$",
+            font_size=24, color=BLACK
+        ).rotate(-PI / 2).next_to(line_vert.get_center(), RIGHT, buff=0.2)
+        self.play(
+            Create(txt_v)
+        )
+
+        # Smaller triangle
+        point_base = Dot(ax.c2p(0.6, 1), color=BLACK, stroke_width=1)
+        line_ver = DashedLine(
+            start=ax.c2p(0.6, 1),
+            end=ax.c2p((1 + 0.15) / 3, 1),
+            color=BLACK
+        )
+        line_hor = DashedLine(
+            start=ax.c2p(0.6, 3*0.6 - 0.15),
+            end=ax.c2p(0.6, 1),
+            color=BLACK
+        )
+        r_angle_2 = RightAngle(
+            line_hor,
+            line_ver,
+            length=0.2,
+            quadrant=(-1, 1),
+            stroke_width=1,
+            color=BLACK
+        )
+        txt_1 = Tex(
+            r"$1$",
+            font_size=16, color=BLACK
+        ).next_to(line_ver.get_center(), DOWN, buff=0.1)
+        txt_m = Tex(
+            r"$m$",
+            font_size=16, color=BLACK
+        ).next_to(line_hor, RIGHT, buff=0.1)
+        self.play(
+            Create(point_base),
+            Create(line_ver),
+            Create(line_hor),
+            Create(r_angle_2),
+            Write(txt_m),
+            Write(txt_1)
+        )
+
+        # Distance formula
+        txt_dist_formula = Tex(
+            r"$\sqrt{1 + m^2}$",
+            font_size=24, color=BLACK
+        ).next_to(ax.c2p(0.5, 3*0.5 - 0.15), LEFT, buff=0.3)
+        self.play(
+            Create(txt_dist_formula)
+        )
+
+        # Write distance formula
+        rect = RoundedRectangle(
+            height=1, width=2.5,
+            stroke_width=2,
+            color=BLACK,
+            fill_color=WHITE, fill_opacity=1
+        ).move_to([0.5, -2, 0])
+        txt_final = Tex(
+            r"$\frac{d}{1} = \frac{| ma + c - b |}{\sqrt{1 + m^2}}$",
+            font_size=32, color=BLACK
+        ).move_to([0.5, -2, 0])
+        self.play(
+            Create(rect),
+            Write(txt_final)
         )
 
         # Finish
