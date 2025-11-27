@@ -246,6 +246,7 @@ class Pythagorean(MovingCameraScene):
             font_size=52, color=BLACK
         ).move_to([0, 0, 0])
 
+
         self.play(
             Create(rect),
             Write(txt),
