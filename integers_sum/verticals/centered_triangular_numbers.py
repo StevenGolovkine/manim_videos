@@ -258,6 +258,7 @@ class Tri(MovingCameraScene):
             *[Create(line_c4[i]) for i in range(11)]
         )
 
+
         # Write results
         results = [
             Tex(r"$\forall n \geq 1, c_n = 1 + 3 t_n$", font_size=36, color=BLACK),
