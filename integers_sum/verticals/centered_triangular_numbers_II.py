@@ -74,6 +74,7 @@ class Tri(MovingCameraScene):
         )
         self.wait(0.5)
 
+
         # Definition of centered triangular numbers
         definition = [
             Tex(r"Un nombre triangulaire centré $c_n$", font_size=24, color=BLACK),
