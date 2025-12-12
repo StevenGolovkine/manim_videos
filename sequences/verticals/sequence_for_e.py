@@ -70,22 +70,144 @@ class Series(MovingCameraScene):
         )
 
         # Create the graph
-        ax = NumberPlane(
-            x_range = (1, 2, 0.1),
-            y_range = (0, 1, 0.1),
-            x_length = 5,
-            y_length = 5,
-            axis_config={
-                "include_numbers": False,
-                "color": WHITE,
-                "stroke_width": 0,
+        ax = Axes(
+            x_range=[0, 7, 1],
+            y_range=[0, 5, 1],
+            x_length=7,
+            y_length=7,
+            tips=False,
+            x_axis_config={
+                "color": BLACK,
             },
-            background_line_style={
-                "stroke_color": WHITE,
-                "stroke_width": 0,
-                "stroke_opacity": 0
+            y_axis_config={
+                "color": BLACK
             }
-        ).scale(0.5).move_to([0, 1, 0])
+        ).scale(0.5).move_to([0, 0, 0])
+
+        graph = ax.plot(
+            lambda x: x / np.log(x),
+            x_range=[1.5, 7],
+            use_smoothing=False,
+            color=BLACK
+        )
+
+        txt_f = Tex(r"$f(x) = \frac{x}{\log x}$", font_size=24, color=BLACK)\
+            .next_to(ax.c2p(1.5, 1.5 / np.log(1.5)), 0.5 * UP)
+        
+        self.play(
+            Create(ax),
+            Create(txt_f),
+            Create(graph)
+        )
+
+        graph_xy = ax.plot(
+            lambda x: x,
+            x_range=[0, 7],
+            use_smoothing=False,
+            color=GREY
+        )
+        txt_fx = Tex(r"$f(x) = x$", font_size=24, color=BLACK)\
+            .next_to(ax.c2p(6, 6), 0.5 * UP)
+        self.play(
+            Create(graph_xy),
+            Create(txt_fx)
+        )
+
+        # Vertical line at x = 1
+        line_x1 = always_redraw(lambda: Line(
+            start=ax.c2p(1, 0), end=ax.c2p(1, 5),
+            color=GREY
+        ))
+        txt_x1 = Tex(r"$1$", font_size=24, color=BLACK)\
+            .next_to(ax.c2p(1, 0), DOWN)
+        self.play(
+            Create(line_x1),
+            Write(txt_x1)
+        )
+
+        # x0
+        x0 = 6.5
+        pt_x0 = ax.c2p(x0, 0)
+        pt_fx0 = ax.c2p(x0, x0 / np.log(x0))
+        line_x0 = always_redraw(lambda: Line(
+            start=pt_x0, end=pt_fx0,
+            color=RED
+        ))
+        txt_x0 = Tex(r"$x_0$", font_size=24, color=RED)\
+            .next_to(pt_x0, DOWN)
+        self.play(
+            Create(line_x0),
+            Write(txt_x0)
+        )
+
+        # Line from f(x0) to x = y
+        line_fx0 = always_redraw(lambda: Line(
+            start=pt_fx0, end=ax.c2p(x0 / np.log(x0), x0 / np.log(x0)),
+            color=BLUE
+        ))
+        self.play(
+            Create(line_fx0),
+        )
+
+        # Line from line_fx0 to f(x1)
+        x1 = x0 / np.log(x0)
+        pt_x1 = ax.c2p(x1, x1)
+        pt_fx1 = ax.c2p(x1, x1 / np.log(x1))
+        line_x1 = always_redraw(lambda: Line(
+            start=pt_x1, end=pt_fx1,
+            color=RED
+        ))
+        ptt_x1 = ax.c2p(x1, 0)
+        txt_x1 = Tex(r"$x_1$", font_size=24, color=RED)\
+            .next_to(ptt_x1, DOWN)
+        self.play(
+            Create(line_x1),
+            Write(txt_x1)
+        )
+
+        # Line from f(x1) to x = y
+        line_fx1 = always_redraw(lambda: Line(
+            start=pt_fx1, end=ax.c2p(x1 / np.log(x1), x1 / np.log(x1)),
+            color=BLUE
+        ))
+        self.play(
+            Create(line_fx1),
+        )
+
+        # Write e + lines to e on x and y
+        line_fx1 = always_redraw(lambda: Line(
+            start=ax.c2p(np.e, 0), end=ax.c2p(np.e, np.e),
+            color=GREEN
+        ))
+        line_fx2 = always_redraw(lambda: Line(
+            start=ax.c2p(0, np.e), end=ax.c2p(np.e, np.e),
+            color=GREEN
+        ))
+        txt_e = Tex(r"$e$", font_size=36, color=GREEN)\
+            .next_to(ax.c2p(np.e, 0), DOWN)
+        txt_e2 = Tex(r"$e$", font_size=36, color=GREEN)\
+            .next_to(ax.c2p(0, np.e), LEFT)
+        self.play(
+            Create(line_fx1),
+            Create(line_fx2),
+            Write(txt_e),
+            Write(txt_e2)
+        )   
+
+        # Write final results
+        txt_result = Tex(
+            r"$x_1 > 1$ et $x_{n+1} = \frac{x_n}{\log(x_n)}$",
+            color=BLACK, font_size=28
+        ).move_to([0, -2.5, 0])
+        txt_result2 = Tex(
+            r"alors $\lim_{n \to +\infty} x_n = e$.",
+            color=BLACK, font_size=28
+        ).next_to(txt_result, DOWN, buff=0.2)
+        txt_result = VGroup(txt_result, txt_result2)
+
+        self.play(
+            Write(txt_result)
+        )
 
         # Finish
         self.wait(2)
