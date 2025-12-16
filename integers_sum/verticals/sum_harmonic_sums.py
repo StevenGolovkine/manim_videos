@@ -73,7 +73,6 @@ class Sums(MovingCameraScene):
         self.wait(0.5)
 
 
-
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
 
