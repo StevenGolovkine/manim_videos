@@ -59,6 +59,7 @@ class Series(MovingCameraScene):
         ]
         txt = VGroup(*txt).arrange(DOWN)
 
+
         self.add(
             txt_title,
             txt
