@@ -72,6 +72,16 @@ class Sums(MovingCameraScene):
         )
         self.wait(0.5)
 
+        # Text sums
+        text_sums = [
+            Tex(r"$H_n = \sum_{k=1}^{n} \frac{1}{k}$", font_size=36, color=BLACK),
+            Tex(
+                r"$\Rightarrow \sum_{k=1}^{n-1} H_k = n H_n - n$",
+                font_size=36, color=BLACK
+            ),
+        ]
+        text_sums = VGroup(*text_sums).arrange(DOWN).move_to([0, 3, 0])
+        self.play(Write(text_sums))
 
         self.wait(2)
         self.play(*[FadeOut(mob)for mob in self.mobjects])
