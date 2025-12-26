@@ -184,7 +184,6 @@ class Sums(MovingCameraScene):
             ]
         )
         
-
         txt_plus = Tex(r"$+$", font_size=36, color=BLACK).\
             next_to(txt_n, RIGHT, buff=0.2)
         self.play(Write(txt_plus))
