@@ -183,6 +183,7 @@ class Sums(MovingCameraScene):
                 for idx in lower_idx
             ]
         )
+        
 
         txt_plus = Tex(r"$+$", font_size=36, color=BLACK).\
             next_to(txt_n, RIGHT, buff=0.2)
