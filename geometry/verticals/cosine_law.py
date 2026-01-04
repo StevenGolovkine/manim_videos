@@ -69,7 +69,6 @@ class Cosine(MovingCameraScene):
             Uncreate(txt)
         )
 
-
         # Create circle
         circle = Circle(radius=2, color=BLACK, stroke_width=2)
         circle.move_to([0, 1, 0])
