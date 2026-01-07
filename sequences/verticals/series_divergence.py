@@ -144,6 +144,7 @@ class Series(MovingCameraScene):
         )
         self.wait(1)
 
+
         final_txt2 = [
             Tex(
                 r"$\frac{1}{\sqrt{2}} + \frac{1}{\sqrt{3}} + \cdots + \frac{1}{\sqrt{n}} > $",
