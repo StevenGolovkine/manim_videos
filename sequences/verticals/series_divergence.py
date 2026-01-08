@@ -8,7 +8,7 @@ from manim import MovingCameraScene
 from manim import Create, Uncreate, Write
 from manim import Axes, VGroup, FadeIn, FadeOut, FunctionGraph, Line, Polygon
 from manim import Text, Tex, Transform, RightAngle, Angle, Circle, Dot
-from manim import NumberPlane, Intersection
+from manim import NumberPlane, Intersection, ArcBetweenPoints
 
 
 from manim import config
@@ -79,11 +79,11 @@ class Series(MovingCameraScene):
         self.play(Write(result))
 
         # Create a right triangle
-        A = np.array([-2.5, 0, 0])
-        B = np.array([1, 0, 0])
-        C = np.array([1, 3, 0])
+        A = np.array([-2, -1, 0])
+        B = np.array([1.5, -1, 0])
+        C = np.array([1.5, 2, 0])
         txt = Tex(r"Pour $k > 1$", font_size=24, color=BLACK).\
-            move_to([-1.5, 2, 0])
+            move_to([-1.5, 1.5, 0])
         triangle = Polygon(
             A,
             B,
@@ -107,37 +107,68 @@ class Series(MovingCameraScene):
             color=BLACK,
             stroke_width=2
         )
-        triangle_g = VGroup(triangle, angle, txt_1, txt_2, txt_3)
 
         self.play(
-            Create(triangle_g),
+            Create(triangle),
+            Create(angle),
+            Write(txt_1),
+            Write(txt_2),
+            Write(txt_3),
             Write(txt),
         )
 
         # Projection of B on AC
-        D = [1, 0, 0]
-        E = [1 - 3 / np.sqrt(9 + 1), 3 / np.sqrt(9 + 1), 0]
-        projection = Line(D, E, color=RED, stroke_width=2)
+        E = [0.0176, 0.7294, 0]
+        projection = Line(B, E, color=RED, stroke_width=2)
         self.play(Create(projection))
 
-        # Circle with diameter AB
-        circle = Circle(
-            radius=3.5,
-            color=BLACK, stroke_width=2
-        ).move_to(A)
+        # Line between E and C
+        line_EC = Line(E, C, color=BLUE, stroke_width=4)
+        txt_EC = Tex(r"$\frac{1}{\sqrt{k}}$", font_size=24, color=BLUE).\
+            next_to(line_EC.get_center(), LEFT, buff=0.4)
         self.play(
-            Create(circle)
+            Create(line_EC),
+            Write(txt_EC)
         )
 
-        # Intersection of circle and AC
-        intersection = Intersection(circle, Line(A, C), color=GREEN, stroke_width=2)
-        self.play(Create(intersection))
+        self.wait(1)
+
+        # Circle with diameter AB
+        x = 0.6586
+        y = 1.2764
+        I = Dot([x, y, 0], color=BLACK)
+
+        arc = ArcBetweenPoints(
+            start=B,
+            end=I.get_center(),
+            radius=3.5,
+            color=BLACK, stroke_width=2
+        )
+        self.play(
+            Create(arc),
+            Create(I)
+        )
+
+        # Line between I and C
+        line_IC = Line(I.get_center(), C, color=GREEN, stroke_width=4)
+        txt_IC = Tex(r"$\sqrt{k} - \sqrt{k - 1}$", font_size=24, color=GREEN).\
+            next_to(line_IC.get_center(), LEFT + UP, buff=0)
+        self.play(
+            Create(line_IC),
+            Write(txt_IC)
+        )
+
+        self.wait(1)
+
+        # # Intersection of circle and AC
+        # intersection = Intersection(circle, Line(A, C), color=GREEN, stroke_width=2)
+        # self.play(Create(intersection))
 
         # Final txt
         final_txt = Tex(
             r"$\frac{1}{\sqrt{k}} > \sqrt{k} - \sqrt{k - 1}$",
             font_size=30, color=BLACK
-        ).move_to([0, -3, 0])
+        ).move_to([0, -2.5, 0])
 
         self.play(
             Write(final_txt)
@@ -155,7 +186,7 @@ class Series(MovingCameraScene):
                 font_size=20, color=BLACK
             ),
         ]
-        final_txt2 = VGroup(*final_txt2).arrange(DOWN).move_to([0, -3, 0])
+        final_txt2 = VGroup(*final_txt2).arrange(DOWN).move_to([0, -2.5, 0])
         self.play(
             Transform(final_txt, final_txt2)
         )
@@ -164,7 +195,7 @@ class Series(MovingCameraScene):
         final_txt3 = Tex(
             r"$1 + \frac{1}{\sqrt{2}} + \frac{1}{\sqrt{3}} + \cdots + \frac{1}{\sqrt{n}} > \sqrt{n}$",
             font_size=30, color=BLACK
-        ).move_to([0, -3, 0])
+        ).move_to([0, -2.5, 0])
         self.play(
             Transform(final_txt, final_txt3)
         )
