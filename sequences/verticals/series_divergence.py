@@ -130,7 +130,6 @@ class Series(MovingCameraScene):
             Create(line_EC),
             Write(txt_EC)
         )
-
         self.wait(1)
 
         # Circle with diameter AB
