@@ -159,10 +159,6 @@ class Series(MovingCameraScene):
 
         self.wait(1)
 
-        # # Intersection of circle and AC
-        # intersection = Intersection(circle, Line(A, C), color=GREEN, stroke_width=2)
-        # self.play(Create(intersection))
-
         # Final txt
         final_txt = Tex(
             r"$\frac{1}{\sqrt{k}} > \sqrt{k} - \sqrt{k - 1}$",
