@@ -9,3 +9,6 @@ media/*
 
 # MacOS files
 .DS_Store
+
+# Virtualenv
+.venv
