@@ -142,7 +142,6 @@ class Sums(MovingCameraScene):
             Write(txt_inside13)
         )
 
-
         inside_rect2 = Rectangle(
             width=1, height=2, color=BLUE, fill_color=BLUE, fill_opacity=0.5,
             stroke_width=0
