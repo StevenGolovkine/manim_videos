@@ -78,7 +78,6 @@ class Sums(MovingCameraScene):
         )
         self.wait(0.5)
 
-
         # Rectangle
         rect = Rectangle(
             width=3, height=2, color=BLACK, fill_color=WHITE, fill_opacity=1,
