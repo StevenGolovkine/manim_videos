@@ -59,7 +59,7 @@ class Sums(MovingCameraScene):
         txt = VGroup(*txt).arrange(DOWN)
 
         results = [
-            Tex(r"$\sum_{k = 1}^n k(k + 1)(k + 2) = \frac{n(n + 1)(n + 2)(n + 3)}{4}$",
+            Tex(r"$\sum_{k = 1}^n k(k + 1) = \frac{n(n + 1)(n + 2)}{3}$",
             font_size=20, color=BLACK),
         ]
         results = VGroup(*results).arrange(DOWN).move_to([0, -1, 0])
@@ -84,9 +84,9 @@ class Sums(MovingCameraScene):
             stroke_width=2
         ).move_to([0, 1.5, 0])
         txt_1 = Tex(
-            r"$1 + 2 + \cdots + (k + 1) + (k + 2)$", font_size=20, color=BLACK
+            r"$1 + 2 + \cdots + n$", font_size=20, color=BLACK
         ).next_to(rect, UP, buff=0.1)
-        txt_2 = Tex(r"$1 + 2 + \cdots + k$", font_size=20, color=BLACK).\
+        txt_2 = Tex(r"$n + 2$", font_size=20, color=BLACK).\
             rotate(PI / 2).\
             next_to(rect, LEFT, buff=0.1)
 
@@ -99,233 +99,174 @@ class Sums(MovingCameraScene):
 
         # Modify txt
         txt_12 = Tex(
-            r"$\frac{(k + 2)(k + 3)}{2}$", font_size=20, color=BLACK
+            r"$\frac{n(n + 1)}{2}$", font_size=20, color=BLACK
         ).next_to(rect, UP, buff=0.1)
-        txt_22 = Tex(r"$\frac{k(k + 1)}{2}$", font_size=20, color=BLACK).\
-            rotate(PI / 2).\
-            next_to(rect, LEFT, buff=0.1)
         self.play(
             Transform(txt_1, txt_12),
-            Transform(txt_2, txt_22),
         )
 
         # Inside rectangle
         inside_rect1 = Rectangle(
-            width=2, height=1, color=RED, fill_color=RED, fill_opacity=0.5,
-            stroke_width=0
-        ).align_to(rect, LEFT + DOWN)
+            width=3, height=0.25, color=BLACK, fill_color=RED, fill_opacity=0.5,
+            stroke_width=0.1
+        ).align_to(rect, LEFT + UP)
         txt_inside1 = Tex(
-            r"$1 + 2 + \cdots + k + (k +1 )$", font_size=15, color=BLACK
-        ).next_to(inside_rect1, UP, buff=0.1)
-        txt_inside11 = Tex(
-            r"$k$", font_size=15, color=BLACK
-        ).next_to(inside_rect1, LEFT, buff=-0.15)
+            r"$1 + 2 + \cdots + n$", font_size=15, color=BLACK
+        ).move_to(inside_rect1.get_center_of_mass())
 
         self.play(
             Create(inside_rect1),
             Write(txt_inside1),
-            Write(txt_inside11),
-        )
-
-        txt_inside12 = Tex(
-            r"$\frac{(k + 1)(k + 2)}{2}$", font_size=15, color=BLACK
-        ).next_to(inside_rect1, UP, buff=0.1)
-        self.play(
-            Transform(txt_inside1, txt_inside12),
-        )
-
-        txt_inside13 = Tex(
-            r"$k\frac{(k + 1)(k + 2)}{2}$", font_size=15, color=BLACK
-        ).move_to(inside_rect1.get_center_of_mass())
-        self.play(
-            Write(txt_inside13)
         )
 
         inside_rect2 = Rectangle(
-            width=1, height=2, color=BLUE, fill_color=BLUE, fill_opacity=0.5,
-            stroke_width=0
-        ).align_to(rect, RIGHT + DOWN)
+            width=2, height=0.25, color=BLACK, fill_color=RED, fill_opacity=0.5,
+            stroke_width=0.1
+        ).next_to(inside_rect1, DOWN, buff=0).align_to(inside_rect1, LEFT)
         txt_inside2 = Tex(
-            r"$k + 2$", font_size=15, color=BLACK
-        ).next_to(inside_rect2, UP, buff=-0.2)
-
-        self.play(
-            Create(inside_rect2),
-            Write(txt_inside2)
-        )
-
-        txt_inside21 = Tex(
-            r"$(k + 2)\frac{k(k + 1)}{2}$", font_size=15, color=BLACK
+            r"$\cdots$", font_size=15, color=BLACK
         ).move_to(inside_rect2.get_center_of_mass())
         self.play(
-            Write(txt_inside21)
+            Create(inside_rect2),
+            Write(txt_inside2),
         )
 
-        # Area inside rectangle
-        inside_rect3 = inside_rect2.copy().set_color(RED)
-        inside_rect = VGroup(inside_rect1.copy(), inside_rect3)
-        txt_inside3 = Tex(
-            r"$k(k + 1)(k + 2)$", font_size=15, color=BLACK
-        ).move_to(inside_rect.get_center_of_mass() + [0.25, -0.25, 0])
-        self.play(
-            FadeOut(txt_inside1),
-            FadeOut(txt_inside11),
-            FadeOut(txt_inside2),
-            FadeOut(txt_inside13),
-            FadeOut(txt_inside21),
-            Uncreate(inside_rect1),
-            Uncreate(inside_rect2),
-            Create(inside_rect),
-            Write(txt_inside3)
-        )
-
-
-        # Second rectangle
-        rect2 = Rectangle(
-            width=3, height=2, color=BLACK, fill_color=WHITE, fill_opacity=1,
-            stroke_width=2
-        ).move_to([0, -1.5, 0])
-        txt_3 = Tex(
-            r"$1 + 2 + \cdots + (n + 1) + (n + 2)$", font_size=20, color=BLACK
-        ).next_to(rect2, UP, buff=0.1)
-        txt_4 = Tex(r"$1 + 2 + \cdots + n$", font_size=20, color=BLACK).\
-            rotate(PI / 2).\
-            next_to(rect2, LEFT, buff=0.1)
-
-        self.play(
-            Create(rect2),
-            Write(txt_3),
-            Write(txt_4),
-            run_time=1
-        )
-
-        # Inside rectangle
         inside_rect3 = Rectangle(
-            width=1, height=0.25, color=RED, fill_color=RED, fill_opacity=0.5,
-            stroke_width=0
-        ).align_to(rect2, LEFT + UP)
-        txt_5 = Tex(
-            r"$1 \times 2 \times 3$", font_size=15, color=BLACK
+            width=1, height=0.25, color=BLACK, fill_color=RED, fill_opacity=0.5,
+            stroke_width=0.1
+        ).next_to(inside_rect2, DOWN, buff=0).align_to(inside_rect2, LEFT)
+        txt_inside3 = Tex(
+            r"$1 + 2 + 3$", font_size=15, color=BLACK
         ).move_to(inside_rect3.get_center_of_mass())
         self.play(
             Create(inside_rect3),
-            Write(txt_5)
+            Write(txt_inside3),
         )
 
         inside_rect4 = Rectangle(
-            width=1, height=0.35, color=BLUE, fill_color=BLUE, fill_opacity=0.5,
-            stroke_width=0
-        ).\
-            next_to(inside_rect3, DOWN, buff=0).\
-            align_to(inside_rect3, LEFT)
-        inside_rect5 = Rectangle(
-            width=0.25, height=0.6, color=BLUE, fill_color=BLUE, fill_opacity=0.5,
-            stroke_width=0
-        ).\
-            next_to(inside_rect3, RIGHT, buff=0).\
-            align_to(inside_rect3, UP)
-        inside_rect_4 = VGroup(inside_rect4, inside_rect5)
-        txt_6 = Tex(
-            r"$2 \times 3 \times 4$", font_size=15, color=BLACK
-        ).move_to(inside_rect4.get_center_of_mass() + [0.25, 0, 0])
+            width=0.5, height=0.25, color=BLACK, fill_color=RED, fill_opacity=0.5,
+            stroke_width=0.1
+        ).next_to(inside_rect3, DOWN, buff=0).align_to(inside_rect3, LEFT)
+        txt_inside4 = Tex(
+            r"$1 + 2$", font_size=15, color=BLACK
+        ).move_to(inside_rect4.get_center_of_mass())
         self.play(
-            Create(inside_rect_4),
-            Write(txt_6)
+            Create(inside_rect4),
+            Write(txt_inside4),
+        )
+
+        inside_rect5 = Rectangle(
+            width=0.25, height=0.25, color=BLACK, fill_color=RED, fill_opacity=0.5,
+            stroke_width=0.1
+        ).next_to(inside_rect4, DOWN, buff=0).align_to(inside_rect4, LEFT)
+        txt_inside5 = Tex(
+            r"$1$", font_size=15, color=BLACK
+        ).move_to(inside_rect5.get_center_of_mass())
+        self.play(
+            Create(inside_rect5),
+            Write(txt_inside5),
         )
 
         inside_rect6 = Rectangle(
-            width=1.25, height=0.35, color=RED, fill_color=RED, fill_opacity=0.5,
-            stroke_width=0
-        ).\
-            next_to(inside_rect_4, DOWN, buff=0).\
-            align_to(inside_rect_4, LEFT)
-        inside_rect61 = Rectangle(
-            width=0.5, height=0.95, color=RED, fill_color=RED, fill_opacity=0.5,
-            stroke_width=0
-        ).\
-            next_to(inside_rect_4, RIGHT, buff=0).\
-            align_to(inside_rect_4, UP)
-        inside_rect_5 = VGroup(inside_rect6, inside_rect61)
-        txt_7 = Tex(
-            r"$3 \times 4 \times 5$", font_size=15, color=BLACK
-        ).move_to(inside_rect6.get_center_of_mass() + [0.25, 0, 0])
+            width=0.25, height=0.75, color=BLACK, fill_color=BLUE, fill_opacity=0.5,
+            stroke_width=0.1
+        ).next_to(inside_rect5, DOWN, buff=0).align_to(inside_rect5, LEFT)
+        txt_inside6 = Tex(
+            r"$1 \cdot 2$", font_size=15, color=BLACK
+        ).rotate(PI / 2).move_to(inside_rect6.get_center_of_mass())
         self.play(
-            Create(inside_rect_5),
-            Write(txt_7)
-        )
-
-        inside_rect8 = Rectangle(
-            width=1.75, height=0.3, color=BLUE, fill_color=BLUE, fill_opacity=0.5,
-            stroke_width=0
-        ).\
-            next_to(inside_rect_5, DOWN, buff=0).\
-            align_to(inside_rect_5, LEFT)
-        inside_rect81 = Rectangle(
-            width=0.5, height=1.25, color=BLUE, fill_color=BLUE, fill_opacity=0.5,
-            stroke_width=0
-        ).\
-            next_to(inside_rect_5, RIGHT, buff=0).\
-            align_to(inside_rect_5, UP)
-        inside_rect_8 = VGroup(inside_rect8, inside_rect81)
-        txt_8 = Tex(
-            r"$\dots$", font_size=15, color=BLACK
-        ).move_to(inside_rect8.get_center_of_mass() + [0.25, 0, 0])
-        self.play(
-            Create(inside_rect_8),
-            Write(txt_8)
+            Create(inside_rect6),
+            Write(txt_inside6)
         )
 
         inside_rect7 = Rectangle(
-            width=2.25, height=0.75, color=RED, fill_color=RED, fill_opacity=0.5,
-            stroke_width=0
-        ).align_to(rect2, LEFT + DOWN)
-        inside_rect8 = Rectangle(
-            width=0.75, height=2, color=RED, fill_color=RED, fill_opacity=0.5,
-            stroke_width=0
-        ).align_to(rect2, RIGHT + DOWN)
-        inside_rect_n = VGroup(inside_rect7, inside_rect8)
-        txt_n = Tex(
-            r"$n(n + 1)(n + 2)$", font_size=15, color=BLACK
-        ).move_to(inside_rect7.get_center_of_mass() + [0.75, 0, 0])
-
+            width=0.25, height=1, color=BLACK, fill_color=BLUE, fill_opacity=0.5,
+            stroke_width=0.1
+        ).next_to(inside_rect6, RIGHT, buff=0).align_to(inside_rect6, DOWN)
+        txt_inside7 = Tex(
+            r"$2 \cdot 3$", font_size=15, color=BLACK
+        ).rotate(PI / 2).move_to(inside_rect7.get_center_of_mass())
         self.play(
-            Create(inside_rect_n),
-            Write(txt_n)
+            Create(inside_rect7),
+            Write(txt_inside7)
         )
+
+        inside_rect8 = Rectangle(
+            width=0.5, height=1.25, color=BLACK, fill_color=BLUE, fill_opacity=0.5,
+            stroke_width=0.1
+        ).next_to(inside_rect7, RIGHT, buff=0).align_to(inside_rect7, DOWN)
+        txt_inside8 = Tex(
+            r"$3 \cdot 4$", font_size=15, color=BLACK
+        ).rotate(PI / 2).move_to(inside_rect8.get_center_of_mass())
+        self.play(
+            Create(inside_rect8),
+            Write(txt_inside8)
+        )
+
+        inside_rect9 = Rectangle(
+            width=1, height=1.5, color=BLACK, fill_color=BLUE, fill_opacity=0.5,
+            stroke_width=0.1
+        ).next_to(inside_rect8, RIGHT, buff=0).align_to(inside_rect8, DOWN)
+        txt_inside9 = Tex(
+            r"$\cdots$", font_size=15, color=BLACK
+        ).rotate(PI / 2).move_to(inside_rect9.get_center_of_mass())
+        self.play(
+            Create(inside_rect9),
+            Write(txt_inside9)
+        )
+
+        inside_rect10 = Rectangle(
+            width=1, height=1.75, color=BLACK, fill_color=BLUE, fill_opacity=0.5,
+            stroke_width=0.1
+        ).next_to(inside_rect9, RIGHT, buff=0).align_to(inside_rect9, DOWN)
+        txt_inside10 = Tex(
+            r"$n \cdot (n+1)$", font_size=15, color=BLACK
+        ).rotate(PI / 2).move_to(inside_rect10.get_center_of_mass())
+        self.play(
+            Create(inside_rect10),
+            Write(txt_inside10)
+        )
+
 
         # Transform txt
-        txt_3_2 = Tex(
-            r"$\frac{(n + 2)(n + 3)}{2}$", font_size=20, color=BLACK
-        ).next_to(rect2, UP, buff=0.1)
-        txt_4_2 = Tex(r"$\frac{n(n + 1)}{2}$", font_size=20, color=BLACK).\
-            rotate(PI / 2).\
-            next_to(rect2, LEFT, buff=0.1)
+        txt_1 = Tex(
+            r"$T_k = 1 + 2 + \cdots + k \Longrightarrow$", font_size=20, color=BLACK
+        ).move_to([-0.5, 0, 0])
         self.play(
-            Transform(txt_3, txt_3_2),
-            Transform(txt_4, txt_4_2),
+            Write(txt_1)
         )
 
-        # Write the final result
-        rect = RoundedRectangle(
-            height=1, width=4,
-            stroke_width=2,
-            color=BLACK,
-            fill_color=WHITE, fill_opacity=1
-        ).move_to([0, 0.5, 0])
-        txt = Tex(
-            r"$1 \cdot 2 \cdot 3 + 2 \cdot 3 \cdot 4$",
-            r"$+ \dots + n(n + 1)(n + 2)$",
-            r"$= \frac{n(n + 1)(n +2)(n + 3)}{4}$",
-            font_size=15, color=BLACK
-         ).move_to([0, 0.5, 0])
-
-        rect.z_index = 0
-        txt.z_index = 1
-        self.play(
-            Create(rect),
-            Write(txt),
-            run_time=0.5
+        txt_21 = Tex(
+            r"$1 \cdot 2 + \cdots +  n(n+1) + (T_1 + \cdots + T_k)$",
+            font_size=20, color=BLACK
         )
+        txt_22 = Tex(
+            r"$= \frac{n(n + 1)(n + 2)}{2}$",
+            font_size=20, color=BLACK
+        )
+        txt_2 = VGroup(txt_21, txt_22).\
+            arrange(DOWN).\
+            move_to([0, -0.75, 0])
+        self.play(
+            Write(txt_2)
+        )
+
+        txt_3 = Tex(
+            r"Or $T_1 + \cdots + T_k = \frac{1 \cdot 2 + \cdots +  n(n+1)}{2}$",
+            font_size=20, color=BLACK
+        ).move_to([0, -1.5, 0])
+        self.play(
+            Write(txt_3)
+        )
+
+        txt_4 = Tex(
+            r"Donc $\frac{3}{2}(1 \cdot 2 + \cdots +  n(n+1)) = \frac{n(n + 1)(n + 2)}{2}$",
+            font_size=20, color=BLACK
+        ).move_to([0, -2.25, 0])
+        self.play(
+            Write(txt_4)
+        )
+
 
         # Finish
         self.wait(2)
