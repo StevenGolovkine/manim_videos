@@ -2,14 +2,15 @@
 Visual proof of the sqaures in circles and semicircles.
 Proofs without Words III. Roger B. Nelsen. p. 38.
 """
+from networkx import radius
 import numpy as np
 
 from manim import MovingCameraScene
 from manim import Create, Uncreate, Write, Transform, TransformFromCopy
 from manim import VGroup, FadeIn, FadeOut , FunctionGraph, Rotate
-from manim import Line, Point, Polygon, RoundedRectangle, Circle, Angle
-from manim import line_intersection, DashedLine, RightAngle
-from manim import Text, Tex, Intersection
+from manim import Line, Point, Polygon, RoundedRectangle, Circle
+from manim import line_intersection, DashedLine, Arc, Sector
+from manim import Text, Tex, Intersection, Square
 
 from manim import config
 from manim import ORIGIN, LEFT, RIGHT, DOWN, LIGHT, UP, PI, DEGREES
@@ -48,7 +49,7 @@ def get_vertices(obj: Polygon) -> list[Line]:
     return coords_vertices
 
 
-class Square(MovingCameraScene):
+class SquareCircle(MovingCameraScene):
     def construct(self):
         self.camera.background_color = WHITE
         self.camera.frame.save_state()
@@ -82,6 +83,35 @@ class Square(MovingCameraScene):
             Uncreate(txt)
         )
 
+        # Draw semicircle
+        semicircle = Sector(
+            radius=0.5, start_angle=0, angle=PI, 
+            color=RED, fill_opacity=0.5
+        ).move_to([-1, 3, 0])
+        self.play(Create(semicircle))
+
+        side = (2 * 0.5) / np.sqrt(5) 
+        square = Square(
+            side_length=side, color=BLUE, fill_opacity=1,
+            stroke_width=0,
+        ).\
+            move_to(semicircle.get_center() - [0, 0.0325, 0])
+        self.play(Create(square))
+
+        # Draw circle
+        circle = Circle(
+            radius=0.5, color=RED, fill_opacity=0.5,
+            stroke_width=0,
+        ).move_to([1, 3, 0])
+        self.play(Create(circle))
+
+        # Draw inside square
+        square_circle = Square(
+            side_length=0.5* 2**0.5, fill_color=BLUE,
+            stroke_width=0, fill_opacity=1
+        ).\
+            move_to(circle.get_center())
+        self.play(Create(square_circle))
 
         # Finish
         self.wait(2)
