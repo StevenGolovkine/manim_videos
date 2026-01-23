@@ -10,7 +10,7 @@ from manim import Create, Uncreate, Write, Transform, TransformFromCopy
 from manim import VGroup, FadeIn, FadeOut , FunctionGraph, Rotate
 from manim import Line, Point, Polygon, RoundedRectangle, Circle
 from manim import line_intersection, DashedLine, Arc, Sector
-from manim import Text, Tex, Intersection, Square
+from manim import Text, Tex, Intersection, Square, Rectangle
 
 from manim import config
 from manim import ORIGIN, LEFT, RIGHT, DOWN, LIGHT, UP, PI, DEGREES
@@ -98,6 +98,15 @@ class SquareCircle(MovingCameraScene):
             move_to(semicircle.get_center() - [0, 0.0325, 0])
         self.play(Create(square))
 
+        # Write equality
+        eq = Tex(r"$=$", font_size=36, color=BLACK).\
+            next_to(semicircle, RIGHT, buff=0.1)
+        self.play(Write(eq))
+
+        eq2 = Tex(r"$\frac{2}{5} \times $", font_size=36, color=BLACK).\
+            next_to(eq, RIGHT, buff=0.1)
+        self.play(Write(eq2))
+
         # Draw circle
         circle = Circle(
             radius=0.5, color=RED, fill_opacity=0.5,
@@ -112,6 +121,56 @@ class SquareCircle(MovingCameraScene):
         ).\
             move_to(circle.get_center())
         self.play(Create(square_circle))
+
+
+        # Create a big square consisting of 6 by 6 small squares
+        squares = VGroup()
+        for i in range(36):
+            square = Rectangle(
+                height=0.5, width=0.5,
+                fill_color=WHITE, fill_opacity=0.2,
+                stroke_color=BLACK, stroke_width=1
+            )
+            squares.add(square)
+        squares.arrange_in_grid(rows=6, cols=6, buff=0)
+        squares.move_to([0, 0, 0])
+        self.play(Create(squares, run_time=2))
+
+        # Square in big sqaure
+        square_big = Square(
+            side_length=1, fill_color=BLUE,
+            stroke_width=0, fill_opacity=1
+        ).\
+            move_to(squares.get_center() + [0, 0.5, 0])
+        self.play(Create(square_big))
+
+        # Draw diameter line
+        line_diameter = Line(
+            squares.get_left(),
+            squares.get_right(),
+            stroke_color=RED, stroke_width=4
+        )
+        self.play(Create(line_diameter))
+
+        # Draw circle
+        rad = 1 * np.sqrt(5) / 2
+        circle2 = Circle(
+            radius=rad,
+            color=RED, fill_opacity=0.5,
+            stroke_width=0,
+        ).move_to(squares.get_center())
+        self.play(Create(circle2))
+
+        # Draw other square
+        squares2 = Polygon(
+            squares[7].get_corner(UP + RIGHT),
+            squares[16].get_corner(UP + RIGHT),
+            squares[28].get_corner(DOWN + LEFT),
+            squares[19].get_corner(DOWN + LEFT),
+            fill_color=BLUE, fill_opacity=0.5,
+            stroke_width=0
+        )
+        self.play(Create(squares2))
 
         # Finish
         self.wait(2)
