@@ -269,6 +269,16 @@ class Sums(MovingCameraScene):
             Write(txts[4])
         )
 
+        txt = Tex(
+            r"$\sum k^3$",
+            font_size=24,
+            color=BLUE
+        ).move_to(VGroup(*txts).get_center())
+        self.play(
+            Transform(VGroup(*txts), txt)
+        )
+
+
         # Write equation
         rect = RoundedRectangle(
             height=1, width=4,
@@ -286,14 +296,6 @@ class Sums(MovingCameraScene):
             Write(txt)
         )
 
-        txt = Tex(
-            r"$\sum k^3$",
-            font_size=24,
-            color=BLUE
-        ).move_to(VGroup(*txts).get_center())
-        self.play(
-            Transform(VGroup(*txts), txt)
-        )
 
         # Finish
         self.wait(2)
