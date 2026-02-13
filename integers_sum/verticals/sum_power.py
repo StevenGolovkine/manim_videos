@@ -308,6 +308,16 @@ class Sums(MovingCameraScene):
             Write(txt_inside_dots)
         )
 
+        # Write results
+        results = [
+            Tex(r"$\sum_{k = 1}^\infty k \times r^{k - 1} = \frac{1}{(1 - r)^2}$",
+            font_size=20, color=BLACK),
+        ]
+        results = VGroup(*results).arrange(DOWN).move_to([0, 2, 0])
+        self.play(
+            Write(results),
+            run_time=1
+        )
 
         # Finish
         self.wait(2)
