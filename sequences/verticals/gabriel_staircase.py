@@ -5,7 +5,7 @@ Proofs without Words I. Roger B. Nelsen. p. 123.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Dot, RoundedRectangle, Polygon, RightAngle, Line, Arc
+from manim import DashedLine, Line, Arrow 
 from manim import Create, Uncreate, Write
 from manim import VGroup, Transform, FadeIn, FadeOut, FunctionGraph, BraceBetweenPoints
 from manim import Text, Tex
@@ -78,6 +78,106 @@ class Proof(MovingCameraScene):
         self.wait(0.5)
 
 
+        # Staircase
+        baseline = Line([-1.75, -1, 0], [1.75, -1, 0], color=BLACK, stroke_width=2)
+        right_arrow = Arrow(
+            start=[1.75, -1, 0], end=[1.75, 3, 0], buff=0,
+            color=BLACK, stroke_width=2, max_tip_length_to_length_ratio=0.05
+        )
+
+        self.play(
+            Create(baseline),
+            Create(right_arrow)
+        )
+
+        # Create the staircase
+        line_1 = Line([-1.75, -1, 0], [-1.75, 0, 0], color=BLACK, stroke_width=2)
+        txt_1 = Tex(r"$1$", font_size=24, color=BLACK).next_to(line_1.get_center(), LEFT, buff=0.05)
+        self.play(
+            Create(line_1),
+            Write(txt_1)
+        )
+
+        line_2 = Line([-1.75, 0, 0], [-0.65, 0, 0], color=BLACK, stroke_width=2)
+        txt_2 = Tex(r"$r$", font_size=24, color=BLACK).next_to(line_2.get_center(), UP, buff=0.05)
+        self.play(
+            Create(line_2),
+            Write(txt_2)
+        )
+
+        line_3 = Line([-0.65, 0, 0], [-0.65, 1, 0], color=BLACK, stroke_width=2)
+        txt_3 = Tex(r"$1$", font_size=24, color=BLACK).next_to(line_3.get_center(), LEFT, buff=0.05)
+        self.play(
+            Create(line_3),
+            Write(txt_3)
+        )
+
+        line_4 = Line([-0.65, 1, 0], [0.1, 1, 0], color=BLACK, stroke_width=2)
+        txt_4 = Tex(r"$r^2$", font_size=24, color=BLACK).next_to(line_4.get_center(), UP, buff=0.05)
+        self.play(
+            Create(line_4),
+            Write(txt_4)
+        )
+
+        line_5 = Line([0.1, 1, 0], [0.1, 2, 0], color=BLACK, stroke_width=2)
+        txt_5 = Tex(r"$1$", font_size=24, color=BLACK).next_to(line_5.get_center(), LEFT, buff=0.05)
+        self.play(
+            Create(line_5),
+            Write(txt_5)
+        )
+
+        line_6 = Line([0.1, 2, 0], [0.7, 2, 0], color=BLACK, stroke_width=2)
+        txt_6 = Tex(r"$r^3$", font_size=24, color=BLACK).next_to(line_6.get_center(), UP, buff=0.05)
+        self.play(
+            Create(line_6),
+            Write(txt_6)
+        )
+
+        arrow = Arrow(
+            start=[0.7, 2, 0], end=[0.7, 3, 0], buff=0,
+            color=BLACK, stroke_width=2, max_tip_length_to_length_ratio=0.1
+        )
+        self.play(Create(arrow))
+
+        # Dashed lines
+        dashed_line_1 = DashedLine([-0.65, -1, 0], [-0.65, 0, 0], color=BLACK, stroke_width=2)
+        dashed_line_2 = DashedLine([0.1, -1, 0], [0.1, 1, 0], color=BLACK, stroke_width=2)
+        dashed_line_3 = DashedLine([0.7, -1, 0], [0.7, 2, 0], color=BLACK, stroke_width=2)
+        txt_dots = Tex(r"$\cdots$", font_size=24, color=BLACK).move_to([1.25, 1, 0])
+
+        txt_sum = Tex(r"$\sum_{k=1}^{\infty} kr^k$", font_size=28, color=BLACK).move_to([-1, -2, 0])
+        self.play(
+            Create(dashed_line_1),
+            Create(dashed_line_2),
+            Create(dashed_line_3),
+            Write(txt_dots),
+            Write(txt_sum)
+        )
+        self.wait(1)
+        self.play(
+            Uncreate(dashed_line_1),
+            Uncreate(dashed_line_2),
+            Uncreate(dashed_line_3),
+            Uncreate(txt_dots),
+        )
+
+
+        dashed_line_4 = DashedLine([-0.65, 0, 0], [1.75, 0, 0], color=BLACK, stroke_width=2)
+        dashed_line_5 = DashedLine([0.1, 1, 0], [1.75, 1, 0], color=BLACK, stroke_width=2)
+        dashed_line_6 = DashedLine([0.7, 2, 0], [1.75, 2, 0], color=BLACK, stroke_width=2)
+        txt_dots_2 = Tex(r"$\vdots$", font_size=24, color=BLACK).move_to([1.25, 2.5, 0])
+
+        txt_sum_2 = Tex(r"$ = \sum_{k = 1}^{\infty} \sum_{i=k}^{\infty} r^i$", font_size=28, color=BLACK).next_to(txt_sum, RIGHT, buff=0.1)
+        self.play(
+            Create(dashed_line_4),
+            Create(dashed_line_5),
+            Create(dashed_line_6),
+            Write(txt_dots_2),
+            Write(txt_sum_2)
+        )
+        self.wait(1)
+        txt_sum_3 = Tex(r"$= \frac{r}{(1-r)^2}$", font_size=28, color=BLACK).next_to(txt_sum, RIGHT, buff=0.1)
+        self.play(Transform(txt_sum_2, txt_sum_3))
 
 
         self.wait(2)
