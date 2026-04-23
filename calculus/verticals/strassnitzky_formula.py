@@ -75,11 +75,11 @@ class Formula(MovingCameraScene):
         # Create 7 by 5 squares
         squares = VGroup()
         squares.add(Square(side_length=0.4, color=BLACK, stroke_width=1))
-        for idx in range(6):
+        for idx in range(9):
             new_square = Square(side_length=0.4, color=BLACK, stroke_width=1).\
                 next_to(squares[idx], direction=RIGHT, buff=0)
             squares.add(new_square)
-        for idx in range(28):
+        for idx in range(70):
             new_square = Square(side_length=0.4, color=BLACK, stroke_width=1).\
                 next_to(squares[idx], direction=DOWN, buff=0)
             squares.add(new_square)
@@ -90,14 +90,20 @@ class Formula(MovingCameraScene):
 
         # First triangle
         triangle_1 = Polygon(
-            squares[28].get_boundary_point(DOWN),
-            squares[27].get_boundary_point(RIGHT + DOWN),
-            squares[34].get_boundary_point(RIGHT + DOWN),
+            squares[70].get_boundary_point(DOWN),
+            squares[69].get_boundary_point(RIGHT + UP),
+            squares[79].get_boundary_point(RIGHT + DOWN),
             color=RED, fill_color=RED, fill_opacity=0.5, stroke_width=1
         )
         right_angle_1 = RightAngle(
-            Line(squares[34].get_boundary_point(RIGHT + DOWN), squares[28].get_boundary_point(DOWN)),
-            Line(squares[34].get_boundary_point(RIGHT + DOWN), squares[27].get_boundary_point(RIGHT + DOWN)),
+            Line(
+                squares[79].get_boundary_point(RIGHT + DOWN),
+                squares[69].get_boundary_point(RIGHT + UP)
+            ),
+            Line(
+                squares[79].get_boundary_point(RIGHT + DOWN),
+                squares[70].get_boundary_point(DOWN)
+            ),
             length=0.2, color=BLACK, stroke_width=1
         )
         self.play(
@@ -107,14 +113,20 @@ class Formula(MovingCameraScene):
 
         # Second triangle
         triangle_2 = Polygon(
-            squares[28].get_boundary_point(DOWN),
-            squares[20].get_boundary_point(LEFT),
-            squares[27].get_boundary_point(RIGHT + DOWN),
+            squares[70].get_boundary_point(DOWN),
+            squares[19].get_boundary_point(LEFT),
+            squares[69].get_boundary_point(RIGHT + UP),
             color=BLUE, fill_color=BLUE, fill_opacity=0.5, stroke_width=1
         )
         right_angle_2 = RightAngle(
-            Line(squares[20].get_boundary_point(LEFT), squares[28].get_boundary_point(DOWN)),
-            Line(squares[20].get_boundary_point(LEFT), squares[27].get_boundary_point(RIGHT + DOWN)),
+            Line(
+                squares[69].get_boundary_point(RIGHT + UP),
+                squares[70].get_boundary_point(LEFT)
+            ),
+            Line(
+                squares[69].get_boundary_point(RIGHT + UP),
+                squares[19].get_boundary_point(LEFT)
+            ),
             length=0.2, color=BLACK, stroke_width=1
         )
         self.play(
@@ -124,14 +136,20 @@ class Formula(MovingCameraScene):
 
         # Third triangle
         triangle_3 = Polygon(
-            squares[28].get_boundary_point(DOWN),
-            squares[5].get_boundary_point(LEFT),
-            squares[20].get_boundary_point(LEFT),
+            squares[70].get_boundary_point(DOWN),
+            squares[8].get_boundary_point(LEFT),
+            squares[19].get_boundary_point(LEFT),
             color=RED, fill_color=RED, fill_opacity=0.5, stroke_width=1
         )
         right_angle_3 = RightAngle(
-            Line(squares[20].get_boundary_point(LEFT), squares[5].get_boundary_point(LEFT)),
-            Line(squares[20].get_boundary_point(LEFT), squares[28].get_boundary_point(DOWN)),
+            Line(
+                squares[8].get_boundary_point(LEFT),
+                squares[70].get_boundary_point(LEFT)
+            ),
+            Line(
+                squares[8].get_boundary_point(LEFT),
+                squares[19].get_boundary_point(LEFT)
+            ),
             length=0.2, color=BLACK, stroke_width=1
         )
         self.play(
@@ -141,14 +159,20 @@ class Formula(MovingCameraScene):
 
         # Fourth triangle
         triangle_4 = Polygon(
-            squares[28].get_boundary_point(DOWN),
-            squares[5].get_boundary_point(LEFT),
-            squares[33].get_boundary_point(DOWN + LEFT),
+            squares[70].get_boundary_point(DOWN),
+            squares[8].get_boundary_point(LEFT),
+            squares[78].get_boundary_point(DOWN + LEFT),
             color=BLACK, fill_color=BLACK, fill_opacity=0.5, stroke_width=1
         )
         right_angle_4 = RightAngle(
-            Line(squares[33].get_boundary_point(DOWN + LEFT), squares[5].get_boundary_point(LEFT)),
-            Line(squares[33].get_boundary_point(DOWN + LEFT), squares[28].get_boundary_point(DOWN)),
+            Line(
+                squares[78].get_boundary_point(DOWN + LEFT),
+                squares[8].get_boundary_point(LEFT)
+            ),
+            Line(
+                squares[78].get_boundary_point(DOWN + LEFT),
+                squares[70].get_boundary_point(DOWN)
+            ),
             length=0.2, color=BLACK, stroke_width=1
         )
         self.play(
@@ -158,8 +182,14 @@ class Formula(MovingCameraScene):
 
         # Last angle
         angle = Angle(
-            Line(squares[28].get_boundary_point(DOWN), squares[33].get_boundary_point(LEFT + DOWN)),
-            Line(squares[28].get_boundary_point(DOWN), squares[5].get_boundary_point(LEFT)),
+            Line(
+                squares[70].get_boundary_point(DOWN),
+                squares[78].get_boundary_point(LEFT + DOWN)
+            ),
+            Line(
+                squares[70].get_boundary_point(DOWN),
+                squares[8].get_boundary_point(LEFT)
+            ),
             radius=0.3, color=WHITE, stroke_width=4
         )
         txt_pi4 = Tex(r"$\pi / 4$", font_size=24, color=WHITE).next_to(angle, RIGHT, buff=0.1)
