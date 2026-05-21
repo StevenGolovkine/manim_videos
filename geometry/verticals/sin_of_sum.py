@@ -1,6 +1,6 @@
 """
 Visual proof of the sine of the sum formula
-Proofs without Words III. Roger B. Nelsen. p. 39.
+Proofs without Words II. Roger B. Nelsen. p. 39.
 """
 import numpy as np
 
