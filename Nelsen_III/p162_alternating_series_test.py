@@ -1,6 +1,6 @@
 """
 Visual proof of the alternating series test.
-Proofs without Words I. Roger B. Nelsen. p. 135.
+Proofs without Words III. Roger B. Nelsen. p. 162.
 """
 import numpy as np
 

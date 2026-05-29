@@ -1,6 +1,6 @@
 """
 Visual proof of a Euler's Arctangent Identity.
-Proofs without Words III. Roger B. Nelsen. p. 77.
+Proofs without Words III. Roger B. Nelsen. p. 74.
 """
 import numpy as np
 

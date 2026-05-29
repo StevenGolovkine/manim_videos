@@ -1,6 +1,6 @@
 """
 Visual proof of the Pythagorean-like theorem II.
-Proofs without Words II. Roger B. Nelsen. p. 11.
+Proofs without Words III. Roger B. Nelsen. p. 11.
 """
 import numpy as np
 

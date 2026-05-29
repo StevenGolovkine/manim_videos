@@ -1,6 +1,6 @@
 """
-Visual proof of The Midpoint Rule is better than the trapezoidal rule for concave f.
-Proofs without Words I. Roger B. Nelsen. p. 41.
+Visual proof of the integration by parts formula.
+Proofs without Words I. Roger B. Nelsen. p. 42.
 """
 import numpy as np
 

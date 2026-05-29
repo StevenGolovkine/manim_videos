@@ -1,7 +1,7 @@
 """
 Visual proof of The square of any odd number is the difference of two consecutive
 triangular numbers.
-Proofs without Words II. Roger B. Nelsen. p. 96.
+Proofs without Words II. Roger B. Nelsen. p. 95.
 """
 import numpy as np
 

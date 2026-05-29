@@ -1,6 +1,6 @@
 """
 Visual proof of an arithmetic-geometric-harmonic mean inequality.
-Proofs without Words III. Roger B. Nelsen. p. 103.
+Proofs without Words II. Roger B. Nelsen. p. 75.
 """
 import numpy as np
 

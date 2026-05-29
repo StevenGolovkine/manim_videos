@@ -1,6 +1,6 @@
 """
-Visual proof of the Pythagorean-like theorem III.
-Proofs without Words II. Roger B. Nelsen. p. 12.
+Visual proof of the Pythagorean-like theorem.
+Proofs without Words III. Roger B. Nelsen. p. 10.
 """
 import numpy as np
 
@@ -79,8 +79,8 @@ class Pythagorean(MovingCameraScene):
         txt_title = VGroup(*txt_title).arrange(DOWN).move_to([0, 2, 0])
 
         txt = [
-            Tex(r"Démonstration III", font_size=36, color=BLACK),
-            Tex(r"Claudi Alsina", font_size=28, color=BLACK),
+            Tex(r"Démonstration", font_size=36, color=BLACK),
+            Tex(r"Manuel Moran Cabre", font_size=28, color=BLACK),
         ]
         txt = VGroup(*txt).arrange(DOWN)
 
@@ -99,13 +99,13 @@ class Pythagorean(MovingCameraScene):
         # Create a triangle with one angle equal pi/3.
         A = [-1, 0, 0]
         B = [1, 0, 0]
-        C = [0.19, 0.68, 0]
+        C = [-0.48, 0.91, 0]
         triangle = Polygon(A, B, C, color=BLACK, fill_color=BLUE, fill_opacity=1, stroke_width=2)
         txt_triangle = Tex(r"$T$", font_size=24, color=BLACK).\
             move_to(triangle.get_center_of_mass())
         angle = Angle(Line(A, B), Line(A, C), radius=0.3, color=BLACK, other_angle=False)
-        txt_angle = Tex(r"$\pi/6$", font_size=18, color=BLACK).\
-            next_to(angle, RIGHT, buff=0.05)
+        txt_angle = Tex(r"$\pi/3$", font_size=18, color=BLACK).\
+            next_to(angle, RIGHT, buff=0.1)
         self.play(
             Create(triangle),
             Write(txt_triangle),
@@ -114,8 +114,8 @@ class Pythagorean(MovingCameraScene):
         )
 
         # Create equilateral triangles on each side of the triangle.
-        D = [-1, 1.36, 0]
-        E = [1.18, 1.04, 0]
+        D = [-1.53, 0.91, 0]
+        E = [1.05, 1.74, 0]
         F = [0, -1.73, 0]
 
         triangle_ACD = Polygon(A, C, D, color=BLACK, fill_color=RED, fill_opacity=1, stroke_width=2)
@@ -150,8 +150,8 @@ class Pythagorean(MovingCameraScene):
 
         # Write formula
         formula = Tex(
-            r"$T_\beta + 3T = T_\alpha + T_\gamma$", font_size=30, color=BLACK
-        ).move_to([0, 3, 0])
+            r"$T + T_\beta = T_\alpha + T_\gamma$", font_size=30, color=BLACK
+        ).move_to([0, 2, 0])
         self.play(Write(formula))
 
         # Move everything to the top
@@ -162,112 +162,106 @@ class Pythagorean(MovingCameraScene):
 
         # Copy main triangle and move it to BCE
         triangle_copy_1 = triangle.copy()
-        triangle_ACD_copy = triangle_ACD.copy()
-        triangle_ABF_copy = triangle_ABF.copy()
-        txt_ACD_copy = txt_ACD.copy()
-        txt_ABF_copy = txt_ABF.copy()
-
-        triangles_copy = VGroup(triangle_copy_1, triangle_ACD_copy, triangle_ABF_copy)
+        triangle_copy_2 = triangle.copy()
+        triangle_copy_3 = triangle.copy()
+        triangle_BCE_copy = triangle_BCE.copy()
+        txt_BCE_copy = txt_BCE.copy()
 
         self.play(
-            triangles_copy.animate.move_to([0, -1.5, 0]),
-            run_time=1
+            triangle_BCE_copy.animate.move_to([0, -2, 0]),
+            run_time=0.5
+        )
+
+        txt_BCE_copy.move_to(triangle_BCE_copy.get_center_of_mass())
+        self.play(
+            triangle_BCE_copy.animate.rotate(31 * DEGREES),
+            Write(txt_BCE_copy),
+            run_time=0.5
+        )
+
+        self.play(
+            triangle_copy_1.animate.rotate(31 * DEGREES),
+            run_time=0.5
+        )
+        self.play(
+            triangle_copy_1.animate.next_to(triangle_BCE_copy, DOWN, buff=0),
+            run_time=0.5
+        )
+
+        self.play(
+            triangle_copy_2.animate.rotate(-89 * DEGREES),
+            run_time=0.5
+        )
+        self.play(
+            triangle_copy_2.animate.move_to(triangle_BCE_copy.get_center_of_mass() + [-0.45, 0.5, 0]),
+            run_time=0.5
+        )
+
+        self.play(
+            triangle_copy_3.animate.rotate(149 * DEGREES),
+            run_time=0.5
+        )
+        self.play(
+            triangle_copy_3.animate.move_to(triangle_BCE_copy.get_center_of_mass() + [0.88, 0.22, 0]),
+            run_time=0.5
         )
 
         txt_triangle_copy_1 = txt_triangle.copy().move_to(triangle_copy_1.get_center_of_mass())
+        txt_triangle_copy_2 = txt_triangle.copy().move_to(triangle_copy_2.get_center_of_mass())
+        txt_triangle_copy_3 = txt_triangle.copy().move_to(triangle_copy_3.get_center_of_mass())
         self.play(
             Write(txt_triangle_copy_1),
+            Write(txt_triangle_copy_2),
+            Write(txt_triangle_copy_3),
             run_time=0.5
         )
 
+        # Finish the proof by showing that the 4 triangles are exactly the same, so the formula is true.
+        triangle_ABF_copy = triangle_ABF.copy().set_opacity(0.5)
+        triangle_ACD_copy = triangle_ACD.copy().set_opacity(0.5)
+        triangle_copy_4 = triangle.copy().set_opacity(0.5)
 
-        txt_ACD_copy.move_to(triangle_ACD_copy.get_center_of_mass())
         self.play(
-            Write(txt_ACD_copy),
+            triangle_ABF_copy.animate.rotate(-(60 - 30.5) * DEGREES),
             run_time=0.5
         )
-
-        txt_ABF_copy.move_to(triangle_ABF_copy.get_center_of_mass())
+        self.play(
+            triangle_ABF_copy.animate.move_to(triangle_BCE_copy.get_center_of_mass() + [0.9, -0.04, 0]),
+            run_time=0.5
+        )
+        txt_ABF_copy = txt_ABF.copy().move_to(triangle_ABF_copy.get_center_of_mass())
         self.play(
             Write(txt_ABF_copy),
             run_time=0.5
         )
 
-        # Finish the proof by showing that the 4 triangles are exactly the same, so the formula is true.
-        triangle_BCE_copy = triangle_BCE.copy().set_opacity(0.5)
-        triangle_copy_2 = triangle_copy_1.copy().set_opacity(0.5)
-        triangle_copy_3 = triangle.copy().set_opacity(0.5)
-        triangle_copy_4 = triangle.copy().set_opacity(0.5)
-        triangle_copy_5 = triangle.copy().set_opacity(0.5)
-        
         self.play(
-            triangle_BCE_copy.animate.rotate(-60 * DEGREES).move_to(triangle_copy_1.get_center_of_mass() + [0.4, -0.05, 0]),
-            run_time=1
+            triangle_ACD_copy.animate.rotate(91 * DEGREES),
+            run_time=0.5
         )
-
-        txt_BCE_copy = txt_BCE.copy().move_to(triangle_BCE_copy.get_center_of_mass())
         self.play(
-            Write(txt_BCE_copy),
-            run_time=1
+            triangle_ACD_copy.animate.move_to(triangle_BCE_copy.get_center_of_mass() + [-0.4, -1.05, 0]),
+            run_time=0.5
         )
-
+        txt_ACD_copy = txt_ACD.copy().move_to(triangle_ACD_copy.get_center_of_mass())
         self.play(
-            triangle_copy_2.animate.rotate(-60 * DEGREES).move_to(triangle_copy_1.get_center_of_mass() + [-0.49, 0.26, 0]),
-            run_time=1
-        )
-        txt_triangle_copy_2 = txt_triangle_copy_1.copy().move_to(triangle_copy_2.get_center_of_mass())
-        self.play(
-            Write(txt_triangle_copy_2),
+            Write(txt_ACD_copy),
             run_time=0.5
         )
 
-        triangle_copy_3 = triangle_copy_1.copy().set_opacity(0.5)
-        
         self.play(
-            triangle_copy_3.animate.flip(UP).rotate(120 * DEGREES).move_to(triangle_copy_2.get_center_of_mass() + [-0.23, -0.05, 0]),
-            run_time=1
-        )
-
-        txt_triangle_copy_3 = txt_triangle_copy_2.copy().move_to(triangle_copy_3.get_center_of_mass())
-        self.play(
-            Write(txt_triangle_copy_3),
+            triangle_copy_4.animate.rotate(91 * DEGREES),
             run_time=0.5
         )
-
-        triangle_copy_4 = triangle_copy_1.copy().set_opacity(0.5)
-        
         self.play(
-            triangle_copy_4.animate.rotate(60 * DEGREES).move_to(triangle_copy_1.get_center_of_mass() + [0.45, -1.05, 0]),
-            run_time=1
+            triangle_copy_4.animate.move_to(triangle_BCE_copy.get_center_of_mass() + [-0.42, 0, 0]),
+            run_time=0.5
         )
-
-        txt_triangle_copy_4 = txt_triangle_copy_2.copy().move_to(triangle_copy_4.get_center_of_mass())
+        txt_triangle_copy_4 = txt_triangle.copy().move_to(triangle_copy_4.get_center_of_mass())
         self.play(
             Write(txt_triangle_copy_4),
             run_time=0.5
         )
-
-        triangle_copy_5 = triangle_copy_3.copy().set_opacity(0.5)
-        self.play(
-            triangle_copy_5.animate.rotate(180 * DEGREES).move_to(triangle_copy_1.get_center_of_mass() + [-0.54, -1.1, 0]),
-            run_time=1
-        )
-        txt_triangle_copy_5 = txt_triangle_copy_4.copy().move_to(triangle_copy_5.get_center_of_mass())
-        self.play(
-            Write(txt_triangle_copy_5),
-            run_time=0.5
-        )
-        
-
-        # self.play(
-        #     triangle_ACD_copy.animate.rotate(-60 * DEGREES).next_to(triangle_ABF_copy, UP, buff=0),
-        #     run_time=1
-        # )
-        # txt_ACD_copy = txt_ACD.copy().move_to(triangle_ACD_copy.get_center_of_mass())
-        # self.play(
-        #     Write(txt_ACD_copy),
-        #     run_time=0.5
-        # )
 
 
         self.wait(2)
@@ -276,8 +270,8 @@ class Pythagorean(MovingCameraScene):
         # Logo
         ref = [
             Tex(r"College Mathematics Journal,", font_size=30, color=BLACK),
-            Tex(r"vol. 41, no. 5,", font_size=30, color=BLACK),
-            Tex(r"(Nov. 2010), p. 370.", font_size=30, color=BLACK)
+            Tex(r"vol. 34, no. 2,", font_size=30, color=BLACK),
+            Tex(r"(March 2003), p. 172.", font_size=30, color=BLACK)
         ]
         ref = VGroup(*ref)\
             .arrange(DOWN, aligned_edge=LEFT, center=False, buff=0.1)\
