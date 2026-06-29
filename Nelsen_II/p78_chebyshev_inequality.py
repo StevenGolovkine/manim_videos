@@ -121,7 +121,7 @@ class Chebyshev(MovingCameraScene):
             font_size=34,
             color=BLACK
         ).move_to([0, 3.15, 0])
-        top_formula.scale_to_fit_width(config.frame_width - 0.45)
+        top_formula.scale_to_fit_width(config.frame_width - 0.55)
 
         outer_box = rectangle_from_bounds(
             0, 10, 0, 7,
@@ -157,6 +157,12 @@ class Chebyshev(MovingCameraScene):
             stroke_width=1.35,
             stroke_color="#666666"
         )
+        source_left_cut = DashedLine(
+            p(1.35, 4.25), p(3.0, 4.25),
+            color=BLACK,
+            stroke_width=1.35,
+            dash_length=0.07
+        ).set_opacity(0.55)
         source_right = rectangle_from_bounds(
             5.1, 7.3, 1.05, 2.05,
             fill_color=GREY,
@@ -207,37 +213,44 @@ class Chebyshev(MovingCameraScene):
         )
 
         bottom_formula_1 = Tex(
-            r"$x_i < x_j \ \&\ y_i < y_j"
-            r"\Rightarrow x_i y_j + x_j y_i \leq x_i y_i + x_j y_j$",
-            font_size=23,
+            r"$x_i < x_j \ \&\ y_i < y_j$",
+            font_size=24,
             color=BLACK
-        ).move_to([0, -2.75, 0])
-        bottom_formula_1.scale_to_fit_width(config.frame_width - 0.35)
+        ).move_to([0, -2, 0])
 
         bottom_formula_2 = Tex(
-            r"$\therefore (x_1+x_2+\cdots+x_n)(y_1+y_2+\cdots+y_n)"
-            r"\leq n(x_1y_1+x_2y_2+\cdots+x_ny_n)$",
-            font_size=23,
+            r"$\Rightarrow x_i y_j + x_j y_i \leq x_i y_i + x_j y_j$",
+            font_size=24,
             color=BLACK
-        ).move_to([0, -3.25, 0])
-        bottom_formula_2.scale_to_fit_width(config.frame_width - 0.25)
+        ).move_to([0, -2.5, 0])
 
         self.play(Write(top_formula))
+        self.wait(0.5)
+        self.play(Create(outer_box))
         self.play(
-            Create(outer_box),
             Create(grid),
             Write(x_labels),
             Write(y_labels),
             run_time=2
         )
-        self.play(FadeIn(source_left), FadeIn(source_right))
+        self.play(
+            FadeIn(source_left),
+            Create(source_left_cut),
+            FadeIn(source_right)
+        )
         self.play(
             FadeIn(lower_left),
-            FadeIn(lower_right),
-            FadeIn(upper_right),
-            Create(arrows),
-            run_time=2
+            Create(arrows[1]),
         )
+        self.play(
+            FadeIn(upper_right),
+            Create(arrows[0]),
+        )
+        self.play(
+            FadeIn(lower_right),
+            Create(arrows[2]),
+        )
+
         self.play(Write(bottom_formula_1), Write(bottom_formula_2))
 
         # Finish
