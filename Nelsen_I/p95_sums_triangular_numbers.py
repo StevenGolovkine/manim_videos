@@ -138,6 +138,14 @@ class Sums(ThreeDScene):
                 cursor += k + 1
             return group
 
+        def layered_triangular_stack(n, side):
+            coords = []
+            for y in range(n):
+                for x in range(y + 1):
+                    for z in range(x + 1):
+                        coords.append((x, y, z))
+            return block_from_coords(coords, side)
+
         def cuboid(nx, ny, nz, side):
             coords = [
                 (x, y, z)
@@ -164,11 +172,13 @@ class Sums(ThreeDScene):
             z_rotation=0,
             y_rotation=0
         )
-        first_stack = separated.copy()
-        for layer in first_stack:
-            layer.set_x(0)
-        first_stack.scale(0.78 / 0.75, about_point=first_stack.get_center())
-        first_stack.move_to(np.array([1.05, 0.15, 1.15]))
+        first_stack = orient(
+            layered_triangular_stack(5, side),
+            np.array([1.05, 0.15, 1.15]),
+            scale=0.78,
+            z_rotation=-PI / 2,
+            y_rotation=0
+        )
 
         middle_side = 0.125
         middle_pieces = VGroup(
@@ -244,9 +254,9 @@ class Sums(ThreeDScene):
         )
         #self.add_fixed_in_frame_mobjects(*fixed_annotations)
 
+        self.play(FadeIn(separated), run_time=1)
         self.play(
-            FadeIn(separated),
-            FadeIn(first_stack),
+            Transform(separated, first_stack),
             # Create(rearrange_arrow),
             # Create(top_height_arrow),
             # Write(top_height_label),
