@@ -282,7 +282,8 @@ class Sums(ThreeDScene):
             cuboid_slab(7, y_index, 5, 0.135)
             for y_index in range(6)
         ])
-        combined_no_split.move_to(np.array([0, 0, -1.15]))
+        combined_no_split.move_to(np.array([0, 0, -1.15])).\
+            scale(1.5, about_point=combined_no_split.get_center())
 
         self.play(
             Transform(split, no_split), run_time=1
