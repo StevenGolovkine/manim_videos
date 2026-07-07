@@ -8,7 +8,7 @@ from manim import ThreeDScene
 from manim import Create, Uncreate, Write
 from manim import VGroup, FadeIn, FadeOut, FunctionGraph, Transform
 from manim import MathTable, Brace, RoundedRectangle
-from manim import Arrow, Cube, DoubleArrow, Line, Text, Tex
+from manim import Arrow, Cube, Line, Text, Tex
 
 from manim import config
 from manim import DEGREES, LEFT, RIGHT, DOWN, LIGHT, UP, PI
@@ -84,44 +84,6 @@ class Sums(ThreeDScene):
             zoom=1.06
         )
 
-        axis_origin = np.array([-1.80, 3.30, 0])
-        axis_x_end = axis_origin + np.array([0.42, -0.12, 0])
-        axis_y_end = axis_origin + np.array([-0.34, 0.20, 0])
-        axis_z_end = axis_origin + np.array([0.00, 0.46, 0])
-        axis_guide = VGroup(
-            Arrow(
-                axis_origin, axis_x_end,
-                buff=0,
-                color=BLACK,
-                stroke_width=2,
-                max_tip_length_to_length_ratio=0.22
-            ),
-            Arrow(
-                axis_origin, axis_y_end,
-                buff=0,
-                color=BLACK,
-                stroke_width=2,
-                max_tip_length_to_length_ratio=0.22
-            ),
-            Arrow(
-                axis_origin, axis_z_end,
-                buff=0,
-                color=BLACK,
-                stroke_width=2,
-                max_tip_length_to_length_ratio=0.22
-            ),
-            Tex(r"$x$", font_size=16, color=BLACK).next_to(
-                axis_x_end, RIGHT, buff=0.02
-            ),
-            Tex(r"$y$", font_size=16, color=BLACK).next_to(
-                axis_y_end, LEFT, buff=0.02
-            ),
-            Tex(r"$z$", font_size=16, color=BLACK).next_to(
-                axis_z_end, UP, buff=0.02
-            ),
-        )
-        self.add(axis_guide)
-        self.add_fixed_in_frame_mobjects(axis_guide)
 
         def cube_at(x, y, z, side):
             cube = Cube(
@@ -187,29 +149,42 @@ class Sums(ThreeDScene):
         no_split_other = triangular_array_sequence(5, -0.18, 0).\
             move_to(np.array([0, 0, -3]))
         
-        arrow_x = no_split.get_critical_point(RIGHT)[0] + 0.28
+        def z_brace(x, y, z_bottom, z_top, label, font_size=24):
+            guide = Line([0, z_bottom, 0], [0, z_top, 0])
+            brace = Brace(
+                guide,
+                direction=RIGHT,
+                buff=0.04,
+                sharpness=1.5,
+                color=BLACK
+            )
+            brace.rotate(
+                PI / 2,
+                axis=np.array([1, 0, 0]),
+                about_point=np.array([0, 0, 0])
+            )
+            brace.move_to([x, y, (z_bottom + z_top) / 2])
+            text = Tex(label, font_size=font_size, color=BLACK)
+            text.rotate(PI / 2, axis=[1, 0, 0])
+            text.move_to([x + 0.3, y + 0.1, (z_bottom + z_top) / 2])
+            return brace, text
+
+        arrow_x = no_split.get_critical_point(RIGHT)[0]
         arrow_y = no_split.get_critical_point(
-            np.array([0, 1, 0]))[1] + 0.28
+            np.array([0, 1, 0]))[1]
         arrow_bottom_z = no_split.get_critical_point(
             np.array([0, 0, -1]))[2]
         arrow_top_z = no_split.get_critical_point(
             np.array([0, 0, 1]))[2]
-        no_split_arrow = DoubleArrow(
-            [arrow_x, arrow_y, arrow_bottom_z],
-            [arrow_x, arrow_y, arrow_top_z],
-            buff=0,
-            color=BLACK,
-            stroke_width=1.5,
-            max_tip_length_to_length_ratio=0.12
-        )
-        no_split_label = Tex(r"$n$", font_size=24, color=BLACK)
-        no_split_label.rotate(PI / 2, axis=[1, 0, 0])
-        no_split_label.move_to(
-            [
-                arrow_x + 0.16,
-                arrow_y,
-                (arrow_bottom_z + arrow_top_z) / 2
-            ]
+
+        final_height_x = arrow_x + 0.55
+        final_height_y = arrow_y + 0.08
+        no_split_brace, no_split_label = z_brace(
+            final_height_x,
+            final_height_y,
+            arrow_bottom_z,
+            arrow_top_z,
+            r"$n$"
         )
 
         def rotated_no_split_copy(
@@ -285,11 +260,74 @@ class Sums(ThreeDScene):
         combined_no_split.move_to(np.array([0, 0, -1.15])).\
             scale(1.5, about_point=combined_no_split.get_center())
 
+        block_left = combined_no_split.get_critical_point(LEFT)[0]
+        block_right = combined_no_split.get_critical_point(RIGHT)[0]
+        block_front = combined_no_split.get_critical_point(
+            np.array([0, 1, 0])
+        )[1]
+        block_back = combined_no_split.get_critical_point(
+            np.array([0, -1, 0])
+        )[1]
+        block_bottom = combined_no_split.get_critical_point(
+            np.array([0, 0, -1])
+        )[2]
+        block_top = combined_no_split.get_critical_point(
+            np.array([0, 0, 1])
+        )[2]
+
+        final_height_x = block_right + 0.55
+        final_height_y = block_front + 0.08
+        final_height_brace, final_height_label = z_brace(
+            final_height_x,
+            final_height_y,
+            block_bottom,
+            block_top,
+            r"$n$"
+        )
+
+        final_width_y = block_back - 0.24
+        final_width_z = block_bottom - 0.24
+        final_width_guide = Line(
+            [block_left, final_width_y, final_width_z],
+            [block_right, final_width_y, final_width_z],
+        )
+        final_width_brace = Brace(
+            final_width_guide,
+            direction=np.array([0, -1, 0]),
+            buff=0.04,
+            sharpness=1.5,
+            color=BLACK,
+        )
+        final_width_label = Tex(r"$n+2$", font_size=22, color=BLACK)
+        final_width_label.rotate(-0.15).move_to([-0.9, -2.4, -0.5])
+
+        final_depth_x = block_right + 0.20
+        final_depth_z = block_bottom - 0.20
+        final_depth_guide = Line(
+            [final_depth_x, block_back, final_depth_z],
+            [final_depth_x, block_front, final_depth_z],
+        )
+        final_depth_brace = Brace(
+            final_depth_guide,
+            direction=RIGHT,
+            buff=0.04,
+            sharpness=1.5,
+            color=BLACK,
+        )
+        final_depth_label = Tex(r"$n+1$", font_size=22, color=BLACK)
+        final_depth_label.rotate(0.35).move_to([1.1, -2.4, -0.5])
+        final_width_label.set_opacity(0)
+        final_depth_label.set_opacity(0)
+        self.add_fixed_in_frame_mobjects(
+            final_width_label,
+            final_depth_label
+        )
+
         self.play(
             Transform(split, no_split), run_time=1
         )
         self.play(
-            Create(no_split_arrow),
+            Create(no_split_brace),
             Write(no_split_label),
             run_time=0.5
         )
@@ -333,6 +371,33 @@ class Sums(ThreeDScene):
                 no_split_rotations_copy, combined_no_split
             ),
             run_time=1
+        )
+        self.play(
+            Create(final_height_brace),
+            Write(final_height_label),
+            Create(final_width_brace),
+            final_width_label.animate.set_opacity(1),
+            Create(final_depth_brace),
+            final_depth_label.animate.set_opacity(1),
+            run_time=1
+        )
+
+        formula = VGroup(
+            Tex(r"$T_k = 1 + 2 + \cdots + k$", font_size=24, color=BLACK),
+            Tex(
+                r"$\Longrightarrow 6\sum_{k=1}^{n} T_k"
+                r"= n(n+1)(n+2)$",
+                font_size=24,
+                color=BLACK
+            )
+        )
+        formula.arrange(DOWN, buff=0.06)
+        formula.move_to([0, 0.5, 0])
+
+        self.add_fixed_in_frame_mobjects(formula)
+        self.play(
+            Write(formula),
+            run_time=0.8
         )
 
 

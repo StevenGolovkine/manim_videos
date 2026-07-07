@@ -8,7 +8,7 @@ from manim import MovingCameraScene, Scene, ManimColor
 from manim import Create, Uncreate, Write
 from manim import Brace, VGroup, FadeIn, FadeOut, FunctionGraph, Rotate
 from manim import Text, Tex, Rectangle, RoundedRectangle, Transform
-from manim import Circle, Polygon, LaggedStart
+from manim import Circle, Polygon, LaggedStart, DoubleArrow
 
 from manim import config
 from manim import LEFT, RIGHT, DOWN, LIGHT, UP, PI
@@ -196,6 +196,58 @@ class Tri(MovingCameraScene):
             Write(txt)
         )
 
+        def triangle_double_arrows(circles, label):
+            centers = [circle.get_center() for circle in circles]
+            top = max(centers, key=lambda point: point[1])
+            bottom_y = min(point[1] for point in centers)
+            bottom_points = [
+                point
+                for point in centers
+                if abs(point[1] - bottom_y) < 0.05
+            ]
+            bottom_left = min(bottom_points, key=lambda point: point[0])
+            bottom_right = max(bottom_points, key=lambda point: point[0])
+
+            left_arrow = DoubleArrow(
+                top + np.array([-0.28, 0.02, 0]),
+                bottom_left + np.array([-0.28, -0.02, 0]),
+                buff=0,
+                color=BLACK,
+                stroke_width=1.3,
+                max_tip_length_to_length_ratio=0.08
+            )
+            right_arrow = DoubleArrow(
+                top + np.array([0.28, 0.02, 0]),
+                bottom_right + np.array([0.28, -0.02, 0]),
+                buff=0,
+                color=BLACK,
+                stroke_width=1.3,
+                max_tip_length_to_length_ratio=0.08
+            )
+            base_arrow = DoubleArrow(
+                bottom_left + np.array([0, -0.27, 0]),
+                bottom_right + np.array([0, -0.27, 0]),
+                buff=0,
+                color=BLACK,
+                stroke_width=1.3,
+                max_tip_length_to_length_ratio=0.06
+            )
+
+            left_label = Tex(label, font_size=16, color=BLACK).move_to(
+                left_arrow.get_center() + np.array([-0.22, 0, 0])
+            )
+            right_label = Tex(label, font_size=16, color=BLACK).move_to(
+                right_arrow.get_center() + np.array([0.22, 0, 0])
+            )
+            base_label = Tex(label, font_size=16, color=BLACK).move_to(
+                base_arrow.get_center() + np.array([0, -0.18, 0])
+            )
+            return VGroup(
+                left_arrow, left_label,
+                right_arrow, right_label,
+                base_arrow, base_label
+            )
+
 
         # Triangle with circles
         txt_1 = Tex(r"Si $n \equiv 0 \text{ mod } 3, T_n \equiv 0 \text{ mod } 3$.", font_size=28, color=BLACK).\
@@ -222,9 +274,11 @@ class Tri(MovingCameraScene):
             circles.add(circle)
 
         circles.move_to([0, -0.75, 0])
+        dimension_arrows = triangle_double_arrows(circles, r"$3k$")
         self.play(
             Create(circles),
         )
+        self.play(Create(dimension_arrows))
 
         A_x = circles[0].get_center()
         B_x = circles[5].get_center()
@@ -287,6 +341,7 @@ class Tri(MovingCameraScene):
             Uncreate(txt_kjl),
             Uncreate(triangle_nkl),
             Uncreate(txt_nkl),
+            Uncreate(dimension_arrows),
         )
 
         txt_1 = Tex(r"Si $n \equiv 1 \text{ mod } 3, T_n \equiv 1 \text{ mod } 3$.", font_size=28, color=BLACK).\
@@ -313,9 +368,11 @@ class Tri(MovingCameraScene):
             circles.add(circle)
 
         circles.move_to([0, -0.75, 0])
+        dimension_arrows = triangle_double_arrows(circles, r"$3k+1$")
         self.play(
             Create(circles),
         )
+        self.play(Create(dimension_arrows))
 
         A_x = circles[0].get_center()
         B_x = circles[5].get_center()
@@ -382,6 +439,7 @@ class Tri(MovingCameraScene):
             Uncreate(txt_kjl),
             Uncreate(triangle_nkl),
             Uncreate(txt_nkl),
+            Uncreate(dimension_arrows),
         )
 
         txt_1 = Tex(r"Si $n \equiv 2 \text{ mod } 3, T_n \equiv 0 \text{ mod } 3$.", font_size=28, color=BLACK).\
@@ -408,9 +466,11 @@ class Tri(MovingCameraScene):
             circles.add(circle)
 
         circles.move_to([0, -0.75, 0])
+        dimension_arrows = triangle_double_arrows(circles, r"$3k+2$")
         self.play(
             Create(circles),
         )
+        self.play(Create(dimension_arrows))
 
 
         A_x = circles[0].get_center()
