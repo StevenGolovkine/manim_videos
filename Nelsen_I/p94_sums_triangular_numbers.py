@@ -80,7 +80,7 @@ class Sums(ThreeDScene):
         self.wait(0.5)
 
         n = 6
-        unit = 0.17
+        unit = 0.20
         triangular_n = n * (n + 1) // 2
         diagram_width = triangular_n * unit
         diagram_height = (n + 2) * unit
@@ -210,7 +210,7 @@ class Sums(ThreeDScene):
                 0
             ])
             width_labels.add(label)
-        omitted = Tex(r"$\cdots$", font_size=24, color=BLACK)
+        omitted = Tex(r"$\vdots$", font_size=24, color=BLACK)
         omitted.move_to([
             (section_lefts[4] + section_lefts[n]) / 2,
             bottom_y - 0.13,
@@ -231,13 +231,18 @@ class Sums(ThreeDScene):
             ])
             region_labels.add(shaded_label)
 
-        lower_tn = Tex(r"$T_n$", font_size=26, color=BLACK)
-        lower_tn.move_to([
-            section_lefts[n] + 0.72 * n * unit,
-            bottom_y + 0.75 * unit,
-            0
-        ])
-        region_labels.add(lower_tn)
+        for k, symbol in ((2, r"$T_2$"), (3, r"$T_3$"), (n, r"$T_n$")):
+            green_label = Tex(
+                symbol,
+                font_size=23 if k < n else 26,
+                color=BLACK
+            )
+            green_label.move_to([
+                section_lefts[k] + 0.72 * k * unit,
+                bottom_y + 0.75 * unit,
+                0
+            ])
+            region_labels.add(green_label)
 
         diagram = VGroup(
             sections,
@@ -250,10 +255,39 @@ class Sums(ThreeDScene):
         )
         diagram.rotate(PI / 2).scale(0.82).move_to([0, 0.1, 0])
 
+        # Enlarge the rectangle without stretching its labels.
+        diagram_center = outer.get_center()
+        geometry = VGroup(sections, top_regions, outer)
+        width_factor = 2
+        height_factor = 1.5
+        geometry.stretch(width_factor, dim=0, about_point=diagram_center)
+        geometry.stretch(height_factor, dim=1, about_point=diagram_center)
+
+        diagram_labels = [
+            *top_sum_labels,
+            *width_labels,
+            height_label,
+            *region_labels
+        ]
+        for label in diagram_labels:
+            horizontal_offset = label.get_center()[0] - diagram_center[0]
+            vertical_offset = label.get_center()[1] - diagram_center[1]
+            label.shift(
+                (width_factor - 1) * horizontal_offset * RIGHT
+                + (height_factor - 1) * vertical_offset * UP
+            )
+
+        diagram.shift(0.75 * UP)
+
         upright_labels = [*width_labels, height_label, *region_labels]
         for label in upright_labels:
             label.rotate(-PI / 2, about_point=label.get_center())
 
+        height_label.next_to(outer, UP, buff=0.08)
+
+        self.play(
+            Create(outer),
+        )
         self.play(
             LaggedStart(
                 *[FadeIn(section) for section in sections],
@@ -263,15 +297,16 @@ class Sums(ThreeDScene):
                 *[FadeIn(strip) for strip in top_regions],
                 lag_ratio=0.12
             ),
-            Create(outer),
             run_time=1.8
         )
         self.play(
-            FadeIn(top_sum_labels),
             FadeIn(width_labels),
             FadeIn(height_label),
+        )
+        self.wait(0.5)
+        self.play(
+            FadeIn(top_sum_labels),
             FadeIn(region_labels),
-            run_time=0.8
         )
 
         first_identity = Tex(
@@ -279,20 +314,27 @@ class Sums(ThreeDScene):
             font_size=22,
             color=BLACK
         )
-        first_identity.move_to([0, -2.15, 0])
+        first_identity.move_to([0, -2.30, 0])
 
         conclusion = Tex(
             r"$T_1+T_2+\cdots+T_n"
-            r"=\dfrac{n+2}{3}\cdot\dfrac{n(n+1)}{2}"
-            r"=\dfrac{n(n+1)(n+2)}{6}$",
-            font_size=20,
+            r"=\dfrac{n+2}{3}\cdot\dfrac{n(n+1)}{2}$",
+            font_size=22,
             color=BLACK
         )
-        conclusion.scale_to_fit_width(4.05)
-        conclusion.move_to([0, -2.85, 0])
+        conclusion.move_to([0, -3.00, 0])
+        conclusion_2 = Tex(
+            r"$T_1+T_2+\cdots+T_n"
+            r"=\dfrac{n(n+1)(n+2)}{6}$",
+            font_size=22,
+            color=BLACK
+        )
+        conclusion_2.move_to([0, -3.00, 0])
 
         self.play(Write(first_identity), run_time=1)
+
         self.play(Write(conclusion), run_time=1.2)
+        self.play(Transform(conclusion, conclusion_2), run_time=1)
 
         # Finish
         self.wait(2)
