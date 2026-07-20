@@ -168,6 +168,18 @@ class Log(MovingCameraScene):
             derivation.scale_to_fit_width(3.75)
         derivation.move_to([0, -2.80, 0])
 
+        proof_content = VGroup(
+            axes,
+            log_curve,
+            shaded_area,
+            guides,
+            axis_labels,
+            boundary_labels,
+            curve_label,
+            derivation
+        )
+        proof_content.shift(0.75 * UP)
+
         shaded_area.set_z_index(0)
         axes.set_z_index(1)
         guides.set_z_index(2)
