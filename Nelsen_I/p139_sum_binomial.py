@@ -5,7 +5,7 @@ Proofs without Words I. Roger B. Nelsen. p. 139.
 import numpy as np
 
 from manim import MovingCameraScene
-from manim import Create, Uncreate, Write
+from manim import Create, Indicate, TransformMatchingTex, Uncreate, Write
 from manim import Arrow, Axes, Circle, DashedLine, VGroup
 from manim import FadeIn, FadeOut, FunctionGraph, Line, Polygon
 from manim import Text, Tex, RoundedRectangle
@@ -205,25 +205,186 @@ class Series(MovingCameraScene):
                     arrows.add(arrow)
             row_arrows[row] = arrows
 
-        # Construct the triangle from its selected bottom row to its apex.
-        self.play(FadeIn(symbolic_rows[last_row]), run_time=0.5)
-        for row in range(last_row - 1, 3, -1):
-            self.play(
+        bottom_label_y = row_positions[last_row][0][1] - 0.3
+        bottom_labels = VGroup()
+        for column, label in (
+            (0, r"$\binom{3n}{0}$"),
+            (3, r"$\binom{3n}{3}$"),
+            (6, r"$\cdots$"),
+            (9, r"$\binom{3n}{3n-3}$"),
+            (12, r"$\binom{3n}{3n}$")
+        ):
+            coefficient = Tex(label, font_size=20, color=BLACK)
+            coefficient.move_to([
+                row_positions[last_row][column][0],
+                bottom_label_y,
+                0
+            ])
+            bottom_labels.add(coefficient)
+
+        residue_colors = ("#C23B3B", BLUE, GREEN)
+
+        def residue_rings(row, residue):
+            rings = VGroup()
+            for column in range(residue, row + 1, 3):
+                ring = Circle(
+                    radius=0.078,
+                    stroke_width=1.8,
+                    color=residue_colors[residue]
+                )
+                ring.move_to(row_positions[row][column])
+                ring.set_z_index(3)
+                rings.add(ring)
+            return rings
+
+        def proof_formula(tex, width=3.65, y=-2.2):
+            formula = Tex(tex, font_size=22, color=BLACK)
+            if formula.width > width:
+                formula.scale_to_fit_width(width)
+            formula.move_to([0, y, 0])
+            return formula
+
+        selection_formula = proof_formula(
+            r"$S_{3n}(0)=\displaystyle\sum_{j=0}^{n}"
+            r"\binom{3n}{3j}$"
+        )
+
+        cycle = VGroup(
+            Tex(r"$r:$", font_size=15, color=BLACK),
+            Tex(r"$0$", font_size=15, color=residue_colors[0]),
+            Tex(r"$\longrightarrow$", font_size=15, color=BLACK),
+            Tex(r"$1$", font_size=15, color=residue_colors[1]),
+            Tex(r"$\longrightarrow$", font_size=15, color=BLACK),
+            Tex(r"$2$", font_size=15, color=residue_colors[2]),
+            Tex(r"$\longrightarrow 0\longrightarrow\cdots$",
+                font_size=15, color=BLACK)
+        ).arrange(RIGHT, buff=0.05)
+        cycle.move_to([0, -2.9, 0])
+
+        # Begin with the coefficients whose indices are multiples of three.
+        self.play(
+            FadeIn(symbolic_rows[last_row]),
+            FadeIn(bottom_labels, shift=0.03 * UP),
+            run_time=1
+        )
+        self.wait(0.5)
+        active_rings = residue_rings(last_row, 0)
+        proof_text = selection_formula
+        self.play(
+            Create(active_rings),
+            Write(proof_text),
+            run_time=1
+        )
+        self.wait(0.5)
+
+        # The first V makes the two-parent form of Pascal's rule explicit.
+        pascal_rule = proof_formula(
+            r"$\displaystyle\binom{m}{k}="
+            r"\binom{m-1}{k-1}+\binom{m-1}{k}$"
+        )
+        self.play(
+            Create(row_arrows[last_row]),
+            FadeIn(symbolic_rows[last_row - 1]),
+            TransformMatchingTex(proof_text, pascal_rule),
+            run_time=1
+        )
+        proof_text = pascal_rule
+        self.wait(0.5)
+
+        pascal_example = (
+            row_nodes[last_row][3],
+            row_nodes[last_row - 1][2],
+            row_nodes[last_row - 1][3],
+            row_arrows[last_row][1],
+            row_arrows[last_row][2]
+        )
+        self.play(
+            *[
+                Indicate(mob, color=residue_colors[0], scale_factor=1.35)
+                for mob in pascal_example
+            ],
+            run_time=1
+        )
+
+        recurrence = proof_formula(
+            r"$\begin{aligned}"
+            r"S_m(r)&=S_{m-1}(r-1)+S_{m-1}(r)\\"
+            r"&=2^{m-1}-S_{m-1}(r+1)"
+            r"\end{aligned}$",
+            width=3.7,
+            y=-2.25
+        )
+        next_rings = residue_rings(last_row - 1, 1)
+        self.play(
+            TransformMatchingTex(proof_text, recurrence),
+            FadeOut(active_rings),
+            FadeIn(next_rings),
+            FadeIn(cycle),
+            run_time=1
+        )
+        proof_text = recurrence
+        active_rings = next_rings
+        self.wait(1)
+
+        expansion_1 = proof_formula(
+            r"$S_{3n}(0)=2^{3n-1}-S_{3n-1}(1)$"
+        )
+        self.play(
+            TransformMatchingTex(proof_text, expansion_1),
+            run_time=1
+        )
+        proof_text = expansion_1
+        self.wait(0.5)
+
+        expansion_by_row = {
+            10: proof_formula(
+                r"$S_{3n}(0)=2^{3n-1}-2^{3n-2}"
+                r"+S_{3n-2}(2)$"
+            ),
+            9: proof_formula(
+                r"$S_{3n}(0)=2^{3n-1}-2^{3n-2}+2^{3n-3}"
+                r"-S_{3n-3}(0)$"
+            ),
+            8: proof_formula(
+                r"$S_{3n}(0)=2^{3n-1}-2^{3n-2}"
+                r"+2^{3n-3}-\cdots$"
+            )
+        }
+
+        # Continue upward; the rings show the cycle 1, 2, 0, ... .
+        for row in range(last_row - 2, 3, -1):
+            residue = (last_row - row) % 3
+            next_rings = residue_rings(row, residue)
+            animations = [
                 Create(row_arrows[row + 1]),
                 FadeIn(symbolic_rows[row]),
-                run_time=0.5
-            )
+                FadeOut(active_rings),
+                FadeIn(next_rings)
+            ]
+            if row in expansion_by_row:
+                next_formula = expansion_by_row[row]
+                animations.append(
+                    TransformMatchingTex(proof_text, next_formula)
+                )
+                proof_text = next_formula
+            self.play(*animations, run_time=1)
+            self.wait(0.5)
+            active_rings = next_rings
 
+        top_rings = residue_rings(3, 0)
         self.play(
             Create(row_arrows[4]),
             Create(continuation),
             FadeIn(numerical_rows[3], shift=0.04 * DOWN),
-            run_time=0.5
+            FadeOut(active_rings),
+            FadeIn(top_rings),
+            run_time=1
         )
+        active_rings = top_rings
         for row in range(2, -1, -1):
             self.play(
                 FadeIn(numerical_rows[row], shift=0.04 * DOWN),
-                run_time=0.5
+                run_time=1
             )
 
         derivation = Tex(
@@ -241,7 +402,12 @@ class Series(MovingCameraScene):
         derivation.scale_to_fit_width(3)
         derivation.to_edge(DOWN, buff=0.32)
 
-        self.play(Write(derivation), run_time=1.5)
+        self.play(
+            TransformMatchingTex(proof_text, derivation),
+            FadeOut(cycle),
+            FadeOut(active_rings),
+            run_time=1.5
+        )
 
 
         # Finish
