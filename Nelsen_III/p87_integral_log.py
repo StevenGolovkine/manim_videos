@@ -91,7 +91,7 @@ class Log(MovingCameraScene):
 
         log_curve = axes.plot(
             np.log,
-            x_range=[0.55, 5.55],
+            x_range=[0.78, 5.55],
             color="#252324",
             stroke_width=2.6,
             use_smoothing=True
@@ -153,7 +153,34 @@ class Log(MovingCameraScene):
             ln_b_label
         )
 
-        derivation = Tex(
+        inverse_caption = Tex(
+            r"Pour une fonction croissante $f$ et son inverse $f^{-1}$:",
+            font_size=16,
+            color=BLACK
+        )
+        inverse_identity = Tex(
+            r"$\displaystyle"
+            r"\int_a^b f(x)\,dx"
+            r"+\int_{f(a)}^{f(b)}f^{-1}(y)\,dy"
+            r"=bf(b)-af(a)$",
+            font_size=17,
+            color=BLACK
+        )
+        if inverse_identity.width > 3.85:
+            inverse_identity.scale_to_fit_width(3.85)
+
+        specialization = Tex(
+            r"$f(x)=\ln x,\qquad f^{-1}(y)=e^y$",
+            font_size=17,
+            color=BLACK
+        )
+        inverse_explanation = VGroup(
+            inverse_caption,
+            inverse_identity,
+            specialization
+        ).arrange(DOWN, buff=0.08)
+
+        log_derivation = Tex(
             r"$\begin{aligned}"
             r"\int_a^b \ln x\,dx"
             r"&=b\ln b-a\ln a"
@@ -161,12 +188,17 @@ class Log(MovingCameraScene):
             r"&=\left.x\ln x\right|_a^b-(b-a)\\[0.35em]"
             r"&=\left.(x\ln x-x)\right|_a^b"
             r"\end{aligned}$",
-            font_size=21,
+            font_size=20,
             color=BLACK
         )
-        if derivation.width > 3.75:
-            derivation.scale_to_fit_width(3.75)
-        derivation.move_to([0, -2.80, 0])
+        if log_derivation.width > 3.75:
+            log_derivation.scale_to_fit_width(3.75)
+
+        derivation = VGroup(
+            inverse_explanation,
+            log_derivation
+        ).arrange(DOWN, buff=0.22)
+        derivation.move_to([0, -2.95, 0])
 
         proof_content = VGroup(
             axes,
