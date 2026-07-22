@@ -157,20 +157,20 @@ class Log(MovingCameraScene):
         )
         guides = VGroup(horizontal_a, horizontal_b, vertical_a, vertical_b)
 
-        x_label = Tex(r"$x$", font_size=24, color=BLACK)
+        x_label = Tex(r"$x$", font_size=28, color=BLACK)
         x_label.next_to(axes.x_axis.get_end(), RIGHT, buff=0.08)
-        y_label = Tex(r"$y$", font_size=24, color=BLACK)
+        y_label = Tex(r"$y$", font_size=28, color=BLACK)
         y_label.next_to(axes.y_axis.get_end(), UP, buff=0.08)
 
-        a_label = Tex(r"$a$", font_size=22, color=BLACK)
+        a_label = Tex(r"$a$", font_size=25, color=BLACK)
         a_label.next_to(axes.c2p(a, 0), DOWN, buff=0.06)
-        b_label = Tex(r"$b$", font_size=22, color=BLACK)
+        b_label = Tex(r"$b$", font_size=25, color=BLACK)
         b_label.next_to(axes.c2p(b, 0), DOWN, buff=0.06)
-        ln_a_label = Tex(r"$\ln a$", font_size=21, color=BLACK)
+        ln_a_label = Tex(r"$\ln a$", font_size=24, color=BLACK)
         ln_a_label.next_to(axes.c2p(0, ln_a), LEFT, buff=0.08)
-        ln_b_label = Tex(r"$\ln b$", font_size=21, color=BLACK)
+        ln_b_label = Tex(r"$\ln b$", font_size=24, color=BLACK)
         ln_b_label.next_to(axes.c2p(0, ln_b), LEFT, buff=0.08)
-        curve_label = Tex(r"$y=\ln x$", font_size=21, color=BLACK)
+        curve_label = Tex(r"$y=\ln x$", font_size=24, color=BLACK)
         curve_label.move_to(axes.c2p(5.05, np.log(5.05) + 0.16))
 
         axis_labels = VGroup(x_label, y_label)
@@ -184,17 +184,17 @@ class Log(MovingCameraScene):
         area_labels = VGroup(
             Tex(
                 r"$\displaystyle\int_a^b\ln x\,dx$",
-                font_size=12,
+                font_size=15,
                 color=log_color
             ).move_to(axes.c2p(3.85, 0.52)),
             Tex(
                 r"$\displaystyle\int_{\ln a}^{\ln b}e^y\,dy$",
-                font_size=11,
+                font_size=14,
                 color=inverse_color
             ).move_to(axes.c2p(1.55, 1.35)),
             Tex(
                 r"$b\ln b-a\ln a$",
-                font_size=12,
+                font_size=15,
                 color=rectangle_color
             ).move_to(axes.c2p(2.35, ln_b + 0.14))
         )
