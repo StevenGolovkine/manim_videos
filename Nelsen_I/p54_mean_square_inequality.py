@@ -67,27 +67,6 @@ class Mean(MovingCameraScene):
             Uncreate(txt)
         )
 
-        title_lines = VGroup(
-            Tex(
-                r"\textbf{The Harmonic Mean---Geometric Mean---}",
-                font_size=24,
-                color=BLACK
-            ),
-            Tex(
-                r"\textbf{Arithmetic Mean---Root Mean Square}",
-                font_size=24,
-                color=BLACK
-            ),
-            Tex(
-                r"\textbf{Inequality II}",
-                font_size=24,
-                color=BLACK
-            )
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.04)
-        if title_lines.width > 4.05:
-            title_lines.scale_to_fit_width(4.05)
-        title_lines.to_edge(UP, buff=0.28)
-        title_lines.to_edge(LEFT, buff=0.22)
 
         a = 1.1
         b = 2.9
@@ -266,7 +245,6 @@ class Mean(MovingCameraScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.13)
         construction_text.move_to([1.50, 0.08, 0])
 
-        self.play(Write(title_lines), run_time=1)
         self.play(
             Create(baseline),
             FadeIn(points),

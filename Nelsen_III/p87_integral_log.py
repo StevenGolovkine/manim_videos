@@ -96,11 +96,39 @@ class Log(MovingCameraScene):
             stroke_width=2.6,
             use_smoothing=True
         )
+
+        log_color = "#3278A8"
+        inverse_color = "#B84F7A"
+        rectangle_color = "#4D8A59"
+
         shaded_area = axes.get_area(
             log_curve,
             x_range=[a, b],
-            color=GREY,
-            opacity=0.45
+            color=BLUE,
+            opacity=0.72
+        )
+        inverse_area = Polygon(
+            axes.c2p(0, ln_a),
+            axes.c2p(a, ln_a),
+            *[
+                axes.c2p(x, np.log(x))
+                for x in np.linspace(a, b, 80)
+            ],
+            axes.c2p(0, ln_b),
+            fill_color=RED,
+            fill_opacity=0.55,
+            stroke_width=0
+        )
+        rectangle_difference = Polygon(
+            axes.c2p(0, ln_a),
+            axes.c2p(a, ln_a),
+            axes.c2p(a, 0),
+            axes.c2p(b, 0),
+            axes.c2p(b, ln_b),
+            axes.c2p(0, ln_b),
+            fill_opacity=0,
+            stroke_color=rectangle_color,
+            stroke_width=2.4
         )
 
         horizontal_a = Line(
@@ -153,46 +181,115 @@ class Log(MovingCameraScene):
             ln_b_label
         )
 
+        area_labels = VGroup(
+            Tex(
+                r"$\displaystyle\int_a^b\ln x\,dx$",
+                font_size=12,
+                color=log_color
+            ).move_to(axes.c2p(3.85, 0.52)),
+            Tex(
+                r"$\displaystyle\int_{\ln a}^{\ln b}e^y\,dy$",
+                font_size=11,
+                color=inverse_color
+            ).move_to(axes.c2p(1.55, 1.35)),
+            Tex(
+                r"$b\ln b-a\ln a$",
+                font_size=12,
+                color=rectangle_color
+            ).move_to(axes.c2p(2.35, ln_b + 0.14))
+        )
+
         inverse_caption = Tex(
             r"Pour une fonction croissante $f$ et son inverse $f^{-1}$:",
             font_size=16,
             color=BLACK
         )
-        inverse_identity = Tex(
-            r"$\displaystyle"
-            r"\int_a^b f(x)\,dx"
-            r"+\int_{f(a)}^{f(b)}f^{-1}(y)\,dy"
-            r"=bf(b)-af(a)$",
-            font_size=17,
-            color=BLACK
-        )
+
+        inverse_identity = VGroup(
+            Tex(
+                r"$\displaystyle\int_a^b f(x)\,dx$",
+                font_size=17,
+                color=log_color
+            ),
+            Tex(r"$+$", font_size=17, color=BLACK),
+            Tex(
+                r"$\displaystyle\int_{f(a)}^{f(b)}f^{-1}(y)\,dy$",
+                font_size=17,
+                color=inverse_color
+            ),
+            Tex(r"$=$", font_size=17, color=BLACK),
+            Tex(
+                r"$bf(b)-af(a)$",
+                font_size=17,
+                color=rectangle_color
+            )
+        ).arrange(RIGHT, buff=0.04)
         if inverse_identity.width > 3.85:
             inverse_identity.scale_to_fit_width(3.85)
 
-        specialization = Tex(
-            r"$f(x)=\ln x,\qquad f^{-1}(y)=e^y$",
-            font_size=17,
-            color=BLACK
-        )
+        specialization = VGroup(
+            Tex(r"$f(x)=\ln x$", font_size=17, color=log_color),
+            Tex(r"$,$", font_size=17, color=BLACK),
+            Tex(r"$f^{-1}(y)=e^y$", font_size=17, color=inverse_color)
+        ).arrange(RIGHT, buff=0.12)
         inverse_explanation = VGroup(
             inverse_caption,
             inverse_identity,
             specialization
         ).arrange(DOWN, buff=0.08)
 
-        log_derivation = Tex(
-            r"$\begin{aligned}"
-            r"\int_a^b \ln x\,dx"
-            r"&=b\ln b-a\ln a"
-            r"-\int_{\ln a}^{\ln b}e^y\,dy\\[0.35em]"
-            r"&=\left.x\ln x\right|_a^b-(b-a)\\[0.35em]"
-            r"&=\left.(x\ln x-x)\right|_a^b"
-            r"\end{aligned}$",
-            font_size=20,
-            color=BLACK
-        )
-        if log_derivation.width > 3.75:
-            log_derivation.scale_to_fit_width(3.75)
+        first_equal = Tex(r"$=$", font_size=19, color=BLACK)
+        first_line = VGroup(
+            Tex(
+                r"$\displaystyle\int_a^b\ln x\,dx$",
+                font_size=19,
+                color=log_color
+            ),
+            first_equal,
+            Tex(r"$b\ln b-a\ln a$", font_size=19, color=rectangle_color),
+            Tex(r"$-$", font_size=19, color=BLACK),
+            Tex(
+                r"$\displaystyle\int_{\ln a}^{\ln b}e^y\,dy$",
+                font_size=19,
+                color=inverse_color
+            )
+        ).arrange(RIGHT, buff=0.04)
+        if first_line.width > 3.75:
+            first_line.scale_to_fit_width(3.75)
+
+        second_equal = Tex(r"$=$", font_size=19, color=BLACK)
+        second_line = VGroup(
+            second_equal,
+            Tex(
+                r"$\left.x\ln x\right|_a^b$",
+                font_size=19,
+                color=rectangle_color
+            ),
+            Tex(r"$-$", font_size=19, color=BLACK),
+            Tex(r"$(b-a)$", font_size=19, color=inverse_color)
+        ).arrange(RIGHT, buff=0.04)
+
+        third_equal = Tex(r"$=$", font_size=19, color=BLACK)
+        third_line = VGroup(
+            third_equal,
+            Tex(
+                r"$\left.(x\ln x-x)\right|_a^b$",
+                font_size=19,
+                color=log_color
+            )
+        ).arrange(RIGHT, buff=0.04)
+
+        log_derivation = VGroup(
+            first_line,
+            second_line,
+            third_line
+        ).arrange(DOWN, buff=0.12)
+        for line, equal_sign in (
+            (first_line, first_equal),
+            (second_line, second_equal),
+            (third_line, third_equal)
+        ):
+            line.shift(-equal_sign.get_center()[0] * RIGHT)
 
         derivation = VGroup(
             inverse_explanation,
@@ -204,26 +301,38 @@ class Log(MovingCameraScene):
             axes,
             log_curve,
             shaded_area,
+            inverse_area,
+            rectangle_difference,
             guides,
             axis_labels,
             boundary_labels,
             curve_label,
+            area_labels,
             derivation
         )
         proof_content.shift(0.75 * UP)
 
         shaded_area.set_z_index(0)
+        inverse_area.set_z_index(0)
         axes.set_z_index(1)
         guides.set_z_index(2)
+        rectangle_difference.set_z_index(2.5)
         log_curve.set_z_index(3)
         axis_labels.set_z_index(4)
         boundary_labels.set_z_index(4)
         curve_label.set_z_index(4)
+        area_labels.set_z_index(4)
 
         self.play(Create(axes), Write(axis_labels), run_time=1.2)
         self.play(Create(log_curve), Write(curve_label), run_time=1.2)
         self.play(Create(guides), Write(boundary_labels), run_time=1)
-        self.play(FadeIn(shaded_area), run_time=0.8)
+        self.play(
+            FadeIn(shaded_area),
+            FadeIn(inverse_area),
+            Create(rectangle_difference),
+            Write(area_labels),
+            run_time=1.2
+        )
         self.play(Write(derivation), run_time=1.5)
 
         # Finish
