@@ -184,17 +184,17 @@ class Log(MovingCameraScene):
         area_labels = VGroup(
             Tex(
                 r"$\displaystyle\int_a^b\ln x\,dx$",
-                font_size=15,
+                font_size=20,
                 color=log_color
             ).move_to(axes.c2p(3.85, 0.52)),
             Tex(
                 r"$\displaystyle\int_{\ln a}^{\ln b}e^y\,dy$",
-                font_size=14,
+                font_size=20,
                 color=inverse_color
             ).move_to(axes.c2p(1.55, 1.35)),
             Tex(
                 r"$b\ln b-a\ln a$",
-                font_size=15,
+                font_size=20,
                 color=rectangle_color
             ).move_to(axes.c2p(2.35, ln_b + 0.14))
         )
