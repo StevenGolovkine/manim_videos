@@ -101,7 +101,8 @@ class Mean(MovingCameraScene):
         BE = Line(B, E, color=BLACK, stroke_width=2.0)
         ED = Line(E, D, color=BLACK, stroke_width=2.0)
         DG = Line(D, G, color=BLACK, stroke_width=2.0)
-        FG = Line(F, G, color=BLACK, stroke_width=2.0)
+        FE = Line(F, E, color=BLACK, stroke_width=2.0)
+        EG = Line(E, G, color=BLACK, stroke_width=2.0)
         FB = Line(F, B, color=BLACK, stroke_width=2.0)
 
         def right_angle_marker(vertex, ray_1, ray_2, size=0.12):
@@ -124,13 +125,20 @@ class Mean(MovingCameraScene):
             for point in (A, B, D, C, E, F, G)
         ])
         point_labels = VGroup(
-            Tex(r"$A$", font_size=18, color=BLACK).next_to(A, UP, buff=0.06),
-            Tex(r"$B$", font_size=18, color=BLACK).next_to(B, UP + LEFT, buff=0.04),
-            Tex(r"$D$", font_size=18, color=BLACK).next_to(D, UP + RIGHT, buff=0.04),
-            Tex(r"$C$", font_size=18, color=BLACK).next_to(C, UP, buff=0.06),
-            Tex(r"$E$", font_size=18, color=BLACK).next_to(E, UP + LEFT, buff=0.04),
-            Tex(r"$F$", font_size=18, color=BLACK).next_to(F, UP + LEFT, buff=0.04),
-            Tex(r"$G$", font_size=18, color=BLACK).next_to(G, UP, buff=0.05)
+            Tex(r"$A$", font_size=18, color=BLACK).\
+                next_to(A, DOWN, buff=0.06),
+            Tex(r"$B$", font_size=18, color=BLACK).\
+                next_to(B, DOWN, buff=0.06),
+            Tex(r"$D$", font_size=18, color=BLACK).\
+                next_to(D, DOWN, buff=0.06),
+            Tex(r"$C$", font_size=18, color=BLACK).\
+                next_to(C, DOWN, buff=0.06),
+            Tex(r"$E$", font_size=18, color=BLACK).\
+                next_to(E, UP + LEFT, buff=0.04),
+            Tex(r"$F$", font_size=18, color=BLACK).\
+                next_to(F, UP + LEFT, buff=0.04),
+            Tex(r"$G$", font_size=18, color=BLACK).\
+                next_to(G, UP + LEFT, buff=0.05)
         )
 
         mean_labels = VGroup(
@@ -148,7 +156,7 @@ class Mean(MovingCameraScene):
                 r"$\dfrac{a+b}{2}$",
                 font_size=17,
                 color=BLACK
-            ).move_to(ED.get_center() + np.array([-0.02, 0.24, 0])),
+            ).move_to(ED.get_center() + np.array([0.05, 0.4, 0])),
             Tex(
                 r"$\sqrt{\dfrac{a^2+b^2}{2}}$",
                 font_size=15,
@@ -156,18 +164,15 @@ class Mean(MovingCameraScene):
             ).move_to(DG.get_center() + 0.38 * RIGHT)
         )
 
-        equal_length_labels = VGroup(
-            Tex(
-                r"$\dfrac{b-a}{2}$",
-                font_size=12,
-                color=BLACK
-            ).move_to((E + G) / 2 + 0.14 * UP),
-            Tex(
-                r"$\dfrac{b-a}{2}$",
-                font_size=12,
-                color=BLACK
-            ).move_to((B + D) / 2 + 0.18 * UP)
-        )
+        final_equality = VGroup(
+            mean_labels[0].copy(),
+            Tex(r"$\leq$", font_size=17, color=BLACK),
+            mean_labels[1].copy(),
+            Tex(r"$\leq$", font_size=17, color=BLACK),
+            mean_labels[2].copy(),
+            Tex(r"$\leq$", font_size=17, color=BLACK),
+            mean_labels[3].copy()
+        ).arrange(RIGHT, buff=0.1).move_to([0, -3, 0])
 
         arrow_y = baseline_y - 0.34
         lower_arrow_y = baseline_y - 0.66
@@ -180,24 +185,24 @@ class Mean(MovingCameraScene):
             color=BLACK
         )
         arrow_difference = DoubleArrow(
-            B + np.array([0, arrow_y - baseline_y, 0]),
-            D + np.array([0, arrow_y - baseline_y, 0]),
+            B + np.array([0, lower_arrow_y - baseline_y, 0]),
+            D + np.array([0, lower_arrow_y - baseline_y, 0]),
             buff=0,
             tip_length=0.10,
             stroke_width=1.4,
             color=BLACK
         )
         arrow_midpoint = DoubleArrow(
-            D + np.array([0, arrow_y - baseline_y, 0]),
-            C + np.array([0, arrow_y - baseline_y, 0]),
+            D + np.array([0, lower_arrow_y - baseline_y, 0]),
+            C + np.array([0, lower_arrow_y - baseline_y, 0]),
             buff=0,
             tip_length=0.10,
             stroke_width=1.4,
             color=BLACK
         )
         arrow_b = DoubleArrow(
-            B + np.array([0, lower_arrow_y - baseline_y, 0]),
-            C + np.array([0, lower_arrow_y - baseline_y, 0]),
+            B + np.array([0, arrow_y - baseline_y, 0]),
+            C + np.array([0, arrow_y - baseline_y, 0]),
             buff=0,
             tip_length=0.10,
             stroke_width=1.4,
@@ -229,51 +234,75 @@ class Mean(MovingCameraScene):
         )
 
         construction_text = VGroup(
-            Tex(r"$AB=a,\quad BC=b$", font_size=13, color=BLACK),
+            Tex(r"$AB=a,\quad BC=b$", font_size=20, color=BLACK),
             Tex(
                 r"$AD=DC=\dfrac{a+b}{2}$",
-                font_size=13,
+                font_size=20,
                 color=BLACK
             ),
-            Tex(r"$BE\perp AB,\quad DE=AD$", font_size=13, color=BLACK),
-            Tex(r"$FE\perp ED,\quad FB\parallel ED$", font_size=13, color=BLACK),
+            Tex(r"$BE\perp AB,\quad DE=AD$", font_size=20, color=BLACK),
+            Tex(r"$FE\perp ED,\quad FB\parallel ED$", font_size=20, color=BLACK),
             Tex(
                 r"$EG=BD=\dfrac{b-a}{2}$",
-                font_size=13,
+                font_size=20,
                 color=BLACK
             )
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.13)
-        construction_text.move_to([1.50, 0.08, 0])
+        construction_text.move_to([0, 2.75, 0])
 
         self.play(
             Create(baseline),
-            FadeIn(points),
-            Write(point_labels),
-            run_time=1.1
+            FadeIn(points[:4]),
+            Write(point_labels[:4]),
+            run_time=1
         )
+        self.play(
+            FadeIn(dimension_arrows),
+            Write(dimension_labels),
+            Write(construction_text[0]),
+            Write(construction_text[1]),
+            run_time=1.2
+        )
+        self.wait(0.5)
+
         self.play(
             Create(BE),
             Create(ED),
-            Create(DG),
-            Create(FG),
-            Create(FB),
+            Create(right_B),
+            Write(point_labels[4]),
+            Write(construction_text[2]),
+            Write(mean_labels[1]),
+            Write(mean_labels[2]),
             run_time=1.5
         )
-        self.play(
-            Create(right_B),
-            Create(right_E),
-            Create(right_F),
-            Write(mean_labels),
-            Write(equal_length_labels),
-            run_time=1.1
-        )
-        self.play(
-            Create(dimension_arrows),
-            Write(dimension_labels),
-            run_time=1.2
-        )
-        self.play(Write(construction_text), run_time=1.3)
+        self.wait(0.5)
 
+        self.play(
+            Create(FB),
+            Create(FE),
+            Create(right_F),
+            Write(point_labels[5]),
+            Write(construction_text[3]),
+            Write(mean_labels[0]),
+            run_time=1.5
+        )
+        self.wait(0.5)
+
+        self.play(
+            Create(DG),
+            Create(EG),
+            Create(right_E),
+            Write(point_labels[6]),
+            Write(construction_text[4]),
+            Write(mean_labels[3]),
+            run_time=1.5
+        )
+        self.wait(0.5)
+
+        self.play(
+            Write(final_equality),
+            run_time=1.5
+        )
 
         # Finish
         self.wait(2)
