@@ -7,11 +7,11 @@ import numpy as np
 from manim import ThreeDScene
 from manim import Create, Uncreate, Write
 from manim import Brace, VGroup, FadeIn, FadeOut, FunctionGraph
-from manim import LaggedStart, ReplacementTransform
+from manim import LaggedStart
 from manim import Cube, MathTex, Text, Tex
 
 from manim import config
-from manim import DEGREES, LEFT, RIGHT, DOWN, LIGHT, ORIGIN, OUT, PI, UP
+from manim import DEGREES, LEFT, RIGHT, DOWN, LIGHT, ORIGIN, OUT, UP
 
 # COLORS
 BLUE = "#B0E1FA"
@@ -181,81 +181,55 @@ class SumFactorialTwo(ThreeDScene):
         )
         for solid, (x, y) in zip(
             stage_one,
-            [(-1.38, 0.72), (0, 0.78), (1.38, 0.72)],
+            [(-0.7, 0.72), (0, 2), (0.7, 0.72)],
         ):
             place_on_screen(solid, x, y)
 
-        # three_sum = MathTex(
-        #     r"S", r"+", r"S", r"+", r"S", r"=", r"3S",
-        #     font_size=32,
-        #     color=BLACK,
-        # ).move_to([0, -2.35, 0])
-        # three_sum[0].set_color(piece_label_colors[0])
-        # three_sum[2].set_color(piece_label_colors[1])
-        # three_sum[4].set_color(piece_label_colors[2])
+        three_sum = MathTex(
+            r"S", r"+", r"S", r"+", r"S", r"=", r"3S",
+            font_size=32,
+            color=BLACK,
+        ).move_to([0, -2.35, 0])
+        three_sum[0].set_color(piece_label_colors[0])
+        three_sum[2].set_color(piece_label_colors[1])
+        three_sum[4].set_color(piece_label_colors[2])
 
-        # prism_coords = [
-        #     (x, y, z)
-        #     for x in range(n + 2)
-        #     for y in range(n + 1)
-        #     for z in range(n)
-        # ]
-        # final_side = 0.19
-        # assembly_center = screen_point(0, 0.05)
-        # box_center = final_side * np.array([n / 2 + 0.5, n / 2, (n - 1) / 2])
+        final_side = 0.17
+        assembly_center = screen_point(0, 0.05)
+        box_dimensions = np.array([n + 2, n + 1, n])
+        box_center = (box_dimensions - 1) / 2
 
-        # packing_data = [
-        #     (
-        #         np.array([[0, -1, 0], [-1, 0, 0], [0, 0, -1]]),
-        #         np.array([-5, -4, -4]),
-        #         np.array([1, 1, 0]),
-        #     ),
-        #     (
-        #         np.array([[0, -1, 0], [0, 0, 1], [1, 0, 0]]),
-        #         np.array([-5, 0, 0]),
-        #         np.array([1, 0, 0]),
-        #     ),
-        #     (
-        #         np.array([[0, 0, 1], [0, -1, 0], [1, 0, 0]]),
-        #         np.array([0, -5, 0]),
-        #         np.array([0, 0, 0]),
-        #     ),
-        # ]
+        # These offsets pack the three already-oriented staircases exactly into
+        # the (n + 2) x (n + 1) x n cuboid. Only translations are required.
+        piece_dimensions = [
+            np.array([n + 1, n, n]),
+            np.array([n + 1, n, n]),
+            np.array([n, n + 1, n]),
+        ]
+        lattice_offsets = [
+            np.array([0, 0, 0]),
+            np.array([0, 1, 0]),
+            np.array([2, 0, 0]),
+        ]
+        target_centers = [
+            assembly_center + final_side * (
+                offset + (dimensions - 1) / 2 - box_center
+            )
+            for dimensions, offset in zip(piece_dimensions, lattice_offsets)
+        ]
 
-        # target_coord_sets = []
-        # packing_targets = VGroup()
-        # for color, (matrix, minimum, offset) in zip(
-        #     piece_colors, packing_data
-        # ):
-        #     target_coords = [
-        #         tuple(matrix @ np.array(point) - minimum + offset)
-        #         for point in staircase_coords
-        #     ]
-        #     target_coord_sets.append(set(target_coords))
-        #     target = voxel_solid(
-        #         target_coords,
-        #         side=final_side,
-        #         color=color,
-        #         center=False,
-        #     )
-        #     target.shift(assembly_center - box_center)
-        #     packing_targets.add(target)
-
-        # assert set.union(*target_coord_sets) == set(prism_coords)
-        # assert sum(len(coords) for coords in target_coord_sets) == len(prism_coords)
-
-        # product_formula = MathTex(
-        #     r"3S=n(n+1)(n+2)",
-        #     font_size=31,
-        #     color=BLACK,
-        # ).move_to(three_sum)
-        # conclusion = MathTex(
-        #     r"S=\frac{n(n+1)(n+2)}{3}",
-        #     font_size=31,
-        #     color=BLACK,
-        # ).move_to(three_sum)
-        # product_formula.set_opacity(0)
-        # conclusion.set_opacity(0)
+        product_formula = MathTex(
+            r"3S=n(n+1)(n+2)",
+            font_size=31,
+            color=BLACK,
+        ).move_to(three_sum)
+        conclusion = MathTex(
+            r"S=\frac{n(n+1)(n+2)}{3}",
+            font_size=31,
+            color=BLACK,
+        ).move_to(three_sum)
+        product_formula.set_opacity(0)
+        conclusion.set_opacity(0)
 
         self.add_fixed_in_frame_mobjects(definition)
         self.play(Write(definition), run_time=0.7)
@@ -264,40 +238,34 @@ class SumFactorialTwo(ThreeDScene):
             run_time=1.2,
         )
 
-        # self.add_fixed_in_frame_mobjects(three_sum)
-        # self.add_fixed_in_frame_mobjects(product_formula, conclusion)
-        # self.play(Write(three_sum), run_time=0.6)
-        # self.wait(0.4)
+        self.add_fixed_in_frame_mobjects(three_sum)
+        self.add_fixed_in_frame_mobjects(product_formula, conclusion)
+        self.play(Write(three_sum), run_time=0.6)
+        self.wait(0.4)
 
-        # self.play(
-        #     ReplacementTransform(
-        #         stage_one[0], packing_targets[0], path_arc=PI / 3
-        #     ),
-        #     run_time=1.4,
-        # )
-        # self.play(
-        #     ReplacementTransform(
-        #         stage_one[1], packing_targets[1], path_arc=-PI / 3
-        #     ),
-        #     run_time=1.4,
-        # )
-        # self.play(
-        #     ReplacementTransform(
-        #         stage_one[2], packing_targets[2], path_arc=PI / 3
-        #     ),
-        #     run_time=1.4,
-        # )
-        # self.play(
-        #     three_sum.animate.set_opacity(0),
-        #     product_formula.animate.set_opacity(1),
-        #     run_time=0.9,
-        # )
-        # self.wait(0.5)
-        # self.play(
-        #     product_formula.animate.set_opacity(0),
-        #     conclusion.animate.set_opacity(1),
-        #     run_time=0.8,
-        # )
+        self.play(
+            stage_one[0].animate.move_to(target_centers[0]),
+            run_time=1.4,
+        )
+        self.play(
+            stage_one[1].animate.move_to(target_centers[1]),
+            run_time=1.4,
+        )
+        self.play(
+            stage_one[2].animate.move_to(target_centers[2]),
+            run_time=1.4,
+        )
+        self.play(
+            three_sum.animate.set_opacity(0),
+            product_formula.animate.set_opacity(1),
+            run_time=0.9,
+        )
+        self.wait(0.5)
+        self.play(
+            product_formula.animate.set_opacity(0),
+            conclusion.animate.set_opacity(1),
+            run_time=0.8,
+        )
 
         # Finish
         self.wait(2)
