@@ -182,7 +182,7 @@ class Tri(ThreeDScene):
         self.wait(0.5)
 
         self.play(
-            pyramid.animate.scale(0.70).move_to(screen_point(-1.13, 0.55)),
+            pyramid.animate.move_to(screen_point(-1, 0.55)),
             FadeOut(height_arrow),
             FadeOut(height_label),
             run_time=1.2,
@@ -193,7 +193,7 @@ class Tri(ThreeDScene):
         separated_positions = []
         separated_colors = []
         for level, size in enumerate(range(n, 0, -1)):
-            layer_center = screen_point(0.88, layer_screen_y[level])
+            layer_center = screen_point(0.88, layer_screen_y[level] + 0.5)
             for position in triangular_positions(size, 0.225):
                 separated_positions.append(position + layer_center)
                 separated_colors.append(layer_colors[level])
@@ -210,12 +210,12 @@ class Tri(ThreeDScene):
         for index, label in enumerate(count_tex):
             count_labels.add(
                 MathTex(label, font_size=18, color=BLACK).move_to(
-                    [1.77, count_y[index], 0]
+                    [1.77, count_y[index] + 0.5, 0]
                 )
             )
         plus_labels = VGroup(*[
             MathTex(r"+", font_size=18, color=BLACK).move_to(
-                [1.77, (count_y[index] + count_y[index + 1]) / 2, 0]
+                [1.77, (count_y[index] + count_y[index + 1]) / 2 + 0.5, 0]
             )
             for index in range(n - 1)
         ])
@@ -238,7 +238,7 @@ class Tri(ThreeDScene):
         row_positions = []
         row_colors = []
         for k in range(1, n + 1):
-            group_center = screen_point(row_centers[k - 1], -0.08)
+            group_center = screen_point(row_centers[k - 1], -2.15)
             positions = rectangular_positions(k, n - k + 1, 0.18)
             row_positions.extend([
                 position + group_center for position in positions
@@ -251,7 +251,7 @@ class Tri(ThreeDScene):
             r"+\cdots+", r"n(1)",
             font_size=22,
             color=BLACK,
-        ).move_to([0, -1.18, 0])
+        ).move_to([0, -2.92, 0])
         term_formula.scale_to_fit_width(4.04)
         displayed_colors = (
             term_colors[0], term_colors[1], term_colors[2], term_colors[-1]
@@ -260,13 +260,9 @@ class Tri(ThreeDScene):
             term_formula[index].set_color(color)
 
         self.play(
-            FadeOut(count_labels),
-            FadeOut(plus_labels),
-            FadeOut(separated_layers),
             TransformFromCopy(pyramid, row_arrays),
             run_time=2,
         )
-        self.play(FadeOut(pyramid), run_time=0.5)
         self.wait(0.5)
 
         self.add_fixed_in_frame_mobjects(term_formula)
