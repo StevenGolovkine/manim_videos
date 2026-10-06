@@ -132,7 +132,7 @@ class Parabola(MovingCameraScene):
 
         qd_segment = DashedLine(
             d_point,
-            q_point,
+            q_point + [1, 0, 0],
             dash_length=0.09,
             dashed_ratio=0.58,
             color=BLACK,
@@ -166,12 +166,12 @@ class Parabola(MovingCameraScene):
         tangent_angle = np.arctan(m_1)
         df_angle = np.arctan(m_2)
         tangent_label = MathTex(
-            r"m_1=y'=\frac{2p}{y}", font_size=18, color=BLACK
+            r"m_1=y'= 2p / y", font_size=18, color=BLACK
         ).rotate(tangent_angle).move_to(point(1.82, tangent_y(1.82) + 0.23))
         normal_label = MathTex(
-            r"m_2=-\frac{y}{2p}", font_size=16, color=BLACK
+            r"m_2=-y / 2p", font_size=16, color=BLACK
         ).rotate(df_angle).move_to(
-            d_point + 0.40 * (focus - d_point) + 0.10 * LEFT
+            d_point + 0.55 * (focus - d_point) + 0.3 * LEFT
         )
 
         d_label = MathTex(
@@ -272,17 +272,18 @@ class Parabola(MovingCameraScene):
         )
         diagram.scale(1.07, about_point=origin).shift(0.62 * UP + 0.5 * LEFT)
 
-        conclusion = MathTex(
-            r"QF=QD",
-            r"\quad\&\quad",
-            r"m_1m_2=-1",
-            r"\quad\Longrightarrow\quad",
-            r"\angle 1=\angle 2=\angle 3",
-            font_size=24,
-            color=BLACK,
-        ).move_to([0, -3.36, 0])
-        conclusion.scale_to_fit_width(4.05)
-        conclusion.shift(0.5 * UP)
+        conclusion = VGroup(
+            MathTex(
+                r"QF=QD\quad\&\quad m_1m_2=-1",
+                font_size=25,
+                color=BLACK,
+            ),
+            MathTex(
+                r"\Longrightarrow\quad \angle 1=\angle 2=\angle 3",
+                font_size=25,
+                color=BLACK,
+            ),
+        ).arrange(DOWN, buff=0.13).move_to([0, -2.86, 0])
 
         self.play(
             Create(x_axis),
@@ -323,12 +324,7 @@ class Parabola(MovingCameraScene):
         )
         self.wait(0.5)
         self.play(
-            Create(df_segment),
-        )
-        self.wait(0.5)
-        self.play(
             Create(tangent),
-            Create(right_angle),
         )
         self.wait(0.5)
         self.play(
@@ -336,15 +332,20 @@ class Parabola(MovingCameraScene):
         )
         self.wait(0.5)
         self.play(
+            Create(df_segment),
+            Create(right_angle),
+        )
+        self.wait(0.5)
+        self.play(
             Write(normal_label),
         )
         self.play(
-            Create(horizontal_ray),
             Create(angle_1),
             Create(angle_2),
             Create(angle_3),
             Write(angle_labels),
         )
+        self.wait(0.5)
         self.play(Write(conclusion))
 
 
