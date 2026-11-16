@@ -403,23 +403,34 @@ class Calissons(MovingCameraScene):
         )
 
         theorem = VGroup(
-            Tex(r"\textbf{Théorème}", font_size=29, color=BLACK),
             Tex(
-                r"Dans tout pavage, chaque orientation",
+                r"Dans tout pavage hexagonal, chaque",
                 font_size=22,
                 color=BLACK,
             ),
             Tex(
-                r"représente un tiers des calissons.",
+                r"orientation représente un tiers",
+                font_size=22,
+                color=BLACK,
+            ),
+            Tex(
+                r"des calissons.",
                 font_size=22,
                 color=BLACK,
             ),
         ).arrange(DOWN, buff=0.06).move_to([0, 3.25, 0])
-        proof_caption = Tex(
-            r"Colorons un même pavage selon l'orientation.",
-            font_size=20,
-            color=BLACK,
-        ).move_to([0, 2.46, 0])
+        proof_caption = VGroup(
+            Tex(
+                r"Colorons un même pavage hexagonal",
+                font_size=20,
+                color=BLACK,
+            ),
+            Tex(
+                r"selon l'orientation.",
+                font_size=20,
+                color=BLACK,
+            )
+        ).arrange(DOWN, buff=0.06).move_to([0, 2, 0])
 
         tiling_data = lozenge_tiling_data(4)
         uncolored_tiling = make_tiling(
@@ -435,7 +446,7 @@ class Calissons(MovingCameraScene):
             center=np.array([1.08, 0.40, 0]),
         )
         tiling_labels = VGroup(
-            Tex(r"pavage", font_size=20, color=BLACK).next_to(
+            Tex(r"hexagone", font_size=20, color=BLACK).next_to(
                 uncolored_tiling, DOWN, buff=0.14
             ),
             Tex(r"orientations", font_size=20, color=BLACK).next_to(
@@ -453,7 +464,7 @@ class Calissons(MovingCameraScene):
             )
             count = MathTex(r"n^2", font_size=20, color=BLACK)
             legend.add(VGroup(sample, count).arrange(RIGHT, buff=0.08))
-        legend.arrange(RIGHT, buff=0.22).move_to([0, -2.05, 0])
+        legend.arrange(RIGHT, buff=0.22).move_to([0, -1.70, 0])
 
         conclusion = VGroup(
             MathTex(
@@ -467,9 +478,10 @@ class Calissons(MovingCameraScene):
                 font_size=25,
                 color=BLACK,
             ),
-        ).arrange(DOWN, buff=0.18).move_to([0, -2.90, 0])
+        ).arrange(DOWN, buff=0.18).move_to([0, -2.40, 0])
 
         self.play(Write(theorem), Write(proof_caption), run_time=1.4)
+        self.wait(1)
         self.play(Create(uncolored_tiling), Write(tiling_labels[0]), run_time=2)
         self.play(
             TransformFromCopy(uncolored_tiling, colored_tiling),
